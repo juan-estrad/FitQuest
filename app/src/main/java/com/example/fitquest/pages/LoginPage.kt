@@ -66,7 +66,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.DarkGray)
+            .background(Color.Gray)
             .padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
