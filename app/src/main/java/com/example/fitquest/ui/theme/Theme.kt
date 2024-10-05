@@ -22,7 +22,7 @@ public val DarkColorScheme = darkColorScheme(
     primary = brightOrange,
     secondary = darkOrange,
     tertiary = darkOrange,
-    onSurface = Purple40,
+    onSurface = grayWhite,
     onBackground = darkOrange,
     background = darker
 
@@ -65,17 +65,13 @@ fun FitQuestTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-//        dynamicColor  -> {
-//            val context = LocalContext.current
-//            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-//        }
+//    val colorScheme = when {
+//
+//        darkTheme -> DarkColorScheme
+//        else -> LightColorScheme
+//    }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
-    }
-
-//    val colorScheme = DarkColorScheme
+    val colorScheme = DarkColorScheme
 
 
     MaterialTheme(
