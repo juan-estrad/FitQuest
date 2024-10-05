@@ -12,10 +12,13 @@ val Pink40 = Color(0xFF7D5260)
 
 //listOf(Color(0xFF393E46), Color(0xFF222831)),
 
-val dark1 = Color(0xFF393E46);
-val dark2 = Color(0xFF222831);
+public val dark = Color(0xFF393E46);
+public val darker = Color(0xFF222831);
 
-val grayWhite = Color(0xFFEEEEEE);
+public val grayWhite = Color(0xFFEEEEEE);
 
-val darkOrange = Color(0xFF967410);
-val lighterOrange = Color(0xFFD58D18);
+public val darkOrange = Color(0xFF967410);
+public val brightOrange = Color(0xFFD58D18);
+
+public val transparent = Color(0x00000000);
+

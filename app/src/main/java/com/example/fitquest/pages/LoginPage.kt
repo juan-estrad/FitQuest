@@ -1,9 +1,11 @@
 package com.example.fitquest.pages
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,7 +28,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthViewModel
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
@@ -39,9 +40,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
+import com.example.fitquest.ui.theme.dark
+import com.example.fitquest.ui.theme.darker
+import com.example.fitquest.ui.theme.grayWhite
+import com.example.fitquest.ui.theme.brightOrange
+import com.example.fitquest.ui.theme.transparent
 
-//import com.example.composeapp.ui.theme.color1
-//import com.example.composeapp.ui.theme.color2
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,8 +74,8 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
 
     val verticalGradientBrush = Brush.verticalGradient(
-        listOf(Color(0xFF222831) , Color(0xFF393E46)),
-        startY = 20.0f,
+        listOf( Color.Transparent, dark),
+        startY = 0f,
         endY = Float.POSITIVE_INFINITY
     )
 
@@ -90,21 +95,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
     ) {
 
-//        Box(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .size(120.dp)
-//                .background(linear)
-//        );
 
-
-//        Box(
-//            modifier = modifier
-//                .fillMaxSize()
-//                .background(gradient)
-//                .padding(horizontal = 16.dp, vertical = 8.dp),
-//            contentAlignment = Alignment.Center
-//        ) {}
 
         // Title
         Text(
@@ -112,62 +103,124 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             color = Color.White
+
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Email input field
+
+
+
+        Box(modifier = Modifier
+            .fillMaxWidth()
+
+            ){
+            Text(text = "EMAIL", color = grayWhite, textAlign = TextAlign.Left, fontSize = 16.sp )
+        }
         OutlinedTextField(
+
             value = email,
             onValueChange = { email = it },
-            label = { Text(text = "Email", color = Color.White) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color(0xFFFF6D00), // Orange color for focused border
-                unfocusedBorderColor = Color.LightGray,
-                focusedLabelColor = Color(0xFFFF6D00),
-                unfocusedLabelColor = Color.White,
+            singleLine = true,
 
-                ),
-            shape = RoundedCornerShape(size = 10.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = transparent, // Orange color for focused border
+
+                unfocusedPlaceholderColor = brightOrange,
+                focusedLabelColor = Color.Transparent,
+                unfocusedLabelColor = grayWhite,
+                containerColor = darker,
+                unfocusedBorderColor = Color.Transparent,
+
+
+                focusedSupportingTextColor = brightOrange
+
+
+            ),
+
+            shape = RoundedCornerShape(size = 6.dp),
             modifier = Modifier.fillMaxWidth()
         )
+        
 
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(15.dp))
+
+        Box(modifier = Modifier
+            .fillMaxWidth()
+
+        ){
+            Text(text = "PASSWORD", color = grayWhite, textAlign = TextAlign.Left, fontSize = 16.sp )
+        }
+
 
         // Password input field
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text(text = "Password", color = Color.White) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color(0xFFFF6D00),
-                unfocusedBorderColor = Color.LightGray,
-                focusedLabelColor = Color(0xFFFF6D00),
-                unfocusedLabelColor = Color.White,
+            singleLine = true,
 
-                ),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = brightOrange, // Orange color for focused border
+
+                unfocusedPlaceholderColor = brightOrange,
+                focusedLabelColor = Color.Transparent,
+                unfocusedLabelColor = grayWhite,
+                containerColor = darker,
+                unfocusedBorderColor = Color.Transparent,
+
+
+                focusedSupportingTextColor = brightOrange
+
+
+            ),
+
+            shape = RoundedCornerShape(size = 6.dp),
             modifier = Modifier.fillMaxWidth()
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(32.dp))
 
         // Login button
         Button(
             onClick = { authViewModel.login(email, password) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6D00)),
+            colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
             enabled = authState.value != AuthState.Loading,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().height(55.dp),
+            shape = RoundedCornerShape(size = 18.dp)
         ) {
-            Text(text = "Login", color = Color.White)
+            Text(text = "Log in", color = grayWhite, fontSize = 32.sp, fontWeight = FontWeight.Bold)
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+
+        Box(modifier = Modifier
+            .fillMaxWidth()
+
+        ){
+            Text(text = "NEED AN ACCOUNT?", color = grayWhite, textAlign = TextAlign.Left, fontSize = 16.sp )
+        }
 
         // Signup navigation text
-        TextButton(onClick = { navController.navigate("signup") }) {
-            Text(text = "Don't have an account? Sign up", color = Color.White)
-        }
+//        TextButton(onClick = { navController.navigate("signup") }) {
+//            Text(text = "Don't have an account? Sign up", color = Color.White)
+//        }
+        Button(
+            onClick = { authViewModel.login(email, password) },
+            colors = ButtonDefaults.buttonColors(containerColor = transparent),
+            enabled = authState.value != AuthState.Loading,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp),
+//                .border(width = 5.dp, color = Color(0xFFD58D18)),
+            shape = RoundedCornerShape(size = 18.dp),
+            border = BorderStroke(4.5.dp, brightOrange)
 
+        ) {
+            Text(text = "REGISTER", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+        }
 
 
     }
