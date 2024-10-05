@@ -1,7 +1,7 @@
 package com.example.fitquest.pages
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,7 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -31,13 +30,18 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.graphics.Color
+
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.fitquest.AuthState
-import com.example.fitquest.R
 
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+
+//import com.example.composeapp.ui.theme.color1
+//import com.example.composeapp.ui.theme.color2
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,15 +66,46 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         }
     }
 
+
+
+    val verticalGradientBrush = Brush.verticalGradient(
+        listOf(Color(0xFF222831) , Color(0xFF393E46)),
+        startY = 20.0f,
+        endY = Float.POSITIVE_INFINITY
+    )
+
+
+    val linear = Brush.linearGradient(listOf(Color.Red, Color.Blue));
+
+
     // Login page layout
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.DarkGray)
-            .padding(16.dp),
+            .background(verticalGradientBrush)
+            .padding(16.dp)
+        ,
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+
     ) {
+
+//        Box(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .size(120.dp)
+//                .background(linear)
+//        );
+
+
+//        Box(
+//            modifier = modifier
+//                .fillMaxSize()
+//                .background(gradient)
+//                .padding(horizontal = 16.dp, vertical = 8.dp),
+//            contentAlignment = Alignment.Center
+//        ) {}
+
         // Title
         Text(
             text = "Login Page",
@@ -93,6 +128,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                 unfocusedLabelColor = Color.White,
 
                 ),
+            shape = RoundedCornerShape(size = 10.dp),
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -131,6 +167,9 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         TextButton(onClick = { navController.navigate("signup") }) {
             Text(text = "Don't have an account? Sign up", color = Color.White)
         }
+
+
+
     }
 
 

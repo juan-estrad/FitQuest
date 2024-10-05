@@ -34,6 +34,9 @@ import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 
+
+
+
 @Composable
 fun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel){
     val authState=authViewModel.authState.observeAsState()
@@ -47,7 +50,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.DarkGray)
+            .background(Color.Blue)
             .padding(16.dp)
     ) {
         // Top section with title and user icon
@@ -63,7 +66,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(Color.Gray),
+                    .background(Color.Blue),
                 contentAlignment = Alignment.Center
             ) {
                 Text("USER", fontSize = 12.sp, color = Color.White)
@@ -71,7 +74,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
         }
 
         // XP Progress Bar
-        Text("XP", color = Color.White, fontSize = 14.sp)
+        Text("XP", color = Color.DarkGray, fontSize = 14.sp)
         LinearProgressIndicator(
             progress = 0.7f, // Replace with dynamic XP progress
             color = Color(0xFFFF6D00),

@@ -2,19 +2,39 @@ package com.example.fitquest.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.fitquest.R
+
+
+val interFont = FontFamily(Font(R.font.inter_bold));
+
+
+
+
 
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
+        color = grayWhite,
+        fontFamily = interFont,
+//        fontWeight = FontWeight.Bold,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     )
+
+//            Text(
+//            text = "EMAIL OR USERNAME",
+//    style = TextStyle(
+//        fontSize = 16.sp,
+//        fontFamily = FontFamily(Font(R.font.inter)),
+//        fontWeight = FontWeight(700),
+//        color = Color(0xFFEEEEEE),
+//    )
+//)
     /* Other default text styles to override
     titleLarge = TextStyle(
         fontFamily = FontFamily.Default,
