@@ -105,7 +105,9 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         Text(
             text =
             buildAnnotatedString {
-                append("Time for a \n\n\n")
+                withStyle(style = SpanStyle(fontSize = 35.sp)) {
+                    append("Time for a \n\n\n")
+                }
                 withStyle(style = SpanStyle(color = brightOrange)) {
                     append("Fit")
                 }
@@ -113,7 +115,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                     append("Quest!")
                 }
             },
-            fontSize = 64.sp,
+            fontSize = 68.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
 
