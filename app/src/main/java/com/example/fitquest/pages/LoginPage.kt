@@ -1,16 +1,17 @@
 package com.example.fitquest.pages
 
 import android.widget.Toast
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.BorderStroke
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,22 +22,34 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthViewModel
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.graphics.Color
+
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.fitquest.AuthState
-import com.example.fitquest.R
+
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
+import com.example.fitquest.ui.theme.dark
+import com.example.fitquest.ui.theme.darker
+import com.example.fitquest.ui.theme.grayWhite
+import com.example.fitquest.ui.theme.brightOrange
+import com.example.fitquest.ui.theme.transparent
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -62,75 +75,174 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         }
     }
 
+
+
+    val verticalGradientBrush = Brush.verticalGradient(
+        listOf( Color.Transparent, dark),
+        startY = 0f,
+        endY = Float.POSITIVE_INFINITY
+    )
+
+
+    val linear = Brush.linearGradient(listOf(Color.Red, Color.Blue));
+
+
     // Login page layout
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color.Gray)
-            .padding(16.dp),
+            .background(verticalGradientBrush)
+            .padding(30.dp)
+        ,
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+        horizontalAlignment = Alignment.CenterHorizontally,
+
+        ) {
+
+
+
         // Title
         Text(
-            text = "Login Page",
-            fontSize = 32.sp,
+            text =
+            buildAnnotatedString {
+                withStyle(style = SpanStyle(fontSize = 35.sp)) {
+                    append("Time for a \n\n\n")
+                }
+                withStyle(style = SpanStyle(color = brightOrange)) {
+                    append("Fit")
+                }
+                withStyle(style = SpanStyle(color = grayWhite)) {
+                    append("Quest!")
+                }
+            },
+            fontSize = 68.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.White
+            textAlign = TextAlign.Center
+
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(66.dp))
 
         // Email input field
+        Box(modifier = Modifier
+            .fillMaxWidth()
+        ){
+            Text(text = "EMAIL", color = grayWhite, textAlign = TextAlign.Left, fontSize = 16.sp )
+        }
         OutlinedTextField(
+
             value = email,
             onValueChange = { email = it },
-            label = { Text(text = "Email", color = Color.White) },
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color(0xFFFF6D00), // Orange color for focused border
-                unfocusedBorderColor = Color.LightGray,
-                focusedLabelColor = Color(0xFFFF6D00),
-                unfocusedLabelColor = Color.White,
+            singleLine = true,
 
-                ),
-            modifier = Modifier.fillMaxWidth()
+            textStyle = TextStyle(
+                fontWeight = FontWeight.Normal,
+                fontSize = 20.sp
+            ),
+
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = transparent, // Orange color for focused border
+
+                unfocusedPlaceholderColor = brightOrange,
+                focusedLabelColor = Color.Transparent,
+                unfocusedLabelColor = grayWhite,
+                containerColor = darker,
+                unfocusedBorderColor = Color.Transparent,
+
+
+                focusedSupportingTextColor = brightOrange
+
+
+            ),
+
+            shape = RoundedCornerShape(size = 6.dp),
+            modifier = Modifier.fillMaxWidth().height(67.dp)
         )
 
-        Spacer(modifier = Modifier.height(8.dp))
+
+        Spacer(modifier = Modifier.height(15.dp))
+
+        Box(modifier = Modifier
+            .fillMaxWidth()
+
+        ){
+            Text(text = "PASSWORD", color = grayWhite, textAlign = TextAlign.Left, fontSize = 16.sp )
+        }
+
 
         // Password input field
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text(text = "Password", color = Color.White) },
+            singleLine = true,
+
+            textStyle = TextStyle(
+                fontWeight = FontWeight.Normal,
+                fontSize = 20.sp
+            ),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = Color(0xFFFF6D00),
-                unfocusedBorderColor = Color.LightGray,
-                focusedLabelColor = Color(0xFFFF6D00),
-                unfocusedLabelColor = Color.White,
+                focusedBorderColor = transparent, // Orange color for focused border
+
+                unfocusedPlaceholderColor = brightOrange,
+                focusedLabelColor = Color.Transparent,
+                unfocusedLabelColor = grayWhite,
+                containerColor = darker,
+                unfocusedBorderColor = Color.Transparent,
+
+
 
                 ),
-            modifier = Modifier.fillMaxWidth()
+
+            shape = RoundedCornerShape(size = 6.dp),
+            modifier = Modifier.fillMaxWidth().height(67.dp)
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(45.dp))
 
         // Login button
         Button(
             onClick = { authViewModel.login(email, password) },
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6D00)),
+            colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
             enabled = authState.value != AuthState.Loading,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().height(65.dp),
+            shape = RoundedCornerShape(size = 18.dp)
         ) {
-            Text(text = "Login", color = Color.White)
+            Text(
+                text = "Login",
+                color = grayWhite,
+                fontSize = 40.sp,
+                fontWeight = FontWeight.Bold
+            )
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+
+        Box(modifier = Modifier
+            .fillMaxWidth()
+
+        ){
+            Text(text = "NEED AN ACCOUNT?", color = grayWhite, textAlign = TextAlign.Left, fontSize = 16.sp )
+        }
 
         // Signup navigation text
-        TextButton(onClick = { navController.navigate("signup") }) {
-            Text(text = "Don't have an account? Sign up", color = Color.White)
+        Button(
+            onClick = { navController.navigate("signup") },
+            colors = ButtonDefaults.buttonColors(containerColor = transparent),
+            enabled = authState.value != AuthState.Loading,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(55.dp),
+//                .border(width = 5.dp, color = Color(0xFFD58D18)),
+            shape = RoundedCornerShape(size = 25.dp),
+            border = BorderStroke(4.5.dp, brightOrange)
+
+        ) {
+            Text(text = "REGISTER", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
         }
+
+
     }
 
 
