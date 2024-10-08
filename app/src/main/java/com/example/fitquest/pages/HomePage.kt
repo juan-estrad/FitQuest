@@ -12,11 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -28,11 +23,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.User
 
 @Composable
 fun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel){
@@ -44,6 +41,12 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
             else -> Unit
         }
     }
+
+    val user = User()
+    user.username = "username"
+    user.userAgility = 20111
+    user.userConsistency = 30111
+    user.streak = 20
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -83,7 +86,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
         )
 
         // Streak Section
-        Text("STREAK", color = Color.White, fontWeight = FontWeight.Light, fontSize = 18.sp)
+        Text(user.streak.toString() + " STREAK", color = Color.White, fontWeight = FontWeight.Light, fontSize = 18.sp)
         Spacer(modifier = Modifier.height(16.dp))
 
         // Stats Section
@@ -101,7 +104,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
                     StatItem("Strength", "85")
-                    StatItem("Consistency", "78")
+                    StatItem("Consistency", user.userConsistency.toString().toString())
                     StatItem("Stamina", "90")
                 }
                 Spacer(modifier = Modifier.height(16.dp))
@@ -110,7 +113,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
                     StatItem("Dexterity", "65")
-                    StatItem("Agility", "72")
+                    StatItem("Agility", user.userAgility.toString().toString())
                 }
             }
         }
@@ -155,3 +158,4 @@ fun StatItem(statName: String, statValue: String) {
         Text(text = statValue, color = Color.White, fontSize = 18.sp)
     }
 }
+
