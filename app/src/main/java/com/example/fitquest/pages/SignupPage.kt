@@ -56,6 +56,9 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
     var password by remember {
         mutableStateOf("")
     }
+    var username by remember {
+        mutableStateOf("")
+    }
 
     val authState =authViewModel.authState.observeAsState()
     val context = LocalContext.current
@@ -66,7 +69,10 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
         val userID = FirebaseAuth.getInstance().uid
         when(authState.value){
             is AuthState.Authenticated -> {
-                myRef.child("$userID").child("Fitcoins").setValue(0)
+                userID?.let {
+                    myRef.child(it).child("Username").setValue(username)// Save username to database
+                    myRef.child(it).child("Fitcoins").setValue(0)
+                }
                 navController.navigate("home")
             }
             is AuthState.Error -> Toast.makeText(context,
@@ -85,44 +91,62 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // EMAIL
-        Box(modifier = Modifier
-            .fillMaxWidth()
-        ){
+        // USERNAME
+        Box(modifier = Modifier.fillMaxWidth()) {
             Text(
-                text =
-                buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = grayWhite)) {
-                        append("EMAIL ")
-                    }
-                    withStyle(style = SpanStyle(color = Color.Red)) {
-                        append("*")
-                    }
-                }
-                , color = grayWhite, textAlign = TextAlign.Left, fontSize = 16.sp )
+                text = buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = grayWhite)) { append("USERNAME ") }
+                    withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
+                },
+                color = grayWhite,
+                textAlign = TextAlign.Left,
+                fontSize = 16.sp
+            )
         }
         OutlinedTextField(
-
-            value = email,
-            onValueChange = { email = it },
-
+            value = username,
+            onValueChange = { username = it },
             singleLine = true,
-
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = transparent, // Orange color for focused border
-
+                focusedBorderColor = transparent,
                 unfocusedPlaceholderColor = brightOrange,
                 focusedLabelColor = Color.Transparent,
                 unfocusedLabelColor = grayWhite,
                 containerColor = darker,
                 unfocusedBorderColor = Color.Transparent,
-
-
                 focusedSupportingTextColor = brightOrange
-
-
             ),
+            shape = RoundedCornerShape(size = 6.dp),
+            modifier = Modifier.fillMaxWidth().height(57.dp)
+        )
 
+        Spacer(modifier = Modifier.height(15.dp))
+
+        // EMAIL
+        Box(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = grayWhite)) { append("EMAIL ") }
+                    withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
+                },
+                color = grayWhite,
+                textAlign = TextAlign.Left,
+                fontSize = 16.sp
+            )
+        }
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            singleLine = true,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = transparent,
+                unfocusedPlaceholderColor = brightOrange,
+                focusedLabelColor = Color.Transparent,
+                unfocusedLabelColor = grayWhite,
+                containerColor = darker,
+                unfocusedBorderColor = Color.Transparent,
+                focusedSupportingTextColor = brightOrange
+            ),
             shape = RoundedCornerShape(size = 6.dp),
             modifier = Modifier.fillMaxWidth().height(57.dp)
         )
@@ -130,72 +154,48 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
         Spacer(modifier = Modifier.height(15.dp))
 
         // PASSWORD
-        Box(modifier = Modifier
-            .fillMaxWidth()
-        ){
+        Box(modifier = Modifier.fillMaxWidth()) {
             Text(
-                text =
-                buildAnnotatedString {
-                    withStyle(style = SpanStyle(color = grayWhite)) {
-                        append("PASSWORD ")
-                    }
-                    withStyle(style = SpanStyle(color = Color.Red)) {
-                        append("*")
-                    }
-                }
-                , color = grayWhite, textAlign = TextAlign.Left, fontSize = 16.sp )
+                text = buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = grayWhite)) { append("PASSWORD ") }
+                    withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
+                },
+                color = grayWhite,
+                textAlign = TextAlign.Left,
+                fontSize = 16.sp
+            )
         }
         OutlinedTextField(
-
             value = password,
-            onValueChange = {
-                password = it
-            },
+            onValueChange = { password = it },
             singleLine = true,
-
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = transparent, // Orange color for focused border
-
+                focusedBorderColor = transparent,
                 unfocusedPlaceholderColor = brightOrange,
                 focusedLabelColor = Color.Transparent,
                 unfocusedLabelColor = grayWhite,
                 containerColor = darker,
                 unfocusedBorderColor = Color.Transparent,
-
-
                 focusedSupportingTextColor = brightOrange
-
-
             ),
-
             shape = RoundedCornerShape(size = 6.dp),
             modifier = Modifier.fillMaxWidth().height(57.dp)
         )
 
-
-
         Spacer(modifier = Modifier.height(16.dp))
 
-        //create account button
-        Button(onClick = {
-            authViewModel.signup(email,password)
-
-        },
+        // Create account button
+        Button(
+            onClick = { authViewModel.signup(email, password) },
             enabled = authState.value != AuthState.Loading
-        )
-        {
+        ) {
             Text(text = "Create Account")
         }
         Spacer(modifier = Modifier.height(16.dp))
 
-        TextButton(onClick={
-            navController.navigate("login")
-        })
-
-        {
-            Text(text ="Already have an account, Login")
-
+        // Login navigation
+        TextButton(onClick = { navController.navigate("login") }) {
+            Text(text = "Already have an account, Login")
         }
-
     }
 }
