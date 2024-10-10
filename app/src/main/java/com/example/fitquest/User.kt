@@ -16,4 +16,6 @@ class User {
     var userAgility:Int = 0
     var userStamina:Int = 0
     var userConsistency:Int = 0
+
+
 }

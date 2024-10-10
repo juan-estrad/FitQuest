@@ -9,7 +9,8 @@ import kotlin.concurrent.timerTask
 class AuthViewModel : ViewModel(){
 
     private val auth : FirebaseAuth =FirebaseAuth.getInstance()
-
+    //val user = User()
+    
     private val _authState = MutableLiveData<AuthState>()
     val authState: LiveData<AuthState> = _authState
 
