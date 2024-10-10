@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.UserProfile
+import com.example.fitquest.UserStats
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
@@ -65,21 +67,38 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
 
     LaunchedEffect(authState.value) {
         val database = Firebase.database
-        val myRef = database.getReference("User")
+        val myRef = database.getReference("Users")
         val userID = FirebaseAuth.getInstance().uid
-        when(authState.value){
+
+        when(authState.value) {
             is AuthState.Authenticated -> {
-                userID?.let {
-                    myRef.child(it).child("Username").setValue(username)// Save username to database
-                    myRef.child(it).child("Fitcoins").setValue(0)
+                userID?.let { id ->
+                    val userProfile = UserProfile(
+                        username = username,
+                        flexcoins = 0,
+                        streak = 0,
+                        userStats = UserStats(
+                            agility = 0,
+                            consistency = 0,
+                            dexterity = 0,
+                            stamina = 0,
+                            strength = 0
+                        )
+                    )
+                    myRef.child(id).setValue(userProfile)
                 }
+
                 navController.navigate("home")
             }
-            is AuthState.Error -> Toast.makeText(context,
-                (authState.value as AuthState.Error).message,Toast.LENGTH_LONG).show()
+
+            is AuthState.Error -> Toast.makeText(
+                context,
+                (authState.value as AuthState.Error).message,
+                Toast.LENGTH_LONG
+            ).show()
+
             else -> Unit
         }
-
     }
 
     Column(
