@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
@@ -61,7 +62,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                     val userRef = database.getReference("Users").child(id) // points to the Users node in firebase
 
                     userRef.get().addOnSuccessListener { dataSnapshot ->     //sends a request to retrieve info in firebase
-                        userProfile = dataSnapshot.getValue(UserProfile::class.java) //converts the info in a user profile object
+                        userProfile = dataSnapshot.getValue(UserProfile::class.java) //converts the info into a user profile object
                     }.addOnFailureListener {
                         Toast.makeText(context, "Failed to retrieve user data", Toast.LENGTH_SHORT).show()
                     }
@@ -86,17 +87,20 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                     .padding(bottom = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
-            ) {
+            )
+            {
                 Text("FitQuest", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
 
+
+                //Plan is to make the circle the pfp but for now i just put the username in there
                 Box(
                     modifier = Modifier
-                        .size(40.dp)
+                        .size(100.dp)
                         .clip(CircleShape)
                         .background(Color.Gray),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(profile.username, fontSize = 12.sp, color = Color.White) //profile username
+                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
                 }
             }
 
@@ -113,11 +117,25 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
 //            )
 
 
-            // Display user streak
-            //havent added streak to db yet
-
-            Text("STREAK", color = Color.White, fontWeight = FontWeight.Light, fontSize = 18.sp)
-            Spacer(modifier = Modifier.height(16.dp))
+            // This displays the streak
+            // i think the future plan is to have a fire emoji or something around it
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "STREAK",
+                    color = Color.White,
+                    fontWeight = FontWeight.Light,
+                    fontSize = 18.sp
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = profile.streak.toString(),
+                    color = Color.White,
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
 
 
             Box(
