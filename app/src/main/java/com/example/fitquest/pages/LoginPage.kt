@@ -43,6 +43,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import com.example.fitquest.ui.theme.dark
@@ -141,7 +142,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             ),
 
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = transparent, // Orange color for focused border
+                focusedBorderColor = brightOrange, // Orange color for focused border
 
                 unfocusedPlaceholderColor = brightOrange,
                 focusedLabelColor = Color.Transparent,
@@ -180,8 +181,9 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                 fontWeight = FontWeight.Normal,
                 fontSize = 20.sp
             ),
+            visualTransformation = PasswordVisualTransformation(),
             colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = transparent, // Orange color for focused border
+                focusedBorderColor = brightOrange, // Orange color for focused border
 
                 unfocusedPlaceholderColor = brightOrange,
                 focusedLabelColor = Color.Transparent,
