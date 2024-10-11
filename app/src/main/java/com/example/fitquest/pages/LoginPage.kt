@@ -76,8 +76,6 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         }
     }
 
-
-
     val verticalGradientBrush = Brush.verticalGradient(
         listOf( Color.Transparent, dark),
         startY = 0f,
