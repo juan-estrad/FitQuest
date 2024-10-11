@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.fitquest.pages.HomePage
 import com.example.fitquest.pages.LoginPage
 import com.example.fitquest.pages.SignupPage
+import com.example.fitquest.pages.TestPage
 
 @Composable
 fun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel){
@@ -23,6 +24,9 @@ fun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel)
         }
         composable("home") {
             HomePage(modifier, navController, authViewModel)
+        }
+        composable("test") {
+            TestPage(modifier, navController, authViewModel)
         }
     })
 }

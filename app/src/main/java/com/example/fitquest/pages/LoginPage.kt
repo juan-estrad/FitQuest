@@ -242,7 +242,6 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             Text(text = "REGISTER", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
         }
 
-
     }
 
 

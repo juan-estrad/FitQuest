@@ -1,6 +1,7 @@
 package com.example.fitquest.pages
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LinearProgressIndicator
@@ -37,12 +39,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat.recreate
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.UserProfile
+import com.example.fitquest.ui.theme.brightOrange
+import com.example.fitquest.ui.theme.transparent
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 
 @Composable
@@ -176,6 +183,28 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
             // Sign Out Button
             TextButton(onClick = { authViewModel.signout() }) {
                 Text(text = "Sign Out", color = Color.Red)
+            }
+            Button(
+                onClick = {
+                    val userRef = database.getReference("Users").child("$userID")
+                    userRef.child("userStats").child("agility").setValue(8)
+                }
+            ) {
+                Text("Test")
+            }
+            Button(
+                onClick = { navController.navigate("test") },
+                colors = ButtonDefaults.buttonColors(containerColor = transparent),
+                enabled = authState.value != AuthState.Loading,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(55.dp),
+//                .border(width = 5.dp, color = Color(0xFFD58D18)),
+                shape = RoundedCornerShape(size = 25.dp),
+                border = BorderStroke(4.5.dp, brightOrange)
+
+            ) {
+                Text(text = "test", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
             }
         }
     }
