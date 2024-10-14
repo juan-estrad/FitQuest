@@ -53,7 +53,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 
 @Composable
-fun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+fun StatsPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
@@ -87,6 +87,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                 .background(Color.DarkGray)
                 .padding(16.dp)
         ) {
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -142,77 +143,57 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                     fontWeight = FontWeight.Bold
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
 
-            // Logging
-            Button(
-                onClick = { navController.navigate("logging") },
-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
-                enabled = authState.value != AuthState.Loading,
+
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp),
-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
-                shape = RoundedCornerShape(size = 25.dp),
-                border = BorderStroke(4.5.dp, brightOrange)
-
+                    .padding(vertical = 16.dp),
+                contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = "Log Workout",
-                    color = brightOrange,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        //display user stats
+                        StatItem("Strength", profile.userStats.strength.toString())
+                        StatItem("Consistency", profile.userStats.consistency.toString())
+                        StatItem("Stamina", profile.userStats.stamina.toString())
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceAround
+                    ) {
+                        StatItem("Dexterity", profile.userStats.dexterity.toString())
+                        StatItem("Agility", profile.userStats.agility.toString())
+                    }
+                }
             }
+
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Store
-            Button(
-                onClick = { navController.navigate("store") },
-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
-                enabled = authState.value != AuthState.Loading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
-                shape = RoundedCornerShape(size = 25.dp),
-                border = BorderStroke(4.5.dp, brightOrange)
+            // display user flexcoin
+            Text("Flexcoins: ${profile.flexcoins}", color = Color.White, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Spacer(modifier = Modifier.height(16.dp))
 
-            ) {
-                Text(
-                    text = "Store",
-                    color = brightOrange,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
+            // Sign Out Button
+            TextButton(onClick = { authViewModel.signout() }) {
+                Text(text = "Sign Out", color = Color.Red)
             }
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Stats
             Button(
-                onClick = { navController.navigate("stats") },
-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
-                enabled = authState.value != AuthState.Loading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
-                shape = RoundedCornerShape(size = 25.dp),
-                border = BorderStroke(4.5.dp, brightOrange)
-
+                onClick = {
+                    val userRef = database.getReference("Users").child("$userID")
+                    userRef.child("userStats").child("agility").setValue(8)
+                }
             ) {
-                Text(
-                    text = "Stats",
-                    color = brightOrange,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Text("Test")
             }
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // For You
             Button(
-                onClick = { navController.navigate("foryou") },
+                onClick = { navController.navigate("test") },
                 colors = ButtonDefaults.buttonColors(containerColor = transparent),
                 enabled = authState.value != AuthState.Loading,
                 modifier = Modifier
@@ -223,13 +204,19 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                 border = BorderStroke(4.5.dp, brightOrange)
 
             ) {
-                Text(
-                    text = "For You",
-                    color = brightOrange,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Text(text = "test", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
             }
         }
+    }
+}
+
+
+@Composable
+fun StatItem(statName: String, statValue: String) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = statName, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+        Text(text = statValue, color = Color.White, fontSize = 18.sp)
     }
 }

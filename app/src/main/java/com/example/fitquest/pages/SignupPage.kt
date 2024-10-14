@@ -40,6 +40,7 @@ import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.UserProfile
 import com.example.fitquest.UserStats
+import com.example.fitquest.Logging
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
@@ -83,6 +84,15 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                             dexterity = 0,
                             stamina = 0,
                             strength = 0
+                        ),
+                        logging = Logging(
+                            workout = "",
+                            type = "",
+                            sets = 0,
+                            reps = 0,
+                            weight = "",
+                            workouttime = ""
+
                         )
                     )
                     myRef.child(id).setValue(userProfile)
