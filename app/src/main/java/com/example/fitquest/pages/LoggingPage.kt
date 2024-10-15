@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -35,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -197,7 +200,8 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
             Column(
                 modifier = modifier
                     .fillMaxSize()
-                    .padding(30.dp),
+                    .padding(30.dp)
+                    .verticalScroll(rememberScrollState()),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -218,18 +222,21 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                     onValueChange = { workout = it },
                     singleLine = true,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = transparent,
+                        focusedBorderColor = brightOrange, // Orange color for focused border
+
                         unfocusedPlaceholderColor = brightOrange,
                         focusedLabelColor = Color.Transparent,
                         unfocusedLabelColor = grayWhite,
                         containerColor = darker,
                         unfocusedBorderColor = Color.Transparent,
+
+
                         focusedSupportingTextColor = brightOrange
                     ),
                     shape = RoundedCornerShape(size = 6.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(30.dp)
+                        .height(55.dp)
                 )
 
                 // Type of Workout
@@ -248,19 +255,26 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                     value = type,
                     onValueChange = { type = it },
                     singleLine = true,
+                    textStyle = TextStyle(
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 20.sp
+                    ),
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = transparent,
+                        focusedBorderColor = brightOrange, // Orange color for focused border
+
                         unfocusedPlaceholderColor = brightOrange,
                         focusedLabelColor = Color.Transparent,
                         unfocusedLabelColor = grayWhite,
                         containerColor = darker,
                         unfocusedBorderColor = Color.Transparent,
+
+
                         focusedSupportingTextColor = brightOrange
                     ),
                     shape = RoundedCornerShape(size = 6.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(30.dp)
+                        .height(55.dp)
                 )
 
                 // Number of Sets
@@ -280,19 +294,23 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                     onValueChange = { sets = it },
                     singleLine = true,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = transparent,
+                        focusedBorderColor = brightOrange, // Orange color for focused border
+
                         unfocusedPlaceholderColor = brightOrange,
                         focusedLabelColor = Color.Transparent,
                         unfocusedLabelColor = grayWhite,
                         containerColor = darker,
                         unfocusedBorderColor = Color.Transparent,
+
+
                         focusedSupportingTextColor = brightOrange
                     ),
                     shape = RoundedCornerShape(size = 6.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(30.dp)
+                        .height(55.dp)
                 )
+
 
                 // Number of reps per set
                 Box(modifier = Modifier.fillMaxWidth()) {
@@ -311,18 +329,21 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                     onValueChange = { reps = it },
                     singleLine = true,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = transparent,
+                        focusedBorderColor = brightOrange, // Orange color for focused border
+
                         unfocusedPlaceholderColor = brightOrange,
                         focusedLabelColor = Color.Transparent,
                         unfocusedLabelColor = grayWhite,
                         containerColor = darker,
                         unfocusedBorderColor = Color.Transparent,
+
+
                         focusedSupportingTextColor = brightOrange
                     ),
                     shape = RoundedCornerShape(size = 6.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(30.dp)
+                        .height(55.dp)
                 )
 
                 // Weight
@@ -342,19 +363,21 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                     onValueChange = { weight = it },
                     singleLine = true,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = transparent,
+                        focusedBorderColor = brightOrange, // Orange color for focused border
+
                         unfocusedPlaceholderColor = brightOrange,
                         focusedLabelColor = Color.Transparent,
                         unfocusedLabelColor = grayWhite,
                         containerColor = darker,
                         unfocusedBorderColor = Color.Transparent,
-                        focusedSupportingTextColor = brightOrange,
-                        focusedTextColor = Color.White
+
+
+                        focusedSupportingTextColor = brightOrange
                     ),
                     shape = RoundedCornerShape(size = 6.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(30.dp)
+                        .height(55.dp)
                 )
 
                 // Time Elapsed
@@ -374,18 +397,21 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                     onValueChange = { workouttime = it },
                     singleLine = true,
                     colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = transparent,
+                        focusedBorderColor = brightOrange, // Orange color for focused border
+
                         unfocusedPlaceholderColor = brightOrange,
                         focusedLabelColor = Color.Transparent,
                         unfocusedLabelColor = grayWhite,
                         containerColor = darker,
                         unfocusedBorderColor = Color.Transparent,
+
+
                         focusedSupportingTextColor = brightOrange
                     ),
                     shape = RoundedCornerShape(size = 6.dp),
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(30.dp)
+                        .height(55.dp)
                 )
 
                 Spacer(modifier = Modifier.height(16.dp))

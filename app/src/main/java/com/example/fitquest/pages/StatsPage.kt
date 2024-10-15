@@ -184,16 +184,16 @@ fun StatsPage(modifier: Modifier = Modifier, navController: NavController, authV
             TextButton(onClick = { authViewModel.signout() }) {
                 Text(text = "Sign Out", color = Color.Red)
             }
+//            Button(
+//                onClick = {
+//                    val userRef = database.getReference("Users").child("$userID")
+//                    userRef.child("userStats").child("agility").setValue(8)
+//                }
+//            ) {
+//                Text("Test")
+//            }
             Button(
-                onClick = {
-                    val userRef = database.getReference("Users").child("$userID")
-                    userRef.child("userStats").child("agility").setValue(8)
-                }
-            ) {
-                Text("Test")
-            }
-            Button(
-                onClick = { navController.navigate("test") },
+                onClick = { navController.navigate("home") },
                 colors = ButtonDefaults.buttonColors(containerColor = transparent),
                 enabled = authState.value != AuthState.Loading,
                 modifier = Modifier
@@ -204,7 +204,7 @@ fun StatsPage(modifier: Modifier = Modifier, navController: NavController, authV
                 border = BorderStroke(4.5.dp, brightOrange)
 
             ) {
-                Text(text = "test", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(text = "HomePage", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
             }
         }
     }
