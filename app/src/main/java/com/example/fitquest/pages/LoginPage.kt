@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,8 +42,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
+
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
+
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import com.example.fitquest.ui.theme.dark
@@ -76,7 +80,6 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
     }
 
 
-
     val verticalGradientBrush = Brush.verticalGradient(
         listOf( Color.Transparent, dark),
         startY = 0f,
@@ -97,8 +100,8 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
 
-    ) {
 
+        ) {
 
 
         // Title
@@ -123,40 +126,13 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
         Spacer(modifier = Modifier.height(66.dp))
 
-        // Email input field
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            ){
-            Text(text = "EMAIL", color = grayWhite, textAlign = TextAlign.Left, fontSize = 16.sp )
-        }
-        OutlinedTextField(
 
+        // Email input
+        LoginInputFields(
+            label = "EMAIL",
             value = email,
-            onValueChange = { email = it },
-            singleLine = true,
+            onValueChange = { email = it }
 
-            textStyle = TextStyle(
-                fontWeight = FontWeight.Normal,
-                fontSize = 20.sp
-            ),
-
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = transparent, // Orange color for focused border
-
-                unfocusedPlaceholderColor = brightOrange,
-                focusedLabelColor = Color.Transparent,
-                unfocusedLabelColor = grayWhite,
-                containerColor = darker,
-                unfocusedBorderColor = Color.Transparent,
-
-
-                focusedSupportingTextColor = brightOrange
-
-
-            ),
-
-            shape = RoundedCornerShape(size = 6.dp),
-            modifier = Modifier.fillMaxWidth().height(67.dp)
         )
         
 
@@ -170,31 +146,16 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         }
 
 
-        // Password input field
-        OutlinedTextField(
+        Spacer(modifier = Modifier.height(15.dp))
+
+       // Password Input
+        LoginInputFields(
+            label = "PASSWORD",
             value = password,
             onValueChange = { password = it },
-            singleLine = true,
 
-            textStyle = TextStyle(
-                fontWeight = FontWeight.Normal,
-                fontSize = 20.sp
-                ),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = transparent, // Orange color for focused border
+            isPassword = true
 
-                unfocusedPlaceholderColor = brightOrange,
-                focusedLabelColor = Color.Transparent,
-                unfocusedLabelColor = grayWhite,
-                containerColor = darker,
-                unfocusedBorderColor = Color.Transparent,
-
-
-
-            ),
-
-            shape = RoundedCornerShape(size = 6.dp),
-            modifier = Modifier.fillMaxWidth().height(67.dp)
         )
 
         Spacer(modifier = Modifier.height(45.dp))
@@ -245,6 +206,50 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
     }
 
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LoginInputFields(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit,
+    isPassword: Boolean = false
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment= Alignment.CenterVertically
+    ) {
+        Text(
+            text = label,
+            color = grayWhite,
+            textAlign = TextAlign.Left,
+            fontSize = 13.sp
+        )
+        Text(
+            text = "*",
+            color = Color.Red,
+            fontSize = 13.sp
+        )
+    }
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        singleLine = true,
+        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = brightOrange,
+            unfocusedPlaceholderColor = brightOrange,
+            focusedLabelColor = Color.Transparent,
+            unfocusedLabelColor = grayWhite,
+            containerColor = darker,
+            unfocusedBorderColor = Color.Transparent,
+            focusedSupportingTextColor = brightOrange
+        ),
+        shape = RoundedCornerShape(size = 6.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+    )
 }
 
