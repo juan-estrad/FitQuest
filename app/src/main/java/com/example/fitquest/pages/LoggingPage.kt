@@ -160,19 +160,6 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                 }
             }
 
-            //            // Display XP Progress Bar probably dont need this
-            //            Text("XP", color = Color.White, fontSize = 14.sp)
-            //            LinearProgressIndicator(
-            //                progress = 0.7f,
-            //                color = Color(0xFFFF6D00),
-            //                trackColor = Color.LightGray,
-            //                modifier = Modifier
-            //                    .fillMaxWidth()
-            //                    .height(8.dp)
-            //                    .padding(vertical = 8.dp)
-            //            )
-
-
             // This displays the streak
             // i think the future plan is to have a fire emoji or something around it
             Row(
@@ -277,144 +264,38 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                         .height(55.dp)
                 )
 
-                // Number of Sets
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = grayWhite)) { append("Number of Sets ") }
-                            withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
-                        },
-                        color = grayWhite,
-                        textAlign = TextAlign.Left,
-                        fontSize = 13.sp
-                    )
-                }
-                OutlinedTextField(
-                    value = sets,
-                    onValueChange = { sets = it },
-                    singleLine = true,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = brightOrange, // Orange color for focused border
+                //Number of sets
+                LoggingInputField(
+                    label = "Number of Sets",
+                    value = sets)
+                    { sets = it }
 
-                        unfocusedPlaceholderColor = brightOrange,
-                        focusedLabelColor = Color.Transparent,
-                        unfocusedLabelColor = grayWhite,
-                        containerColor = darker,
-                        unfocusedBorderColor = Color.Transparent,
+                Spacer(modifier = Modifier.height(15.dp))
 
+                // Number of Reps per Set
+                LoggingInputField(
+                    label = "Number of Reps per Set",
+                    value = reps)
+                    { reps = it }
 
-                        focusedSupportingTextColor = brightOrange
-                    ),
-                    shape = RoundedCornerShape(size = 6.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp)
-                )
-
-
-                // Number of reps per set
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = grayWhite)) { append("Number of reps per set ") }
-                            withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
-                        },
-                        color = grayWhite,
-                        textAlign = TextAlign.Left,
-                        fontSize = 13.sp
-                    )
-                }
-                OutlinedTextField(
-                    value = reps,
-                    onValueChange = { reps = it },
-                    singleLine = true,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = brightOrange, // Orange color for focused border
-
-                        unfocusedPlaceholderColor = brightOrange,
-                        focusedLabelColor = Color.Transparent,
-                        unfocusedLabelColor = grayWhite,
-                        containerColor = darker,
-                        unfocusedBorderColor = Color.Transparent,
-
-
-                        focusedSupportingTextColor = brightOrange
-                    ),
-                    shape = RoundedCornerShape(size = 6.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp)
-                )
+                Spacer(modifier = Modifier.height(15.dp))
 
                 // Weight
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = grayWhite)) { append("Weight ") }
-                            withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
-                        },
-                        color = grayWhite,
-                        textAlign = TextAlign.Left,
-                        fontSize = 13.sp
-                    )
-                }
-                OutlinedTextField(
-                    value = weight,
-                    onValueChange = { weight = it },
-                    singleLine = true,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = brightOrange, // Orange color for focused border
+                LoggingInputField(
+                    label = "Weight",
+                    value = weight)
+                    { weight = it }
 
-                        unfocusedPlaceholderColor = brightOrange,
-                        focusedLabelColor = Color.Transparent,
-                        unfocusedLabelColor = grayWhite,
-                        containerColor = darker,
-                        unfocusedBorderColor = Color.Transparent,
-
-
-                        focusedSupportingTextColor = brightOrange
-                    ),
-                    shape = RoundedCornerShape(size = 6.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp)
-                )
+                Spacer(modifier = Modifier.height(15.dp))
 
                 // Time Elapsed
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = grayWhite)) { append("workouttime ") }
-                            withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
-                        },
-                        color = grayWhite,
-                        textAlign = TextAlign.Left,
-                        fontSize = 13.sp
-                    )
-                }
-                OutlinedTextField(
-                    value = workouttime,
-                    onValueChange = { workouttime = it },
-                    singleLine = true,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = brightOrange, // Orange color for focused border
-
-                        unfocusedPlaceholderColor = brightOrange,
-                        focusedLabelColor = Color.Transparent,
-                        unfocusedLabelColor = grayWhite,
-                        containerColor = darker,
-                        unfocusedBorderColor = Color.Transparent,
-
-
-                        focusedSupportingTextColor = brightOrange
-                    ),
-                    shape = RoundedCornerShape(size = 6.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp)
-                )
+                LoggingInputField(
+                    label = "Workout Time",
+                    value = workouttime)
+                    { workouttime = it }
 
                 Spacer(modifier = Modifier.height(16.dp))
+
 
                 Row(
                     modifier = Modifier
@@ -453,4 +334,44 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
             }
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LoggingInputField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit
+) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = label,
+            color = grayWhite,
+            fontSize = 13.sp
+        )
+        Text(
+            text = "*",
+            color = Color.Red,
+            fontSize = 13.sp
+        )
+    }
+
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        singleLine = true,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = brightOrange, // Orange color for focused border
+            unfocusedPlaceholderColor = brightOrange,
+            focusedLabelColor = Color.Transparent,
+            unfocusedLabelColor = grayWhite,
+            containerColor = darker,
+            unfocusedBorderColor = Color.Transparent,
+            focusedSupportingTextColor = brightOrange
+        ),
+        shape = RoundedCornerShape(size = 6.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(55.dp)
+    )
 }
