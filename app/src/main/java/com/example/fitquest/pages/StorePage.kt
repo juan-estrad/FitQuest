@@ -16,14 +16,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -39,7 +34,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat.recreate
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
@@ -48,15 +42,10 @@ import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.transparent
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 
-
-
-
 @Composable
-fun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+fun StorePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
@@ -65,36 +54,37 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
     val userID = FirebaseAuth.getInstance().uid
 
     LaunchedEffect(authState.value) {
-        when(authState.value) {
+        when (authState.value) {
             is AuthState.Unauthenticated -> navController.navigate("login")
             is AuthState.Authenticated -> {
                 userID?.let { id ->
-                    val userRef = database.getReference("Users").child(id) // points to the Users node in firebase
+                    val userRef = database.getReference("Users")
+                        .child(id) // points to the Users node in firebase
 
-                    userRef.get().addOnSuccessListener { dataSnapshot ->     //sends a request to retrieve info in firebase
-                        userProfile = dataSnapshot.getValue(UserProfile::class.java) //converts the info into a user profile object
-                    }.addOnFailureListener {
-                        Toast.makeText(context, "Failed to retrieve user data", Toast.LENGTH_SHORT).show()
+                    userRef.get()
+                        .addOnSuccessListener { dataSnapshot ->     //sends a request to retrieve info in firebase
+                            userProfile =
+                                dataSnapshot.getValue(UserProfile::class.java) //converts the info into a user profile object
+                        }.addOnFailureListener {
+                        Toast.makeText(context, "Failed to retrieve user data", Toast.LENGTH_SHORT)
+                            .show()
                     }
                 }
             }
+
             else -> Unit
         }
     }
 
-
-    // display content if the userProfile is not null
     userProfile?.let { profile ->
         Column(
             modifier = modifier
                 .fillMaxSize()
                 .background(Color.DarkGray)
                 .padding(16.dp)
-
         ) {
             Row(
                 modifier = Modifier
-
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -111,13 +101,26 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                         .clip(CircleShape)
                         .background(Color.Gray),
                     contentAlignment = Alignment.Center
-
                 ) {
                     Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
                 }
             }
 
+//            // Display XP Progress Bar probably dont need this
+//            Text("XP", color = Color.White, fontSize = 14.sp)
+//            LinearProgressIndicator(
+//                progress = 0.7f,
+//                color = Color(0xFFFF6D00),
+//                trackColor = Color.LightGray,
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(8.dp)
+//                    .padding(vertical = 8.dp)
+//            )
 
+
+            // This displays the streak
+            // i think the future plan is to have a fire emoji or something around it
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
