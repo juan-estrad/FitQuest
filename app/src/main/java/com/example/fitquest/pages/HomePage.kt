@@ -104,21 +104,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                 }
             }
 
-//            // Display XP Progress Bar probably dont need this
-//            Text("XP", color = Color.White, fontSize = 14.sp)
-//            LinearProgressIndicator(
-//                progress = 0.7f,
-//                color = Color(0xFFFF6D00),
-//                trackColor = Color.LightGray,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(8.dp)
-//                    .padding(vertical = 8.dp)
-//            )
 
-
-            // This displays the streak
-            // i think the future plan is to have a fire emoji or something around it
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {

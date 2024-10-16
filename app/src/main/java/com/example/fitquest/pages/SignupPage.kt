@@ -156,7 +156,6 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignupInputField(

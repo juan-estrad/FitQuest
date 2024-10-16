@@ -157,7 +157,6 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             )
         }
 
-
         Spacer(modifier = Modifier.height(32.dp))
 
 
@@ -186,7 +185,6 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
 
     }
-
 
 }
 
