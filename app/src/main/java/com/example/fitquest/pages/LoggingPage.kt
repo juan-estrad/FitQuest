@@ -237,6 +237,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                         textAlign = TextAlign.Left,
                         fontSize = 13.sp
                     )
+
                 }
                 OutlinedTextField(
                     value = type,
