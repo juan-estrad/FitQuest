@@ -4,9 +4,13 @@ import android.R.attr.button
 import android.os.Build.VERSION_CODES.N
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,14 +19,29 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -42,8 +61,11 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
@@ -92,6 +114,12 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
     var count by remember {
         mutableStateOf(0)
     }
+
+    var expanded by remember { mutableStateOf(false) }
+    val items = listOf("A", "B", "C", "D", "E", "F")
+    val disabledValue = "B"
+    var selectedIndex by remember { mutableStateOf(0) }
+
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
@@ -193,17 +221,36 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Workoutname
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = grayWhite)) { append("Choose Workout ") }
-                            withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
-                        },
-                        color = grayWhite,
-                        textAlign = TextAlign.Left,
-                        fontSize = 13.sp
-                    )
+                Demo_ExposedDropdownMenuBox()
+                /*fun c() {
+                    var expanded by remember { mutableStateOf(false) }
+
+                    Box(modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.TopStart)) {
+                        IconButton(onClick = { expanded = true }) {
+                            Icon(Icons.Default.MoreVert, contentDescription = "Localized description")
+                        }
+                        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                            DropdownMenuItem(
+                                text = { Text("Edit") },
+                                onClick = { /* Handle edit! */ },
+                                leadingIcon = { Icon(Icons.Outlined.Edit, contentDescription = null) }
+                            )
+                            DropdownMenuItem(
+                                text = { Text("Settings") },
+                                onClick = { /* Handle settings! */ },
+                                leadingIcon = { Icon(Icons.Outlined.Settings, contentDescription = null) }
+                            )
+                            HorizontalDivider()
+                            DropdownMenuItem(
+                                text = { Text("Send Feedback") },
+                                onClick = { /* Handle send feedback! */ },
+                                leadingIcon = { Icon(Icons.Outlined.Email, contentDescription = null) },
+                                trailingIcon = { Text("F11", textAlign = TextAlign.Center) }
+                            )
+                        }
+                    }
                 }
+
                 OutlinedTextField(
                     value = workout,
                     onValueChange = { workout = it },
@@ -224,7 +271,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(55.dp)
-                )
+                )*/
 
                 // Type of Workout
                 Box(modifier = Modifier.fillMaxWidth()) {
@@ -375,4 +422,82 @@ fun LoggingInputField(
             .fillMaxWidth()
             .height(55.dp)
     )
+}
+
+@Composable
+fun MenuSample() {
+    var expanded by remember { mutableStateOf(false) }
+
+    Box(modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.TopStart)) {
+        Button(onClick = { expanded = true }) {
+            Text("Choose workout")
+        }
+        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            DropdownMenuItem(
+                text = { Text("Cardio") },
+                onClick = { /* Handle edit! */ },
+                leadingIcon = { Icon(Icons.Outlined.Edit, contentDescription = null) }
+            )
+            DropdownMenuItem(
+                text = { Text("Settings") },
+                onClick = { /* Handle settings! */ },
+                leadingIcon = { Icon(Icons.Outlined.Settings, contentDescription = null) }
+            )
+            HorizontalDivider()
+            DropdownMenuItem(
+                text = { Text("Send Feedback") },
+                onClick = { /* Handle send feedback! */ },
+                leadingIcon = { Icon(Icons.Outlined.Email, contentDescription = null) },
+                trailingIcon = { Text("F11", textAlign = TextAlign.Center) }
+            )
+        }
+    }
+}
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Demo_ExposedDropdownMenuBox() {
+    val context = LocalContext.current
+    val coffeeDrinks = arrayOf("Americano", "Cappuccino", "Espresso", "Latte", "Mocha")
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf(coffeeDrinks[0]) }
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(32.dp)
+    ) {
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = {
+                expanded = !expanded
+            }
+        ) {
+            TextField(
+                value = selectedText,
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = Modifier.menuAnchor()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                coffeeDrinks.forEach { item ->
+                    DropdownMenuItem(
+                        text = { Text(text = item) },
+                        onClick = {
+                            selectedText = item
+                            expanded = false
+                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
+            }
+        }
+    }
 }
