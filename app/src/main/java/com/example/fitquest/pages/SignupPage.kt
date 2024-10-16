@@ -32,8 +32,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -41,16 +43,20 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+
 import com.example.fitquest.UserProfile
 import com.example.fitquest.UserStats
+
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.transparent
 import com.example.fitquest.ui.theme.verticalGradientBrush
+
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -113,6 +119,7 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
 
         Spacer(modifier = Modifier.height(16.dp))
 
+
         //Username input
         SignupInputField(
             label = "USERNAME",
@@ -137,6 +144,7 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
             onValueChange = { password = it }
             //isPassword = true
         )
+
 
         Spacer(modifier = Modifier.height(16.dp))
 

@@ -42,9 +42,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
+
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import com.example.fitquest.ui.theme.dark
@@ -77,6 +79,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         }
     }
 
+
     val verticalGradientBrush = Brush.verticalGradient(
         listOf( Color.Transparent, dark),
         startY = 0f,
@@ -97,7 +100,9 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
 
+
         ) {
+
 
         // Title
         Text(
@@ -121,12 +126,24 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
         Spacer(modifier = Modifier.height(66.dp))
 
+
         // Email input
         LoginInputFields(
             label = "EMAIL",
             value = email,
             onValueChange = { email = it }
+
         )
+        
+
+        Spacer(modifier = Modifier.height(15.dp))
+
+        Box(modifier = Modifier
+            .fillMaxWidth()
+
+        ){
+            Text(text = "PASSWORD", color = grayWhite, textAlign = TextAlign.Left, fontSize = 16.sp )
+        }
 
 
         Spacer(modifier = Modifier.height(15.dp))
@@ -136,7 +153,9 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             label = "PASSWORD",
             value = password,
             onValueChange = { password = it },
+
             isPassword = true
+
         )
 
         Spacer(modifier = Modifier.height(45.dp))
@@ -156,6 +175,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                 fontWeight = FontWeight.Bold
             )
         }
+
 
         Spacer(modifier = Modifier.height(32.dp))
 

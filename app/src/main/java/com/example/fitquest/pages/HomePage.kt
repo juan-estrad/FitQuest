@@ -45,6 +45,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 
+
+
+
 @Composable
 fun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
@@ -72,6 +75,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
         }
     }
 
+
     // display content if the userProfile is not null
     userProfile?.let { profile ->
         Column(
@@ -79,10 +83,12 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                 .fillMaxSize()
                 .background(Color.DarkGray)
                 .padding(16.dp)
+
         ) {
 
             Row(
                 modifier = Modifier
+
                     .fillMaxWidth()
                     .padding(bottom = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -99,6 +105,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                         .clip(CircleShape)
                         .background(Color.Gray),
                     contentAlignment = Alignment.Center
+
                 ) {
                     Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
                 }
