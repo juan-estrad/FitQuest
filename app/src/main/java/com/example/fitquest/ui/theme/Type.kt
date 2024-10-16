@@ -21,7 +21,9 @@ val Typography = Typography(
         color = grayWhite,
         fontFamily = interFont,
 //        fontWeight = FontWeight.Bold,
+
         fontSize = 20.sp,
+
         lineHeight = 32.sp,
         letterSpacing = 1.sp
     )
