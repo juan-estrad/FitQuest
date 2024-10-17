@@ -1,16 +1,10 @@
 package com.example.fitquest.pages
 
-import android.R.attr.button
-import android.os.Build.VERSION_CODES.N
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,26 +13,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.outlined.Edit
-import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Button
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MenuItemColors
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -61,11 +44,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.PopupProperties
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
@@ -74,14 +54,9 @@ import com.example.fitquest.UserProfile
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
-import com.example.fitquest.ui.theme.transparent
 import com.example.fitquest.ui.theme.verticalGradientBrush
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ServerValue
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -114,11 +89,6 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
     var count by remember {
         mutableStateOf(0)
     }
-
-    var expanded by remember { mutableStateOf(false) }
-    val items = listOf("A", "B", "C", "D", "E", "F")
-    val disabledValue = "B"
-    var selectedIndex by remember { mutableStateOf(0) }
 
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
@@ -378,11 +348,29 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                         Text(text = "Move to logging page")
                     }
 
+
                 }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Button(
+                        onClick = {navController.navigate("home")}
+                    ){
+                        Text(text= "home")
+                    }
+                }
+
             }
         }
     }
 }
+
+
+//FUNCTIONS
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -424,46 +412,27 @@ fun LoggingInputField(
     )
 }
 
-@Composable
-fun MenuSample() {
-    var expanded by remember { mutableStateOf(false) }
-
-    Box(modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.TopStart)) {
-        Button(onClick = { expanded = true }) {
-            Text("Choose workout")
-        }
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            DropdownMenuItem(
-                text = { Text("Cardio") },
-                onClick = { /* Handle edit! */ },
-                leadingIcon = { Icon(Icons.Outlined.Edit, contentDescription = null) }
-            )
-            DropdownMenuItem(
-                text = { Text("Settings") },
-                onClick = { /* Handle settings! */ },
-                leadingIcon = { Icon(Icons.Outlined.Settings, contentDescription = null) }
-            )
-            HorizontalDivider()
-            DropdownMenuItem(
-                text = { Text("Send Feedback") },
-                onClick = { /* Handle send feedback! */ },
-                leadingIcon = { Icon(Icons.Outlined.Email, contentDescription = null) },
-                trailingIcon = { Text("F11", textAlign = TextAlign.Center) }
-            )
-        }
-    }
-}
-
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Demo_ExposedDropdownMenuBox() {
     val context = LocalContext.current
-    val coffeeDrinks = arrayOf("Americano", "Cappuccino", "Espresso", "Latte", "Mocha")
+    val database = Firebase.database.reference.child("workouts")
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf(coffeeDrinks[0]) }
+    var selectedText by remember { mutableStateOf("Select a Workout") }
+    var workoutCategories by remember { mutableStateOf(listOf<String>()) }
 
+
+    LaunchedEffect(Unit) {
+        database.get().addOnSuccessListener { dataSnapshot ->
+            val categories = mutableListOf<String>()
+            dataSnapshot.children.forEach {
+                it.key?.let { key -> categories.add(key) }
+            }
+            workoutCategories = categories
+        }.addOnFailureListener {
+            Toast.makeText(context, "Failed to fetch workouts", Toast.LENGTH_SHORT).show()
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -487,13 +456,13 @@ fun Demo_ExposedDropdownMenuBox() {
                 expanded = expanded,
                 onDismissRequest = { expanded = false }
             ) {
-                coffeeDrinks.forEach { item ->
+                workoutCategories.forEach { category ->
                     DropdownMenuItem(
-                        text = { Text(text = item) },
+                        text = { Text(text = category) },
                         onClick = {
-                            selectedText = item
+                            selectedText = category
                             expanded = false
-                            Toast.makeText(context, item, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, category, Toast.LENGTH_SHORT).show()
                         }
                     )
                 }
