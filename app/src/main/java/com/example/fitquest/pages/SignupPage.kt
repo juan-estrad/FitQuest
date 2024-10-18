@@ -43,11 +43,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.Date
+import com.example.fitquest.Log
 
 import com.example.fitquest.UserProfile
 import com.example.fitquest.UserStats
 
 import com.example.fitquest.Logging
+import com.example.fitquest.Monthday
+import com.example.fitquest.Year
 
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
@@ -96,13 +100,20 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                             strength = 0
                         ),
                         logging = Logging(
-                            workout = "",
-                            type = "",
-                            sets = 0,
-                            reps = 0,
-                            weight = "",
-                            workouttime = ""
-
+                            date = Date(
+                                year = Year(
+                                    monthday = Monthday(
+                                        log = Log (
+                                            workout = "",
+                                            type = "",
+                                            sets = 0,
+                                            reps = 0,
+                                            weight = "",
+                                            workouttime = ""
+                                        )
+                                    )
+                                )
+                            )
                         )
                     )
                     myRef.child(id).setValue(userProfile)

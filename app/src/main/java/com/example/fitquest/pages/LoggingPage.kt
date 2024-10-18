@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.Log
 import com.example.fitquest.Logging
 import com.example.fitquest.UserProfile
 import com.example.fitquest.ui.theme.brightOrange
@@ -104,7 +105,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                 userID?.let { id ->
                     val userRef = database.getReference("Users").child(id) // points to the Users node in firebase
 
-                    val logging = Logging(
+                    val log = Log(
                         workout = "",
                         type = "",
                         sets = 0,
