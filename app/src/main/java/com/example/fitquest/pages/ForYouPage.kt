@@ -171,9 +171,9 @@ fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, auth
                         .fillMaxWidth()
                         .padding(bottom = 16.dp)
                 ) {
-                    Text(text = "hello")
                     Spacer(modifier = Modifier.width(8.dp))
                 }
+                Text(text = "hello")
 
                 Row (
                     modifier = Modifier
