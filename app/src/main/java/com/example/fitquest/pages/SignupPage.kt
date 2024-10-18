@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -48,6 +49,8 @@ import com.example.fitquest.UserProfile
 import com.example.fitquest.UserStats
 
 import com.example.fitquest.Logging
+import com.example.fitquest.ui.HollowOrangeButton
+import com.example.fitquest.ui.OrangeFilledButton
 
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
@@ -59,6 +62,8 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 
+import com.example.fitquest.ui.UserInputField
+import java.sql.Blob
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -132,24 +137,23 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
 
 
         //Username input
-        SignupInputField(
+        UserInputField(
             label = "USERNAME",
             value = username,
             onValueChange = { username = it }
         )
 
-        Spacer(modifier = Modifier.height(15.dp))
 
         //Email input
-        SignupInputField(
+        UserInputField(
             label = "EMAIL",
             value = email,
             onValueChange = { email = it }
         )
 
-        Spacer(modifier = Modifier.height(15.dp))
+
         //Password input
-        SignupInputField(
+        UserInputField(
             label = "PASSWORD",
             value = password,
             onValueChange = { password = it }
@@ -160,17 +164,30 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
         Spacer(modifier = Modifier.height(16.dp))
 
         // Create account button
-        Button(
-            onClick = { authViewModel.signup(email, password) },
-            enabled = authState.value != AuthState.Loading
-        ) {
-            Text(text = "Create Account")
-        }
-        Spacer(modifier = Modifier.height(16.dp))
+
+        OrangeFilledButton(
+            "Create Account",
+            {authViewModel.signup(email, password)},
+            authState.value != AuthState.Loading
+        )
+
 
         // Login navigation
+//        HollowOrangeButton("Already have an account? Login", {navController.navigate("login")} ,  authState.value != AuthState.Loading)
+
         TextButton(onClick = { navController.navigate("login") }) {
-            Text(text = "Already have an account, Login")
+
+            Text(
+                buildAnnotatedString {
+                    withStyle(style = SpanStyle(color = grayWhite, fontSize = 15.sp)) {
+                        append("Already have an account?")
+                    }
+                    withStyle(style = SpanStyle(color = brightOrange, fontSize = 15.sp, fontWeight = FontWeight.Bold)  ) {
+                        append(" LOGIN")
+                    }
+                }
+            )
+//            Text(text = "Already have an account? Login")
         }
     }
 }
