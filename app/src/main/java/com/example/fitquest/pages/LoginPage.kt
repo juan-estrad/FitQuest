@@ -1,8 +1,8 @@
 package com.example.fitquest.pages
 
-import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 
+
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,32 +23,35 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
-
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.example.fitquest.AuthViewModel
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.livedata.observeAsState
 
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import com.example.fitquest.AuthState
-
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
-
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
+import androidx.navigation.NavController
+import android.widget.Toast
+import androidx.compose.material3.Text
+
+import com.example.fitquest.AuthViewModel
+import com.example.fitquest.AuthState
+
+
+import com.example.fitquest.ui.UserInputFields
+
 import com.example.fitquest.ui.theme.dark
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
@@ -128,7 +131,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
 
         // Email input
-        LoginInputFields(
+        UserInputFields(
             label = "EMAIL",
             value = email,
             onValueChange = { email = it }
@@ -136,20 +139,9 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         )
         
 
-        Spacer(modifier = Modifier.height(15.dp))
-
-        Box(modifier = Modifier
-            .fillMaxWidth()
-
-        ){
-            Text(text = "PASSWORD", color = grayWhite, textAlign = TextAlign.Left, fontSize = 16.sp )
-        }
-
-
-        Spacer(modifier = Modifier.height(15.dp))
 
        // Password Input
-        LoginInputFields(
+        UserInputFields(
             label = "PASSWORD",
             value = password,
             onValueChange = { password = it },
@@ -207,48 +199,5 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LoginInputFields(
-    label: String,
-    value: String,
-    onValueChange: (String) -> Unit,
-    isPassword: Boolean = false
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment= Alignment.CenterVertically
-    ) {
-        Text(
-            text = label,
-            color = grayWhite,
-            textAlign = TextAlign.Left,
-            fontSize = 13.sp
-        )
-        Text(
-            text = "*",
-            color = Color.Red,
-            fontSize = 13.sp
-        )
-    }
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        singleLine = true,
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = brightOrange,
-            unfocusedPlaceholderColor = brightOrange,
-            focusedLabelColor = Color.Transparent,
-            unfocusedLabelColor = grayWhite,
-            containerColor = darker,
-            unfocusedBorderColor = Color.Transparent,
-            focusedSupportingTextColor = brightOrange
-        ),
-        shape = RoundedCornerShape(size = 6.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-    )
-}
+
 

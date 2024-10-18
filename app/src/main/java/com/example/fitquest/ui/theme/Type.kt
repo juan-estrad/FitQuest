@@ -17,13 +17,11 @@ val interFont = FontFamily(Font(R.font.inter_bold));
 
 // Set of Material typography styles to start with
 val Typography = Typography(
-    bodyLarge = TextStyle(
+        bodyLarge = TextStyle(
         color = grayWhite,
         fontFamily = interFont,
-//        fontWeight = FontWeight.Bold,
-
+    //        fontWeight = FontWeight.Bold,
         fontSize = 20.sp,
-
         lineHeight = 32.sp,
         letterSpacing = 1.sp
     )
