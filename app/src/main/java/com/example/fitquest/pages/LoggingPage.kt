@@ -237,29 +237,25 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                                         selectedText = category
                                         expanded = false
                                         Toast.makeText(context, category, Toast.LENGTH_SHORT).show()
-                                        when (selectedText) {
-                                            "Cardio" -> {
-                                                @Composable
-                                                fun test() {
-                                                    Box(modifier = Modifier.fillMaxWidth()) {
-                                                        Text(
-                                                            text = buildAnnotatedString {
-                                                                withStyle(style = SpanStyle(color = grayWhite)) { append("Type of Workout ") }
-                                                                withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
-                                                            },
-                                                            color = grayWhite,
-                                                            textAlign = TextAlign.Left,
-                                                            fontSize = 13.sp
-                                                        )
 
-                                                    }
-                                                }
-                                            }
-                                        }
                                     }
                                 )
                             }
                         }
+                        if (selectedText == "Arms") {
+
+                            LoggingInputField(
+                                label = "Workout",
+                                value = type) { type = it }
+
+                            Spacer(modifier = Modifier.height(15.dp))
+
+                            LoggingInputField(
+                                label = "Number of Sets",
+                                value = sets) { sets = it }
+
+                        }
+
                     }
                 }
 
