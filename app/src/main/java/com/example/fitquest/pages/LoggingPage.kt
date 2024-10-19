@@ -242,20 +242,64 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                                 )
                             }
                         }
-                        if (selectedText == "Arms") {
+                        if (selectedText != "Cardio") {
+                            Column {
+                                Spacer(modifier = Modifier.height(70.dp))
 
-                            LoggingInputField(
+                                LoggingInputField(
                                 label = "Workout",
-                                value = type) { type = it }
+                                value = type) { type = it
+                                }
 
-                            Spacer(modifier = Modifier.height(15.dp))
+                                Spacer(modifier = Modifier.height(15.dp))
 
-                            LoggingInputField(
-                                label = "Number of Sets",
-                                value = sets) { sets = it }
+                                LoggingInputField(
+                                    label = "Number of Sets",
+                                    value = sets) {
+                                    sets = it
+                                }
 
+                                Spacer(modifier = Modifier.height(15.dp))
+
+                                LoggingInputField(
+                                    label = "Number of Reps per Set",
+                                    value = reps)
+                                { reps = it }
+
+                                Spacer(modifier = Modifier.height(15.dp))
+
+                                // Weight
+                                LoggingInputField(
+                                    label = "Weight",
+                                    value = weight)
+                                { weight = it }
+
+                                Spacer(modifier = Modifier.height(15.dp))
+
+                                // Time Elapsed
+                                LoggingInputField(
+                                    label = "Workout Time",
+                                    value = workouttime)
+                                { workouttime = it }
+                            }
                         }
+                        else
+                            Column {
+                                Spacer(modifier = Modifier.height(65.dp))
 
+                                LoggingInputField(
+                                    label = "Distance",
+                                    value = type) { type = it
+                                }
+
+                                Spacer(modifier = Modifier.height(15.dp))
+
+                                LoggingInputField(
+                                    label = "Time Elapsed",
+                                    value = sets) {
+                                    sets = it
+                                }
+                            }
                     }
                 }
 
