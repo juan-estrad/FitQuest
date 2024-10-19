@@ -16,7 +16,23 @@ data class UserStats(
     val strength: Int = 0
 )
 
-data class Logging (
+data class Logging(
+    val date: Date = Date()
+)
+
+data class Date(
+    val year: Year = Year()
+)
+
+data class Year(
+    val monthday: Monthday = Monthday()
+)
+
+data class Monthday(
+    val log: Log = Log()
+)
+
+data class Log(
     val workout: String = "",
     val type: String = "",
     val sets: Int = 0,
@@ -24,4 +40,5 @@ data class Logging (
     val weight: String = "",
     val workouttime: String = ""
 )
+
 

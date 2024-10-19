@@ -1,7 +1,5 @@
 package com.example.fitquest.pages
 
-import android.R.attr.button
-import android.os.Build.VERSION_CODES.N
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -20,9 +18,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -47,19 +49,15 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.Log
 import com.example.fitquest.Logging
 import com.example.fitquest.UserProfile
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
-import com.example.fitquest.ui.theme.transparent
 import com.example.fitquest.ui.theme.verticalGradientBrush
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ServerValue
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -92,21 +90,27 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
     var count by remember {
         mutableStateOf(0)
     }
+
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
     var userProfile by remember { mutableStateOf<UserProfile?>(null) }
     val database = Firebase.database //initialize an instance of the realtime database
     val userID = FirebaseAuth.getInstance().uid
+    var workoutCategories by remember { mutableStateOf(listOf<String>()) }
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf("Select a Workout") }
+
 
     LaunchedEffect(authState.value) {
         when(authState.value) {
             is AuthState.Unauthenticated -> navController.navigate("login")
             is AuthState.Authenticated -> {
                 userID?.let { id ->
-                    val userRef = database.getReference("Users").child(id) // points to the Users node in firebase
+                    val userRef = database.getReference("Users").child(id)
+                    val database = Firebase.database.reference.child("workouts") // points to the Users node in firebase
 
-                    val logging = Logging(
+                    val log = Log(
                         workout = "",
                         type = "",
                         sets = 0,
@@ -116,9 +120,19 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                     )
 
                     userRef.get().addOnSuccessListener { dataSnapshot ->     //sends a request to retrieve info in firebase
-                        userProfile = dataSnapshot.getValue(UserProfile::class.java) //converts the info into a user profile object
+                        userProfile = dataSnapshot.getValue(UserProfile::class.java)
+                    //converts the info into a user profile object
                     }.addOnFailureListener {
                         Toast.makeText(context, "Failed to retrieve user data", Toast.LENGTH_SHORT).show()
+                    }
+                    database.get().addOnSuccessListener { dataSnapshot ->
+                        val categories = mutableListOf<String>()
+                        dataSnapshot.children.forEach {
+                            it.key?.let { key -> categories.add(key) }
+                        }
+                        workoutCategories = categories
+                    }.addOnFailureListener {
+                        Toast.makeText(context, "Failed to fetch workouts", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -160,19 +174,6 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                 }
             }
 
-            //            // Display XP Progress Bar probably dont need this
-            //            Text("XP", color = Color.White, fontSize = 14.sp)
-            //            LinearProgressIndicator(
-            //                progress = 0.7f,
-            //                color = Color(0xFFFF6D00),
-            //                trackColor = Color.LightGray,
-            //                modifier = Modifier
-            //                    .fillMaxWidth()
-            //                    .height(8.dp)
-            //                    .padding(vertical = 8.dp)
-            //            )
-
-
             // This displays the streak
             // i think the future plan is to have a fire emoji or something around it
             Row(
@@ -206,41 +207,104 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // Workoutname
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = grayWhite)) { append("Choose Workout ") }
-                            withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
-                        },
-                        color = grayWhite,
-                        textAlign = TextAlign.Left,
-                        fontSize = 13.sp
-                    )
-                }
-                OutlinedTextField(
-                    value = workout,
-                    onValueChange = { workout = it },
-                    singleLine = true,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = brightOrange, // Orange color for focused border
-
-                        unfocusedPlaceholderColor = brightOrange,
-                        focusedLabelColor = Color.Transparent,
-                        unfocusedLabelColor = grayWhite,
-                        containerColor = darker,
-                        unfocusedBorderColor = Color.Transparent,
-
-
-                        focusedSupportingTextColor = brightOrange
-                    ),
-                    shape = RoundedCornerShape(size = 6.dp),
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(55.dp)
-                )
+                        .padding(32.dp)
+                ) {
+                    ExposedDropdownMenuBox(
+                        expanded = expanded,
+                        onExpandedChange = {
+                            expanded = !expanded
+                        }
+                    ) {
+                        TextField(
+                            value = selectedText,
+                            onValueChange = {},
+                            readOnly = true,
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                            modifier = Modifier.menuAnchor()
+                        )
+
+                        ExposedDropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            workoutCategories.forEach { category ->
+                                DropdownMenuItem(
+                                    text = { Text(text = category) },
+                                    onClick = {
+                                        selectedText = category
+                                        expanded = false
+                                        Toast.makeText(context, category, Toast.LENGTH_SHORT).show()
+
+                                    }
+                                )
+                            }
+                        }
+                        if (selectedText != "Cardio") {
+                            Column {
+                                Spacer(modifier = Modifier.height(70.dp))
+
+                                LoggingInputField(
+                                label = "Workout",
+                                value = type) { type = it
+                                }
+
+                                Spacer(modifier = Modifier.height(15.dp))
+
+                                LoggingInputField(
+                                    label = "Number of Sets",
+                                    value = sets) {
+                                    sets = it
+                                }
+
+                                Spacer(modifier = Modifier.height(15.dp))
+
+                                LoggingInputField(
+                                    label = "Number of Reps per Set",
+                                    value = reps)
+                                { reps = it }
+
+                                Spacer(modifier = Modifier.height(15.dp))
+
+                                // Weight
+                                LoggingInputField(
+                                    label = "Weight",
+                                    value = weight)
+                                { weight = it }
+
+                                Spacer(modifier = Modifier.height(15.dp))
+
+                                // Time Elapsed
+                                LoggingInputField(
+                                    label = "Workout Time",
+                                    value = workouttime)
+                                { workouttime = it }
+                            }
+                        }
+                        else
+                            Column {
+                                Spacer(modifier = Modifier.height(65.dp))
+
+                                LoggingInputField(
+                                    label = "Distance",
+                                    value = type) { type = it
+                                }
+
+                                Spacer(modifier = Modifier.height(15.dp))
+
+                                LoggingInputField(
+                                    label = "Time Elapsed",
+                                    value = sets) {
+                                    sets = it
+                                }
+                            }
+                    }
+                }
 
                 // Type of Workout
-                Box(modifier = Modifier.fillMaxWidth()) {
+                /*Box(modifier = Modifier.fillMaxWidth()) {
                     Text(
                         text = buildAnnotatedString {
                             withStyle(style = SpanStyle(color = grayWhite)) { append("Type of Workout ") }
@@ -250,8 +314,9 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                         textAlign = TextAlign.Left,
                         fontSize = 13.sp
                     )
-                }
-                OutlinedTextField(
+
+                }*/
+                /*OutlinedTextField(
                     value = type,
                     onValueChange = { type = it },
                     singleLine = true,
@@ -277,144 +342,35 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                         .height(55.dp)
                 )
 
-                // Number of Sets
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = grayWhite)) { append("Number of Sets ") }
-                            withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
-                        },
-                        color = grayWhite,
-                        textAlign = TextAlign.Left,
-                        fontSize = 13.sp
-                    )
-                }
-                OutlinedTextField(
-                    value = sets,
-                    onValueChange = { sets = it },
-                    singleLine = true,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = brightOrange, // Orange color for focused border
-
-                        unfocusedPlaceholderColor = brightOrange,
-                        focusedLabelColor = Color.Transparent,
-                        unfocusedLabelColor = grayWhite,
-                        containerColor = darker,
-                        unfocusedBorderColor = Color.Transparent,
+                //Number of sets
 
 
-                        focusedSupportingTextColor = brightOrange
-                    ),
-                    shape = RoundedCornerShape(size = 6.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp)
-                )
+                Spacer(modifier = Modifier.height(15.dp))
 
+                // Number of Reps per Set
+                LoggingInputField(
+                    label = "Number of Reps per Set",
+                    value = reps)
+                    { reps = it }
 
-                // Number of reps per set
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = grayWhite)) { append("Number of reps per set ") }
-                            withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
-                        },
-                        color = grayWhite,
-                        textAlign = TextAlign.Left,
-                        fontSize = 13.sp
-                    )
-                }
-                OutlinedTextField(
-                    value = reps,
-                    onValueChange = { reps = it },
-                    singleLine = true,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = brightOrange, // Orange color for focused border
-
-                        unfocusedPlaceholderColor = brightOrange,
-                        focusedLabelColor = Color.Transparent,
-                        unfocusedLabelColor = grayWhite,
-                        containerColor = darker,
-                        unfocusedBorderColor = Color.Transparent,
-
-
-                        focusedSupportingTextColor = brightOrange
-                    ),
-                    shape = RoundedCornerShape(size = 6.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp)
-                )
+                Spacer(modifier = Modifier.height(15.dp))
 
                 // Weight
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = grayWhite)) { append("Weight ") }
-                            withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
-                        },
-                        color = grayWhite,
-                        textAlign = TextAlign.Left,
-                        fontSize = 13.sp
-                    )
-                }
-                OutlinedTextField(
-                    value = weight,
-                    onValueChange = { weight = it },
-                    singleLine = true,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = brightOrange, // Orange color for focused border
+                LoggingInputField(
+                    label = "Weight",
+                    value = weight)
+                    { weight = it }
 
-                        unfocusedPlaceholderColor = brightOrange,
-                        focusedLabelColor = Color.Transparent,
-                        unfocusedLabelColor = grayWhite,
-                        containerColor = darker,
-                        unfocusedBorderColor = Color.Transparent,
-
-
-                        focusedSupportingTextColor = brightOrange
-                    ),
-                    shape = RoundedCornerShape(size = 6.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp)
-                )
+                Spacer(modifier = Modifier.height(15.dp))
 
                 // Time Elapsed
-                Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = grayWhite)) { append("workouttime ") }
-                            withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
-                        },
-                        color = grayWhite,
-                        textAlign = TextAlign.Left,
-                        fontSize = 13.sp
-                    )
-                }
-                OutlinedTextField(
-                    value = workouttime,
-                    onValueChange = { workouttime = it },
-                    singleLine = true,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = brightOrange, // Orange color for focused border
-
-                        unfocusedPlaceholderColor = brightOrange,
-                        focusedLabelColor = Color.Transparent,
-                        unfocusedLabelColor = grayWhite,
-                        containerColor = darker,
-                        unfocusedBorderColor = Color.Transparent,
-
-
-                        focusedSupportingTextColor = brightOrange
-                    ),
-                    shape = RoundedCornerShape(size = 6.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp)
-                )
+                LoggingInputField(
+                    label = "Workout Time",
+                    value = workouttime)
+                    { workouttime = it }*/
 
                 Spacer(modifier = Modifier.height(16.dp))
+
 
                 Row(
                     modifier = Modifier
@@ -430,7 +386,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                             val formatYear : SimpleDateFormat = SimpleDateFormat("YYYY", Locale.getDefault())
                             val monthday :String= formatMonthDay.format(time)
                             val year :String= formatYear.format(time)
-                            val userRef = database.getReference("Users").child("$userID").child("logging").child("Date").child("$year").child("$monthday").child("workour" + count)
+                            val userRef = database.getReference("Users").child("$userID").child("logging").child("Date").child("$year").child("$monthday").child("workout" + count)
                             userRef.child("Workout").setValue(workout)
                             userRef.child("Type").setValue(type)
                             userRef.child("sets").setValue(sets)
@@ -449,6 +405,128 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                         Text(text = "Move to logging page")
                     }
 
+
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Button(
+                        onClick = {navController.navigate("home")}
+                    ){
+                        Text(text= "home")
+                    }
+                }
+
+            }
+        }
+    }
+}
+
+
+//FUNCTIONS
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LoggingInputField(
+    label: String,
+    value: String,
+    onValueChange: (String) -> Unit
+) {
+    Row(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = label,
+            color = grayWhite,
+            fontSize = 13.sp
+        )
+        Text(
+            text = "*",
+            color = Color.Red,
+            fontSize = 13.sp
+        )
+    }
+
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        singleLine = true,
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = brightOrange, // Orange color for focused border
+            unfocusedPlaceholderColor = brightOrange,
+            focusedLabelColor = Color.Transparent,
+            unfocusedLabelColor = grayWhite,
+            containerColor = darker,
+            unfocusedBorderColor = Color.Transparent,
+            focusedSupportingTextColor = brightOrange
+        ),
+        shape = RoundedCornerShape(size = 6.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(55.dp)
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Demo_ExposedDropdownMenuBox() {
+    val context = LocalContext.current
+    val database = Firebase.database.reference.child("workouts")
+    var expanded by remember { mutableStateOf(false) }
+    var selectedText by remember { mutableStateOf("Select a Workout") }
+    var workoutCategories by remember { mutableStateOf(listOf<String>()) }
+
+
+    LaunchedEffect(Unit) {
+        database.get().addOnSuccessListener { dataSnapshot ->
+            val categories = mutableListOf<String>()
+            dataSnapshot.children.forEach {
+                it.key?.let { key -> categories.add(key) }
+            }
+            workoutCategories = categories
+        }.addOnFailureListener {
+            Toast.makeText(context, "Failed to fetch workouts", Toast.LENGTH_SHORT).show()
+        }
+    }
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(32.dp)
+    ) {
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = {
+                expanded = !expanded
+            }
+        ) {
+            TextField(
+                value = selectedText,
+                onValueChange = {},
+                readOnly = true,
+                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                modifier = Modifier.menuAnchor()
+            )
+
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                workoutCategories.forEach { category ->
+                    DropdownMenuItem(
+                        text = { Text(text = category) },
+                        onClick = {
+                            selectedText = category
+                            expanded = false
+                            Toast.makeText(context, category, Toast.LENGTH_SHORT).show()
+                            when (selectedText) {
+                                "Cardio" -> {
+
+                                }
+                            }
+                        }
+                    )
                 }
             }
         }

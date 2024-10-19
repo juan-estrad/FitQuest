@@ -1,6 +1,9 @@
 package com.example.fitquest.pages
 
+import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,9 +17,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -27,6 +34,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,12 +51,18 @@ import androidx.core.app.ActivityCompat.recreate
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.Logging
 import com.example.fitquest.UserProfile
+import com.example.fitquest.Year
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.transparent
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 
@@ -162,6 +176,7 @@ fun StatsPage(modifier: Modifier = Modifier, navController: NavController, authV
                         StatItem("Strength", profile.userStats.strength.toString())
                         StatItem("Consistency", profile.userStats.consistency.toString())
                         StatItem("Stamina", profile.userStats.stamina.toString())
+
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     Row(
@@ -206,6 +221,12 @@ fun StatsPage(modifier: Modifier = Modifier, navController: NavController, authV
             ) {
                 Text(text = "HomePage", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
             }
+            Spacer(modifier = Modifier.height(15.dp))
+
+            //VisibilityToggleButtons()
+            //test()
+            //MyScreen()
+            DisplayChildrenButton()
         }
     }
 }
@@ -218,5 +239,222 @@ fun StatItem(statName: String, statValue: String) {
     ) {
         Text(text = statName, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
         Text(text = statValue, color = Color.White, fontSize = 18.sp)
+    }
+}
+
+@Composable
+fun test() {
+    val database = Firebase.database
+    val childRef = database.getReference("User")
+    childRef.addValueEventListener(object : ValueEventListener {
+        override fun onDataChange(dataSnapshot: DataSnapshot) {
+            if (dataSnapshot.exists()) {
+                for (child in dataSnapshot.children) {
+                    // Access the child's key and value
+                    val key = child.key
+                    val value = child.value
+
+                    // Process the data as needed
+                    Log.d("Firebase", "Key: $key, Value: $value")
+                    //Text(text ="Firebase", "Key: $key, Value: $value")
+                }
+            }
+        }
+
+        override fun onCancelled(databaseError: DatabaseError) {
+            // Handle any errors
+            Log.e("Firebase", "Error: ${databaseError.message}")
+        }
+    })
+}
+
+@Composable
+fun VisibilityToggleButtons() {
+    var showButtons by remember { mutableStateOf(true) }
+
+    Column {
+        Button(onClick = { showButtons = !showButtons }) {
+            Text(if (showButtons) "2024" else "2024")
+        }
+
+        AnimatedVisibility(visible = showButtons) {
+            Column {
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                ) {
+                    Button(onClick = { /* Action for Button 1 */ }) {
+                        Text("Button 1")
+                    }
+
+                    Button(onClick = { /* Action for Button 2 */ }) {
+                        Text("Button 2")
+                    }
+                }
+            }
+        }
+    }
+}
+
+/*@Composable
+fun DisplayChildrenButton() {
+    var children by remember { mutableStateOf(emptyList<Map<String, Any>>()) }
+    val db = Firebase.database.getInstance()
+
+    Column {
+        Button(onClick = {
+            db.collection("your_collection")
+                .get()
+                .addOnSuccessListener { documents ->
+                    children = documents.map { it.data }
+                }
+        }) {
+            Text("Load Children")
+        }
+
+        children.forEach { child ->
+            Text(
+                text = "Name: ${child["name"]}, Age: ${child["age"]}",
+                modifier = padding(8.dp)
+            )
+        }
+    }
+}*/
+
+val database = Firebase.database
+val userID = FirebaseAuth.getInstance().uid
+val myRef = database.getReference("Users").child("$userID").child("logging").child("Date")
+@Composable
+fun FirebaseDataDisplay() {
+    var data by remember { mutableStateOf<Map<String, Any?>>(emptyMap()) }
+    val errorMessage = remember { mutableStateOf("") }
+    var showButtonsYear by remember { mutableStateOf(true) }
+    var showButtonsDate by remember { mutableStateOf(true) }
+
+
+
+    LaunchedEffect(Unit) {
+        myRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    data = snapshot.value as Map<String, Any?>
+                } else {
+                    errorMessage.value = "No data found"
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                errorMessage.value = "Error fetching data: ${error.message}"
+            }
+        })
+    }
+
+    if (errorMessage.value.isNotEmpty()) {
+        Text(text = errorMessage.value)
+    } else {
+        LazyColumn {
+            items(data.entries.toList()) { (value) ->
+
+                //Text(text = "$value")
+                Button(onClick = { showButtonsYear = !showButtonsYear }) {
+                    Text(if (showButtonsYear)  "$value" else "$value")
+                }
+                AnimatedVisibility(visible = showButtonsYear) {
+                    Column {
+                        Button(onClick = { showButtonsDate = !showButtonsDate }) {
+                            Text(if (showButtonsDate) "$value" else "$value")
+                        }
+                        AnimatedVisibility(visible = showButtonsDate) {
+                            Column {
+                                Button(onClick = { showButtonsDate = !showButtonsDate }) {
+                                    Text(if (showButtonsDate) "$value" else "$value")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MyScreen() {
+    Column {
+        FirebaseDataDisplay()
+    }
+}
+
+@Composable
+fun DisplayChildrenButton(modifier: Modifier = Modifier) {
+    var children by remember { mutableStateOf<List<DataSnapshot>>(emptyList()) }
+    var showYear by remember { mutableStateOf(true) }
+    var showDate by remember { mutableStateOf(true) }
+    val database = Firebase.database //initialize an instance of the realtime database
+    val userID = FirebaseAuth.getInstance().uid
+    val databaseRef = database.getReference()
+    Column (
+        modifier = modifier
+            .verticalScroll(rememberScrollState())
+    ) {
+        Button(onClick = {
+            showYear = !showYear
+            databaseRef.child("Users").child("$userID").child("logging").child("Date").addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    children = snapshot.children.toList()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    // Handle error
+                }
+            })
+        }) {
+
+            Text(if (showYear) "2024" else "2024")
+        }
+        AnimatedVisibility(visible = showYear) {
+            children.forEach { child ->
+                Row {
+                    Button(onClick = {
+                        showDate = !showDate
+                        databaseRef.child("Users").child("$userID").child("logging").child("Date").child("2024").addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                children = snapshot.children.toList()
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                // Handle error
+                            }
+                        })
+                    }) {
+                        val childKey = child.key
+                        val childValue = child.value
+                        Text("$childKey")
+                    }
+                    AnimatedVisibility(visible = showDate) {
+                        children.forEach { child ->
+                            Row {
+                                Button(onClick = {
+
+                                    databaseRef.child("Users").child("$userID").child("logging")
+                                        .child("Date").child("2024").child("10-17")
+                                        .addListenerForSingleValueEvent(object : ValueEventListener {
+                                            override fun onDataChange(snapshot: DataSnapshot) {
+                                                children = snapshot.children.toList()
+                                            }
+
+                                            override fun onCancelled(error: DatabaseError) {
+                                                // Handle error
+                                            }
+                                        })
+                                }) {
+                                    Text("log")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
