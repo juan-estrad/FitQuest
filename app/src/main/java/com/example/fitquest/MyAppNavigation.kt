@@ -18,7 +18,7 @@ import com.example.fitquest.pages.StorePage
 fun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel){
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "login", builder = {
+    NavHost(navController = navController, startDestination = "signup", builder = {
         composable("login"){
             LoginPage(modifier,navController,authViewModel)
         }

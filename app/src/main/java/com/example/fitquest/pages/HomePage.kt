@@ -129,7 +129,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = profile.streak.toString(),
+                    text = profile.streak.streak.toString(),
                     color = Color.White,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
