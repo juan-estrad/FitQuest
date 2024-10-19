@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -21,12 +23,17 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.fitquest.AuthState
@@ -41,6 +48,26 @@ val verticalGradientBrush = Brush.verticalGradient(
     startY = 0f,
     endY = Float.POSITIVE_INFINITY
 )
+@Composable
+fun FitQuestTxt(
+    fontSize: TextUnit
+    // DEFAUT 68.sp
+) {
+    Text(
+        text =
+        buildAnnotatedString {
+            withStyle(style = SpanStyle(color = brightOrange)) {
+                append("Fit")
+            }
+            withStyle(style = SpanStyle(color = grayWhite)) {
+                append("Quest!")
+            }
+        },
+        fontSize = fontSize,
+        fontWeight = FontWeight.Bold,
+        textAlign = TextAlign.Center
+    )
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -111,6 +138,37 @@ fun Title01(
 
 //
 
+@Composable
+fun TopBar(
+    label: String,
+    username: String,
+    onClickFunction: () -> Unit,
+    enabled: Boolean
+
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    )
+    {
+        Text(label, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
+
+
+        //Plan is to make the circle the pfp but for now i just put the username in there
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .clip(CircleShape)
+                .background(Color.Gray),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(username, fontSize = 20.sp, color = Color.White) //profile username
+        }
+    }
+}
 
 @Composable
 fun OrangeFilledButton(

@@ -196,7 +196,8 @@ fun StatsPage(modifier: Modifier = Modifier, navController: NavController, authV
             Spacer(modifier = Modifier.height(16.dp))
 
             // Sign Out Button
-            TextButton(onClick = { authViewModel.signout() }) {
+            TextButton(
+                onClick = { authViewModel.signout() }) {
                 Text(text = "Sign Out", color = Color.Red)
             }
 //            Button(

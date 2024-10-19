@@ -225,6 +225,12 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                     fontWeight = FontWeight.Bold
                 )
             }
+
+
+            TextButton(
+                onClick = { authViewModel.signout() }) {
+                Text(text = "Sign Out", color = Color.Red)
+            }
         }
     }
 }

@@ -52,6 +52,8 @@ import com.example.fitquest.UserStats
 import com.example.fitquest.Logging
 import com.example.fitquest.Monthday
 import com.example.fitquest.Year
+import com.example.fitquest.ui.OrangeFilledButton
+import com.example.fitquest.ui.UserInputField
 
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
@@ -139,28 +141,27 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
     ){
         Text(text = "Start your journey", fontSize = 32.sp )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(30.dp))
 
 
         //Username input
-        SignupInputField(
+        UserInputField(
             label = "USERNAME",
             value = username,
             onValueChange = { username = it }
         )
 
-        Spacer(modifier = Modifier.height(15.dp))
+
 
         //Email input
-        SignupInputField(
+        UserInputField(
             label = "EMAIL",
             value = email,
             onValueChange = { email = it }
         )
 
-        Spacer(modifier = Modifier.height(15.dp))
         //Password input
-        SignupInputField(
+        UserInputField(
             label = "PASSWORD",
             value = password,
             onValueChange = { password = it }
@@ -171,12 +172,18 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
         Spacer(modifier = Modifier.height(16.dp))
 
         // Create account button
-        Button(
-            onClick = { authViewModel.signup(email, password) },
-            enabled = authState.value != AuthState.Loading
-        ) {
-            Text(text = "Create Account")
-        }
+        OrangeFilledButton("Create Account", {authViewModel.signup(email, password)},  authState.value != AuthState.Loading)
+
+
+//        Button(
+//            onClick = { authViewModel.signup(email, password) },
+//            enabled = authState.value != AuthState.Loading
+//        ) {
+//            Text(text = "Create Account")
+//        }
+//
+
+
         Spacer(modifier = Modifier.height(16.dp))
 
         // Login navigation
@@ -186,48 +193,3 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun SignupInputField(
-    label: String,
-    value: String,
-    onValueChange: (String) -> Unit,
-    isPassword: Boolean = false
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment= Alignment.CenterVertically
-    ) {
-        Text(
-            text = label,
-            color = grayWhite,
-            textAlign = TextAlign.Left,
-            fontSize = 16.sp
-        )
-        Text(
-            text = "*",
-            color = Color.Red,
-            fontSize = 16.sp
-        )
-    }
-
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        singleLine = true,
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = brightOrange,
-            unfocusedPlaceholderColor = brightOrange,
-            focusedLabelColor = Color.Transparent,
-            unfocusedLabelColor = grayWhite,
-            containerColor = darker,
-            unfocusedBorderColor = Color.Transparent,
-            focusedSupportingTextColor = brightOrange
-        ),
-        shape = RoundedCornerShape(size = 6.dp),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(57.dp)
-    )
-}
