@@ -99,22 +99,6 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                             stamina = 0,
                             strength = 0
                         ),
-                        logging = Logging(
-                            date = Date(
-                                year = Year(
-                                    monthday = Monthday(
-                                        log = Log (
-                                            workout = "",
-                                            type = "",
-                                            sets = 0,
-                                            reps = 0,
-                                            weight = "",
-                                            workouttime = ""
-                                        )
-                                    )
-                                )
-                            )
-                        )
                     )
                     myRef.child(id).setValue(userProfile)
                 }
