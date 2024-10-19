@@ -1,11 +1,13 @@
 package com.example.fitquest
 
+import java.time.LocalDateTime
+
 data class UserProfile(
     val username: String = "",
     val flexcoins: Int = 0,
-    val streak: Int = 0,
     val userStats: UserStats = UserStats(),
-    val logging: Logging = Logging()
+    val logging: Logging = Logging(),
+    val streak: UserStreak = UserStreak() //Need to add to DB to work
 )
 
 data class UserStats(
@@ -14,6 +16,12 @@ data class UserStats(
     val dexterity: Int = 0,
     val stamina: Int = 0,
     val strength: Int = 0
+)
+
+data class UserStreak(
+    var streak:Int = 0,
+    var lastUpdate: LocalDateTime? = LocalDateTime.now(),
+    var streakExpiration:LocalDateTime? = lastUpdate?.plusDays(2)
 )
 
 data class Logging(
@@ -41,4 +49,16 @@ data class Log(
     val workouttime: String = ""
 )
 
+fun isStreakExpired(user:UserProfile):Boolean{
+    return user.streak.lastUpdate!!.isAfter(user.streak.streakExpiration)
+}
 
+fun updateStreak(user:UserProfile){
+    if(isStreakExpired(user)){
+        user.streak.streak = 0
+    } else {
+        user.streak.streak++
+        user.streak.lastUpdate = LocalDateTime.now()
+        user.streak.streakExpiration = user.streak.lastUpdate?.plusDays(2)
+    }
+}

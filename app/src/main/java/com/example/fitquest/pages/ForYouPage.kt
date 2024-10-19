@@ -56,7 +56,7 @@ import com.example.fitquest.AuthViewModel
 import com.example.fitquest.UserProfile
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.transparent
-import com.google.ai.client.generativeai.type.content
+//import com.google.ai.client.generativeai.type.content
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
@@ -149,7 +149,7 @@ fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, auth
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = profile.streak.toString(),
+                    text = profile.streak.streak.toString(),
                     color = Color.White,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold

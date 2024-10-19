@@ -172,7 +172,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = profile.streak.toString(),
+                    text = profile.streak.streak.toString(),
                     color = Color.White,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold

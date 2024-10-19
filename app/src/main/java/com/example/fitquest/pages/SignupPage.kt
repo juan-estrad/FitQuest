@@ -4,7 +4,6 @@ package com.example.fitquest.pages
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,14 +29,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -51,17 +47,18 @@ import com.example.fitquest.UserStats
 
 import com.example.fitquest.Logging
 import com.example.fitquest.Monthday
+import com.example.fitquest.UserStreak
 import com.example.fitquest.Year
 
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
-import com.example.fitquest.ui.theme.transparent
 import com.example.fitquest.ui.theme.verticalGradientBrush
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
+import java.time.LocalDateTime
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -91,7 +88,6 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                     val userProfile = UserProfile(
                         username = username,
                         flexcoins = 0,
-                        streak = 0,
                         userStats = UserStats(
                             agility = 0,
                             consistency = 0,
@@ -114,6 +110,11 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                                     )
                                 )
                             )
+                        ),
+                        streak = UserStreak(
+                            streak = 0,
+                            lastUpdate = null,
+                            streakExpiration = null
                         )
                     )
                     myRef.child(id).setValue(userProfile)
