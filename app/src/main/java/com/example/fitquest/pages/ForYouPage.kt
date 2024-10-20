@@ -1,5 +1,6 @@
 package com.example.fitquest.pages
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -16,16 +17,21 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -99,6 +105,7 @@ fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, auth
                 .fillMaxSize()
                 .background(Color.DarkGray)
                 .padding(16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             Row(
                 modifier = Modifier
@@ -166,13 +173,40 @@ fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, auth
                 ){
                     Text("Daily", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
                 }
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                ) {
-                    Text(text = "hello")
-                    Spacer(modifier = Modifier.width(8.dp))
+
+                Column {
+                    LazyRow {
+                        items(1) { index ->
+                            DailyBox(
+                                name = " ",
+                                title = "My Title",
+                                text = "This is some text in the box.",
+                                workouts = " ",
+                                onClick = {
+
+                                }
+                            )
+                            DailyBox(
+                                name = " ",
+
+                                title = "My Title",
+                                text = "This is some text in the box.",
+                                workouts = " ",
+                                onClick = {
+
+                                }
+                            )
+                            DailyBox(
+                                name = " ",
+                                title = "My Title",
+                                text = "This is some text in the box.",
+                                workouts = " ",
+                                onClick = {
+
+                                }
+                            )
+                        }
+                    }
                 }
 
                 Row (
@@ -185,6 +219,42 @@ fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, auth
                     Text("Weekly", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
                     Spacer(modifier = Modifier.width(8.dp))
                 }
+
+                Column {
+                    LazyRow {
+                        items(1) { index ->
+                            WeeklyBox(
+                                name = " ",
+                                title = "My Title",
+                                text = "This is some text in the box.",
+                                workouts = " ",
+                                onClick = {
+
+                                }
+                            )
+                            WeeklyBox(
+                                name = " ",
+
+                                title = "My Title",
+                                text = "This is some text in the box.",
+                                workouts = " ",
+                                onClick = {
+
+                                }
+                            )
+                            WeeklyBox(
+                                name = " ",
+                                title = "My Title",
+                                text = "This is some text in the box.",
+                                workouts = " ",
+                                onClick = {
+
+                                }
+                            )
+                        }
+                    }
+                }
+
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
@@ -194,6 +264,42 @@ fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, auth
                 ) {
                     Text("Recommended", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
                     Spacer(modifier = Modifier.width(20.dp))
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp)
+                ) {
+                }
+                Column {
+                    ReccomendedBox(
+                        name = "Arnold Beefcake",
+
+                        title = "T-800 (muscles only!!)",
+                        text = "This is some text in the box.",
+                        workouts = "Upperbody, Lowerbody",
+                        onClick = {
+
+                        }
+                    )
+                    ReccomendedBox(
+                        name = "Emily LoveCraft",
+                        title = "Emily's gym Time!",
+                        text = "Test Test Test",
+                        workouts = "Core workout, Cardio",
+                        onClick = {
+
+                        }
+                    )
+                    ReccomendedBox(
+                        name = "Dave Rubin",
+                        title = "Training to Battle Psycho",
+                        text = "Test",
+                        workouts = "Core workout, Calisthenics, Stretching",
+                        onClick = {
+                        }
+                    )
+
                 }
             }
         }
@@ -258,6 +364,155 @@ fun PopupButton() {
                 Button(onClick = { showDialog = false }) {
                     Text("OK")
                 }
+                Button(onClick = { showDialog = false }) {
+                    Text("OK")
+                }
+            }
+        )
+    }
+}
+
+@Composable
+fun ReccomendedBox(name: String, title: String, text: String, workouts: String, onClick:  () -> Unit) {
+    var showDialog by remember { mutableStateOf(false) }
+    Card(
+        modifier = Modifier
+            .clickable { showDialog = true  }
+            .padding(7.dp)
+            .width(400.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+        ) {
+            Row {
+                Box(modifier = Modifier
+                        .size(30.dp)
+                        .clip(CircleShape)
+                        .background(color = brightOrange),
+                )
+                Text(
+                    text = "  $name",
+                    fontSize = 17.sp,
+                    style = MaterialTheme.typography.headlineSmall
+                )
+            }
+            Text(text = title)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Description:",
+                fontSize = 14.sp)
+            Text(text = text,
+                fontSize = 14.sp,
+                style = MaterialTheme.typography.headlineSmall,
+                lineHeight = 16.sp)
+            Spacer(modifier = Modifier.height(8.dp))
+            Row {
+                Text(text = "Focus: ",
+                    fontSize = 14.sp)
+                Text(text = workouts,
+                    fontSize = 14.sp,
+                    style = MaterialTheme.typography.headlineSmall)
+            }
+        }
+        if (showDialog) {
+            AlertDialog(
+                modifier = Modifier.size(750.dp, 500.dp),
+                onDismissRequest = { showDialog = false },
+                title = { Text(text = title) },
+                text = { Text("This is a popup message.") },
+                confirmButton = {
+                    Button(onClick = { showDialog = false }) {
+                        Text("OK")
+                    }
+                }
+            )
+        }
+    }
+}
+
+@Composable
+fun WeeklyBox(name: String, title: String, text: String, workouts: String, onClick:  () -> Unit) {
+    Card(
+        modifier = Modifier
+            .clickable { onClick() }
+            .padding(7.dp)
+            .width(325.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+        ) {
+            Text(text = title,)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Description:",
+                fontSize = 14.sp)
+            Text(text = text,
+                fontSize = 14.sp,
+                style = MaterialTheme.typography.headlineSmall,
+                lineHeight = 16.sp)
+            Spacer(modifier = Modifier.height(8.dp))
+            Row {
+                Text(text = "Focus: ",
+                    fontSize = 14.sp)
+                Text(text = workouts,
+                    fontSize = 14.sp,
+                    style = MaterialTheme.typography.headlineSmall)
+            }
+        }
+    }
+}
+
+@Composable
+fun DailyBox(name: String, title: String, text: String, workouts: String, onClick: () -> Unit) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    Card(
+        modifier = Modifier
+            .clickable { showDialog = true }
+            .padding(7.dp)
+            .width(325.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+        ) {
+            Text(text = title,)
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = "Description:",
+                fontSize = 14.sp)
+            Text(text = text,
+                fontSize = 14.sp,
+                style = MaterialTheme.typography.headlineSmall,
+                lineHeight = 16.sp)
+            Spacer(modifier = Modifier.height(8.dp))
+            Row {
+                Text(text = "Focus: ",
+                    fontSize = 14.sp)
+                Text(text = workouts,
+                    fontSize = 14.sp,
+                    style = MaterialTheme.typography.headlineSmall)
+            }
+        }
+    }
+}
+
+@Composable
+fun ModalButtonExample() {
+    var showDialog by remember { mutableStateOf(false) }
+
+    Button(onClick = { showDialog = true }) {
+        Text("Show Modal Dialog")
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Modal Dialog Title") },
+            text = { Text("This is a modal dialog.") },
+            confirmButton = {
                 Button(onClick = { showDialog = false }) {
                     Text("OK")
                 }
