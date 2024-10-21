@@ -46,6 +46,7 @@ import com.example.fitquest.AuthViewModel
 import com.example.fitquest.UserProfile
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.transparent
+import com.example.fitquest.ui.verticalGradientBrush
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -86,11 +87,12 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
     // display content if the userProfile is not null
     userProfile?.let { profile ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .background(Color.DarkGray)
-                .padding(16.dp)
-
+                .background(verticalGradientBrush)
+                .padding(30.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Row(
                 modifier = Modifier
@@ -222,6 +224,12 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
                 )
+            }
+
+
+            TextButton(
+                onClick = { authViewModel.signout() }) {
+                Text(text = "Sign Out", color = Color.Red)
             }
         }
     }

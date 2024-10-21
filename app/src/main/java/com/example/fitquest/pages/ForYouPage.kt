@@ -191,6 +191,7 @@ fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, auth
                     Text("Daily", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
                 }
 
+
                 Column {
                     LazyRow {
                         items(1) { index ->
@@ -224,7 +225,9 @@ fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, auth
                             )
                         }
                     }
+
                 }
+                Text(text = "hello")
 
                 Row (
                     modifier = Modifier
@@ -388,6 +391,7 @@ fun PopupButton() {
         )
     }
 }
+
 
 @Composable
 fun ReccomendedBox(name: String, title: String, text: String, workouts: String, onClick:  () -> Unit) {
@@ -621,3 +625,4 @@ fun RandomChildDisplay() {
 
     Text(text = childValue)
 }
+

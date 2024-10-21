@@ -222,6 +222,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                         expanded = expanded,
                         onExpandedChange = {
                             expanded = !expanded
+
                         }
                     ) {
                         TextField(
@@ -316,13 +317,16 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                                 }
                             }
                         }
+
                         else
                             Column {
                                 Spacer(modifier = Modifier.height(65.dp))
 
                                 LoggingInputField(
                                     label = "Distance",
+
                                     value = distance) { distance = it
+
                                 }
 
                                 Spacer(modifier = Modifier.height(15.dp))
@@ -354,6 +358,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                     }
                 }
 
+
                 Spacer(modifier = Modifier.height(16.dp))
 
 
@@ -365,6 +370,8 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Button(
+
+
                         onClick = { navController.navigate("logging") },
 
                         ) {
