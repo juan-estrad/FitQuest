@@ -32,7 +32,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -65,7 +64,21 @@ import com.example.fitquest.ui.theme.transparent
 //import com.google.ai.client.generativeai.type.content
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.tasks.await
+import java.util.concurrent.TimeUnit
+import kotlin.random.Random
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
+import androidx.compose.material3.Text as Text
+
 
 @Composable
 fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
@@ -162,6 +175,10 @@ fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, auth
                     fontWeight = FontWeight.Bold
                 )
             }
+            val database = Firebase.database
+            val myRef = database.getReference("Users")
+
+
             Column(
             ) {
                 Row (
@@ -299,8 +316,8 @@ fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, auth
                         onClick = {
                         }
                     )
-
                 }
+                //RandomChildDisplay()
             }
         }
     }
@@ -467,6 +484,39 @@ fun WeeklyBox(name: String, title: String, text: String, workouts: String, onCli
 @Composable
 fun DailyBox(name: String, title: String, text: String, workouts: String, onClick: () -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
+    val database = FirebaseDatabase.getInstance()
+    val userID = FirebaseAuth.getInstance().uid
+    val time :Long = System.currentTimeMillis()
+    val formatMonthDay : SimpleDateFormat = SimpleDateFormat("M-dd", Locale.getDefault())
+    val formatYear : SimpleDateFormat = SimpleDateFormat("YYYY", Locale.getDefault())
+    val monthday :String= formatMonthDay.format(time)
+    val year :String= formatYear.format(time)
+    val referenceWorkoutTitle = database.getReference("workouts")
+    var childValue1 by remember { mutableStateOf("") }
+    var childValue2 by remember { mutableStateOf("") }
+    var childValue3 by remember { mutableStateOf("") }
+
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            val snapshot1 = referenceWorkoutTitle.get().await()
+            val children1 = snapshot1.children.toList()
+            val randomIndex1 = (0 until children1.size).random()
+            childValue1 = children1[randomIndex1].key.toString()
+
+            val snapshot2 = referenceWorkoutTitle.child(childValue1).get().await()
+            val children2 = snapshot2.children.toList()
+            val randomIndex2 = (0 until children2.size).random()
+            childValue2 = children2[randomIndex2].key.toString()
+
+            val snapshot3 = referenceWorkoutTitle.child(childValue1).child(childValue2).get().await()
+            val children3 = snapshot3.children.toList()
+            val randomIndex3 = (0 until children3.size).random()
+            childValue3 = children3[randomIndex3].value.toString()
+
+            delay(24 * 60 * 60 * 1000) // 24 hours in milliseconds
+        }
+    }
 
     Card(
         modifier = Modifier
@@ -479,11 +529,11 @@ fun DailyBox(name: String, title: String, text: String, workouts: String, onClic
             modifier = Modifier
                 .padding(16.dp)
         ) {
-            Text(text = title,)
+            Text(text =  childValue2,)
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = "Description:",
                 fontSize = 14.sp)
-            Text(text = text,
+            Text(text = childValue3,
                 fontSize = 14.sp,
                 style = MaterialTheme.typography.headlineSmall,
                 lineHeight = 16.sp)
@@ -491,9 +541,10 @@ fun DailyBox(name: String, title: String, text: String, workouts: String, onClic
             Row {
                 Text(text = "Focus: ",
                     fontSize = 14.sp)
-                Text(text = workouts,
+                Text(text = childValue1,
                     fontSize = 14.sp,
                     style = MaterialTheme.typography.headlineSmall)
+                Button(onClick = { }) { }
             }
         }
     }
@@ -519,4 +570,54 @@ fun ModalButtonExample() {
             }
         )
     }
+}
+
+
+
+fun getRandomChild(databaseReference: DatabaseReference) {
+    databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val children = snapshot.children.toList()
+            if (children.isNotEmpty()) {
+                val randomIndex = Random.nextInt(children.size)
+                val randomChild = children[randomIndex]
+
+                // Do something with the random child
+                println(randomChild.key) // Key of the random child
+                println(randomChild.value) // Value of the random child
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            // Handle error
+            println("Error: ${error.message}")
+        }
+    })
+}
+
+@Composable
+fun RandomChildDisplay() {
+    val database = FirebaseDatabase.getInstance()
+    val userID = FirebaseAuth.getInstance().uid
+    val time :Long = System.currentTimeMillis()
+    val formatMonthDay : SimpleDateFormat = SimpleDateFormat("M-dd", Locale.getDefault())
+    val formatYear : SimpleDateFormat = SimpleDateFormat("YYYY", Locale.getDefault())
+    val monthday :String= formatMonthDay.format(time)
+    val year :String= formatYear.format(time)
+    val referenceWorkout = database.getReference("workouts").child("Arms")
+    var childValue by remember { mutableStateOf("") }
+    var childValue2 by remember { mutableStateOf("") }
+
+
+    LaunchedEffect(Unit) {
+        while (true) {
+            val snapshot = referenceWorkout.get().await()
+            val children = snapshot.children.toList()
+            val randomIndex = (0 until children.size).random()
+            childValue = children[randomIndex].key.toString()
+            delay(24 * 60 * 60 * 1000) // 24 hours in milliseconds
+        }
+    }
+
+    Text(text = childValue)
 }

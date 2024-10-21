@@ -42,6 +42,7 @@ import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.transparent
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
 
 @Composable
