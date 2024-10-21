@@ -90,6 +90,12 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
     var count by remember {
         mutableStateOf(0)
     }
+    var distance by remember {
+        mutableStateOf("")
+    }
+    var timeelapsed by remember {
+        mutableStateOf("")
+    }
 
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
@@ -187,7 +193,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = profile.streak.toString(),
+                    text = profile.streak.streak.toString(),
                     color = Color.White,
                     fontSize = 18.sp,
                     fontWeight = FontWeight.Bold
@@ -216,6 +222,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                         expanded = expanded,
                         onExpandedChange = {
                             expanded = !expanded
+
                         }
                     ) {
                         TextField(
@@ -242,13 +249,18 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                                 )
                             }
                         }
+                        val time :Long = System.currentTimeMillis()
+                        val formatMonthDay : SimpleDateFormat = SimpleDateFormat("M-dd", Locale.getDefault())
+                        val formatYear : SimpleDateFormat = SimpleDateFormat("YYYY", Locale.getDefault())
+                        val monthday :String= formatMonthDay.format(time)
+                        val year :String= formatYear.format(time)
                         if (selectedText != "Cardio") {
                             Column {
                                 Spacer(modifier = Modifier.height(70.dp))
 
                                 LoggingInputField(
                                 label = "Workout",
-                                value = type) { type = it
+                                value = workout) { workout = it
                                 }
 
                                 Spacer(modifier = Modifier.height(15.dp))
@@ -281,93 +293,71 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                                     label = "Workout Time",
                                     value = workouttime)
                                 { workouttime = it }
+
+                                Spacer(modifier = Modifier.height(20.dp))
+
+                                Button(
+                                    onClick = {
+                                        val userRef = database.getReference("Users").child("$userID").child("logging").child("Date").child("$year").child("$monthday").child("workout" + count)
+                                        userRef.child("Workout").setValue(workout)
+                                        userRef.child("Type").setValue(selectedText)
+                                        userRef.child("sets").setValue(sets)
+                                        userRef.child("reps").setValue(reps)
+                                        userRef.child("weight").setValue(weight)
+                                        userRef.child("time").setValue(workouttime)
+                                        count ++
+                                        workout = ""
+                                        sets = ""
+                                        reps = ""
+                                        weight = ""
+                                        workouttime = ""
+                                    }
+                                ) {
+                                    Text("Add value")
+                                }
                             }
                         }
+
                         else
                             Column {
                                 Spacer(modifier = Modifier.height(65.dp))
 
                                 LoggingInputField(
                                     label = "Distance",
-                                    value = type) { type = it
+
+                                    value = distance) { distance = it
+
                                 }
 
                                 Spacer(modifier = Modifier.height(15.dp))
 
                                 LoggingInputField(
                                     label = "Time Elapsed",
-                                    value = sets) {
-                                    sets = it
+                                    value = timeelapsed) {
+                                    timeelapsed = it
+                                }
+
+                                Spacer(modifier = Modifier.height(20.dp))
+
+                                Button(
+                                    onClick = {
+                                        val userRef = database.getReference("Users").child("$userID").child("logging").child("Date").child("$year").child("$monthday").child("workout" + count)
+                                        userRef.child("Time Elapsed").setValue(timeelapsed)
+                                        userRef.child("Type").setValue(selectedText)
+                                        userRef.child("Distance").setValue(distance)
+                                        count ++
+                                        type = ""
+                                        distance = ""
+                                        timeelapsed = ""
+
+                                    }
+                                ) {
+                                    Text("Add value")
                                 }
                             }
                     }
                 }
 
-                // Type of Workout
-                /*Box(modifier = Modifier.fillMaxWidth()) {
-                    Text(
-                        text = buildAnnotatedString {
-                            withStyle(style = SpanStyle(color = grayWhite)) { append("Type of Workout ") }
-                            withStyle(style = SpanStyle(color = Color.Red)) { append("*") }
-                        },
-                        color = grayWhite,
-                        textAlign = TextAlign.Left,
-                        fontSize = 13.sp
-                    )
-
-                }*/
-                /*OutlinedTextField(
-                    value = type,
-                    onValueChange = { type = it },
-                    singleLine = true,
-                    textStyle = TextStyle(
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 20.sp
-                    ),
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        focusedBorderColor = brightOrange, // Orange color for focused border
-
-                        unfocusedPlaceholderColor = brightOrange,
-                        focusedLabelColor = Color.Transparent,
-                        unfocusedLabelColor = grayWhite,
-                        containerColor = darker,
-                        unfocusedBorderColor = Color.Transparent,
-
-
-                        focusedSupportingTextColor = brightOrange
-                    ),
-                    shape = RoundedCornerShape(size = 6.dp),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(55.dp)
-                )
-
-                //Number of sets
-
-
-                Spacer(modifier = Modifier.height(15.dp))
-
-                // Number of Reps per Set
-                LoggingInputField(
-                    label = "Number of Reps per Set",
-                    value = reps)
-                    { reps = it }
-
-                Spacer(modifier = Modifier.height(15.dp))
-
-                // Weight
-                LoggingInputField(
-                    label = "Weight",
-                    value = weight)
-                    { weight = it }
-
-                Spacer(modifier = Modifier.height(15.dp))
-
-                // Time Elapsed
-                LoggingInputField(
-                    label = "Workout Time",
-                    value = workouttime)
-                    { workouttime = it }*/
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -380,32 +370,13 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Button(
-                        onClick = {
-                            val time :Long = System.currentTimeMillis()
-                            val formatMonthDay : SimpleDateFormat = SimpleDateFormat("M-dd", Locale.getDefault())
-                            val formatYear : SimpleDateFormat = SimpleDateFormat("YYYY", Locale.getDefault())
-                            val monthday :String= formatMonthDay.format(time)
-                            val year :String= formatYear.format(time)
-                            val userRef = database.getReference("Users").child("$userID").child("logging").child("Date").child("$year").child("$monthday").child("workout" + count)
-                            userRef.child("Workout").setValue(workout)
-                            userRef.child("Type").setValue(type)
-                            userRef.child("sets").setValue(sets)
-                            userRef.child("reps").setValue(reps)
-                            userRef.child("weight").setValue(weight)
-                            userRef.child("time").setValue(workouttime)
-                            count ++
-                        }
-                    ) {
-                        Text("Add value")
-                    }
-                    Button(
+
+
                         onClick = { navController.navigate("logging") },
 
                         ) {
                         Text(text = "Move to logging page")
                     }
-
-
                 }
                 Row(
                     modifier = Modifier
