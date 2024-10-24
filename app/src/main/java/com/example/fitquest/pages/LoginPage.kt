@@ -2,6 +2,7 @@ package com.example.fitquest.pages
 
 
 
+import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 
 import androidx.navigation.NavController
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -39,6 +41,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.vector.PathNode
 
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.AuthState
@@ -54,15 +57,13 @@ import com.example.fitquest.ui.UserInputField
 import com.example.fitquest.ui.Title01
 import com.example.fitquest.ui.OrangeFilledButton
 import com.example.fitquest.ui.HollowOrangeButton
+import kotlin.system.exitProcess
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
-
-
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
@@ -79,11 +80,6 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             else -> Unit
         }
     }
-
-
-
-
-
 
 
     // Login page layout
@@ -133,7 +129,6 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             onValueChange = { password = it },
 
             isPassword = true
-
         )
 
         Spacer(modifier = Modifier.height(35.dp))
@@ -165,6 +160,17 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 //            Text(text = "REGISTER", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
 //        }
 //
+
+
+
+
+        BackHandler(enabled = true ) {
+//            val intent = Intent(Intent.ACTION_MAIN)
+//            intent.addCategory(Intent.CATEGORY_HOME)
+//            context.startActivity(intent)
+
+            exitProcess(1);
+        }
 
 
     }

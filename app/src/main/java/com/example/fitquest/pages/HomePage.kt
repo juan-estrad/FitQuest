@@ -1,6 +1,8 @@
 package com.example.fitquest.pages
 
+import android.content.Intent
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,14 +19,24 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -37,25 +50,25 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat.recreate
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.UserProfile
 import com.example.fitquest.ui.theme.brightOrange
+import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.transparent
 import com.example.fitquest.ui.verticalGradientBrush
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import kotlin.system.exitProcess
 
 
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
@@ -64,6 +77,8 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
     var userProfile by remember { mutableStateOf<UserProfile?>(null) }
     val database = Firebase.database //initialize an instance of the realtime database
     val userID = FirebaseAuth.getInstance().uid
+
+
 
     LaunchedEffect(authState.value) {
         when(authState.value) {
@@ -86,6 +101,123 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
 
     // display content if the userProfile is not null
     userProfile?.let { profile ->
+
+
+//        Column(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .background(verticalGradientBrush)
+//                .padding(30.dp),
+//            verticalArrangement = Arrangement.Top,
+//            horizontalAlignment = Alignment.CenterHorizontally,
+//        ){
+
+
+
+        Scaffold(
+            topBar = {
+                TopAppBar(
+                    modifier = Modifier.height(150.dp),
+
+                    //THIS IS TO FILL THE TOP CAR CONTENT
+                    title = {
+                        Box(Modifier.fillMaxHeight(), contentAlignment = Alignment.Center) {
+                            Text("My App")
+                        }
+                    }
+                    // Additional configurations
+                )
+            },
+            bottomBar = {
+                BottomAppBar(
+                    actions = {
+//                        IconButton(onClick = { /* do something */ }) {
+//                            Icon(Icons.Filled.Home, contentDescription = "Localized description")
+//                        }
+                        Box(
+                            modifier = Modifier
+                            .size(100.dp)
+                            .clip(CircleShape)
+                            .background(Color.Gray),
+                            contentAlignment = Alignment.Center
+
+                        ) {
+                            Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
+                        }
+
+                    },
+                    floatingActionButton = {
+                        FloatingActionButton(
+                            onClick = { /* do something */ },
+                            containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+                        ) {
+                            Icon(Icons.Filled.Add, "Localized description")
+                        }
+                    }
+
+                )
+            }
+
+        ) {
+            // Content of your main screen
+        }
+
+
+//        TopAppBar(
+//            colors = topAppBarColors(
+//                containerColor = brightOrange,
+//                titleContentColor = grayWhite,
+//            ),
+//
+//            title = {
+////                Text("Top app bar")
+//                Box(
+//                    modifier = Modifier
+//                        .size(100.dp)
+//                        .clip(CircleShape)
+//                        .background(Color.Gray),
+//                    contentAlignment = Alignment.Center
+//
+//                ) {
+//                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
+//                }
+//            },
+//            modifier = Modifier.height(300.dp),
+//
+//            )
+
+
+
+
+//        Row(
+//                modifier = Modifier
+//                    .background(verticalGradientBrush)
+//                    .fillMaxWidth()
+//                    .padding(bottom = 16.dp),
+//
+////                horizontalArrangement = Arrangement.,
+//                verticalAlignment = Alignment.CenterVertically
+//            )
+//            {
+//
+//                //Plan is to make the circle the pfp but for now i just put the username in there
+//                Box(
+//                    modifier = Modifier
+//                        .size(100.dp)
+//                        .clip(CircleShape)
+//                        .background(Color.Gray),
+//                    contentAlignment = Alignment.Center
+//
+//                ) {
+//                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
+//                }
+//
+//                Spacer(modifier = Modifier.width(16.dp))
+//                Text(profile.username, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
+//            }
+
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -94,30 +226,16 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Row(
-                modifier = Modifier
-
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            )
-            {
-                Text("FitQuest", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
+//            Row(
+//                modifier = Modifier
+//
+//                    .fillMaxWidth()
+//                    .padding(bottom = 16.dp),
+//                horizontalArrangement = Arrangement.SpaceBetween,
+//                verticalAlignment = Alignment.Top
+//            ){}
 
 
-                //Plan is to make the circle the pfp but for now i just put the username in there
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .background(Color.Gray),
-                    contentAlignment = Alignment.Center
-
-                ) {
-                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
-                }
-            }
 
 
             Row(
@@ -231,6 +349,25 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                 onClick = { authViewModel.signout() }) {
                 Text(text = "Sign Out", color = Color.Red)
             }
+
+
+
+
         }
+    }
+
+
+    // This modify the device's back button to function like a the device's home button
+    // pressing it will make it minimize the app in stead of shutting it down completely
+    BackHandler(enabled = true ) {
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_HOME)
+        context.startActivity(intent)
+
+
+        // THIS FUNCTION BELOW WILL SHUTDOWN THE APP
+        // which the app has to be relaunch after
+
+        //exitProcess(1);
     }
 }

@@ -2,6 +2,7 @@ package com.example.fitquest.pages
 
 
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -61,6 +62,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 import java.time.LocalDateTime
+import kotlin.system.exitProcess
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -165,8 +167,8 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
         UserInputField(
             label = "PASSWORD",
             value = password,
-            onValueChange = { password = it }
-            //isPassword = true
+            onValueChange = { password = it },
+            isPassword = true
         )
 
 
@@ -192,5 +194,7 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
             Text(text = "Already have an account, Login")
         }
     }
+
+
 }
 
