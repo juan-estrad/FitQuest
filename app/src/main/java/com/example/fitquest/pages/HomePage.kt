@@ -1,8 +1,6 @@
 package com.example.fitquest.pages
 
-import android.content.Intent
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -234,12 +232,5 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                 Text(text = "Sign Out", color = Color.Red)
             }
         }
-    }
-    BackHandler {
-        val homeIntent = Intent(Intent.ACTION_MAIN).apply {
-            addCategory(Intent.CATEGORY_HOME)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        }
-        context.startActivity(homeIntent)
     }
 }

@@ -138,37 +138,7 @@ fun Title01(
 
 //
 
-@Composable
-fun TopBar(
-    label: String,
-    username: String,
-    onClickFunction: () -> Unit,
-    enabled: Boolean
 
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    )
-    {
-        Text(label, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
-
-
-        //Plan is to make the circle the pfp but for now i just put the username in there
-        Box(
-            modifier = Modifier
-                .size(100.dp)
-                .clip(CircleShape)
-                .background(Color.Gray),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(username, fontSize = 20.sp, color = Color.White) //profile username
-        }
-    }
-}
 
 @Composable
 fun OrangeFilledButton(
