@@ -66,6 +66,12 @@ dependencies {
     implementation(libs.firebase.database.ktx)
     implementation(libs.protolite.well.known.types)
     implementation(libs.generativeai)
+
+//
+    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.appcompat)
+
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

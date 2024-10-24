@@ -19,6 +19,10 @@ fun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel)
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "login", builder = {
+
+        composable("splash"){
+            LoginPage(modifier,navController,authViewModel)
+        }
         composable("login"){
             LoginPage(modifier,navController,authViewModel)
         }

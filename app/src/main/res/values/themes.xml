@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.FitQuest" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.FitQuest" parent="android:Theme.Material.NoActionBar">
+        <item name="android:colorBackground">@color/darker</item>
+    </style>
+
+
+    <style name="Theme.FitQuestSplashScreen" parent="Theme.SplashScreen">
+        <item name="android:windowSplashScreenBackground">@color/darker</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="postSplashScreenTheme">@style/Theme.FitQuest</item>
+    </style>
+
+
 </resources>

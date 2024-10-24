@@ -2,6 +2,7 @@ package com.example.fitquest.pages
 
 
 
+import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,6 +33,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 
 import androidx.navigation.NavController
 import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -55,7 +57,7 @@ import com.example.fitquest.ui.Title01
 import com.example.fitquest.ui.OrangeFilledButton
 import com.example.fitquest.ui.HollowOrangeButton
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
@@ -165,7 +167,13 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 //            Text(text = "REGISTER", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
 //        }
 //
-
+        BackHandler {
+            val homeIntent = Intent(Intent.ACTION_MAIN).apply {
+                addCategory(Intent.CATEGORY_HOME)
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            context.startActivity(homeIntent)
+        }
 
     }
 
