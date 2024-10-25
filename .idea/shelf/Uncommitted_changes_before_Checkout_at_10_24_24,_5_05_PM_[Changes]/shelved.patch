@@ -1,0 +1,68 @@
+Index: app/src/main/java/com/example/fitquest/pages/LoginPage.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.fitquest.pages\n\n\n\nimport android.content.Intent\nimport androidx.compose.foundation.BorderStroke\nimport androidx.compose.foundation.layout.Spacer\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.height\nimport androidx.compose.material3.Button\nimport androidx.compose.material3.ButtonDefaults\nimport androidx.compose.material3.ExperimentalMaterial3Api\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.getValue\nimport androidx.compose.runtime.mutableStateOf\nimport androidx.compose.runtime.remember\nimport androidx.compose.runtime.setValue\nimport androidx.compose.runtime.LaunchedEffect\nimport androidx.compose.runtime.livedata.observeAsState\n\nimport androidx.compose.ui.unit.dp\nimport androidx.compose.ui.unit.sp\nimport androidx.compose.ui.platform.LocalContext\nimport androidx.compose.ui.text.font.FontWeight\nimport androidx.compose.foundation.shape.RoundedCornerShape\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.graphics.Brush\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.text.SpanStyle\nimport androidx.compose.ui.text.style.TextAlign\nimport androidx.compose.ui.text.withStyle\nimport androidx.compose.ui.text.buildAnnotatedString\n\nimport androidx.navigation.NavController\nimport android.widget.Toast\nimport androidx.activity.compose.BackHandler\nimport androidx.compose.foundation.background\nimport androidx.compose.foundation.layout.Arrangement\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.material3.Text\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.graphics.vector.PathNode\n\nimport com.example.fitquest.AuthViewModel\nimport com.example.fitquest.AuthState\n\n\nimport com.example.fitquest.ui.theme.grayWhite\nimport com.example.fitquest.ui.theme.brightOrange\nimport com.example.fitquest.ui.theme.transparent\nimport com.example.fitquest.ui.verticalGradientBrush\n\n\nimport com.example.fitquest.ui.UserInputField\nimport com.example.fitquest.ui.Title01\nimport com.example.fitquest.ui.OrangeFilledButton\nimport com.example.fitquest.ui.HollowOrangeButton\nimport kotlin.system.exitProcess\n\n\n@Composable\nfun LoginPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {\n    var email by remember { mutableStateOf(\"\") }\n    var password by remember { mutableStateOf(\"\") }\n    val authState = authViewModel.authState.observeAsState()\n    val context = LocalContext.current\n\n    // Handle authentication state changes\n    LaunchedEffect(authState.value) {\n        when (authState.value) {\n            is AuthState.Authenticated -> navController.navigate(\"home\")\n            is AuthState.Error -> Toast.makeText(\n                context,\n                (authState.value as AuthState.Error).message,\n                Toast.LENGTH_LONG\n            ).show()\n\n            else -> Unit\n        }\n    }\n\n\n    // Login page layout\n    Column(\n        modifier = Modifier\n            .fillMaxSize()\n            .background(verticalGradientBrush)\n            .padding(30.dp),\n        verticalArrangement = Arrangement.Center,\n        horizontalAlignment = Alignment.CenterHorizontally,\n        ) {\n        // Title\n        Text(\n            text =\n            buildAnnotatedString {\n                withStyle(style = SpanStyle(fontSize = 35.sp)) {\n                    append(\"Time for a \\n\\n\\n\")\n                }\n                withStyle(style = SpanStyle(color = brightOrange)) {\n                    append(\"Fit\")\n                }\n                withStyle(style = SpanStyle(color = grayWhite)) {\n                    append(\"Quest!\")\n                }\n            },\n            fontSize = 68.sp,\n            fontWeight = FontWeight.Bold,\n            textAlign = TextAlign.Center\n        )\n\n        Spacer(modifier = Modifier.height(66.dp))\n\n\n        // Email input\n        UserInputField(\n            label = \"EMAIL\",\n            value = email,\n            onValueChange = { email = it }\n        )\n        \n\n\n       // Password Input\n        UserInputField(\n            label = \"PASSWORD\",\n            value = password,\n            onValueChange = { password = it },\n\n            isPassword = true\n        )\n\n        Spacer(modifier = Modifier.height(35.dp))\n\n        // Login button\n        OrangeFilledButton(\"Login\", {authViewModel.login(email, password)},  authState.value != AuthState.Loading)\n\n\n        Spacer(modifier = Modifier.height(32.dp))\n\n        Title01(\"NEED AN ACCOUNT?\")\n\n\n        // Signup navigation text\n        HollowOrangeButton(\"REGISTER\", {navController.navigate(\"signup\")} ,  authState.value != AuthState.Loading)\n\n//        Button(\n//            onClick = { navController.navigate(\"signup\") },\n//            colors = ButtonDefaults.buttonColors(containerColor = transparent),\n//            enabled = authState.value != AuthState.Loading,\n//            modifier = Modifier\n//                .fillMaxWidth()\n//                .height(55.dp),\n////                .border(width = 5.dp, color = Color(0xFFD58D18)),\n//            shape = RoundedCornerShape(size = 25.dp),\n//            border = BorderStroke(4.5.dp, brightOrange)\n//\n//        ) {\n//            Text(text = \"REGISTER\", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)\n//        }\n//\n        BackHandler {\n            val homeIntent = Intent(Intent.ACTION_MAIN).apply {\n                addCategory(Intent.CATEGORY_HOME)\n                flags = Intent.FLAG_ACTIVITY_NEW_TASK\n            }\n            context.startActivity(homeIntent)\n        }\n\n\n\n        BackHandler(enabled = true ) {\n//            val intent = Intent(Intent.ACTION_MAIN)\n//            intent.addCategory(Intent.CATEGORY_HOME)\n//            context.startActivity(intent)\n\n            exitProcess(1);\n        }\n\n\n    }\n\n}\n\n\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/fitquest/pages/LoginPage.kt b/app/src/main/java/com/example/fitquest/pages/LoginPage.kt
+--- a/app/src/main/java/com/example/fitquest/pages/LoginPage.kt	(revision c2f47a2d4b1c821ca798456bdfd83e6e963e45bd)
++++ b/app/src/main/java/com/example/fitquest/pages/LoginPage.kt	(date 1729803792510)
+@@ -171,11 +171,12 @@
+ 
+ 
+         BackHandler(enabled = true ) {
+-//            val intent = Intent(Intent.ACTION_MAIN)
+-//            intent.addCategory(Intent.CATEGORY_HOME)
+-//            context.startActivity(intent)
+ 
+-            exitProcess(1);
++
++            val intent = Intent(Intent.ACTION_MAIN)
++            intent.addCategory(Intent.CATEGORY_HOME)
++            context.startActivity(intent)
++//            exitProcess(1);
+         }
+ 
+ 
+Index: app/src/main/java/com/example/fitquest/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.fitquest\n\nimport android.os.Bundle\nimport androidx.activity.ComponentActivity\nimport androidx.activity.compose.setContent\nimport androidx.activity.enableEdgeToEdge\nimport androidx.activity.viewModels\nimport androidx.compose.foundation.layout.Box\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.material3.Scaffold\nimport androidx.compose.material3.Text\nimport androidx.compose.runtime.Composable\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.layout.AlignmentLine\nimport androidx.compose.ui.tooling.preview.Preview\nimport androidx.core.splashscreen.SplashScreen\nimport androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen\nimport androidx.lifecycle.viewmodel.compose.viewModel\nimport com.example.fitquest.ui.theme.FitQuestTheme\n\nclass MainActivity : ComponentActivity() {\n    override fun onCreate(savedInstanceState: Bundle?) {\n        super.onCreate(savedInstanceState)\n\n\n        val authViewModel : AuthViewModel by viewModels()\n        val splashScreen = installSplashScreen()\n//        splashScreen.setKeepOnScreenCondition{true};\n\n        enableEdgeToEdge()\n        setContent {\n\n\n            FitQuestTheme {\n                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->\n                    MyAppNavigation(modifier = Modifier.padding(innerPadding), authViewModel = authViewModel)\n\n                }\n            }\n\n\n\n\n        }\n    }\n}\n\n\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/fitquest/MainActivity.kt b/app/src/main/java/com/example/fitquest/MainActivity.kt
+--- a/app/src/main/java/com/example/fitquest/MainActivity.kt	(revision c2f47a2d4b1c821ca798456bdfd83e6e963e45bd)
++++ b/app/src/main/java/com/example/fitquest/MainActivity.kt	(date 1729803937086)
+@@ -38,10 +38,6 @@
+ 
+                 }
+             }
+-
+-
+-
+-
+         }
+     }
+ }
+Index: app/src/main/res/values/themes.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n\n    <style name=\"Theme.FitQuest\" parent=\"android:Theme.Material.Light.NoActionBar\">\n        <item name=\"android:windowSplashScreenBackground\">@color/darker</item>\n    </style>\n\n\n\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/themes.xml b/app/src/main/res/values/themes.xml
+--- a/app/src/main/res/values/themes.xml	(revision c2f47a2d4b1c821ca798456bdfd83e6e963e45bd)
++++ b/app/src/main/res/values/themes.xml	(date 1729803883602)
+@@ -1,6 +1,9 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+ 
++
++
++
+     <style name="Theme.FitQuest" parent="android:Theme.Material.Light.NoActionBar">
+         <item name="android:windowSplashScreenBackground">@color/darker</item>
+     </style>
