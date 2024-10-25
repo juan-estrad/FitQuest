@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -43,11 +44,28 @@ import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.transparent
 
-val verticalGradientBrush = Brush.verticalGradient(
-    listOf( Color.Transparent, dark),
-    startY = 0f,
-    endY = Float.POSITIVE_INFINITY
-)
+
+@Composable
+fun verticalGradientBrush(): Brush {
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.toFloat()
+
+    return Brush.verticalGradient(
+        colors = listOf(transparent, dark),
+
+        startY = 250f,
+        endY = Float.POSITIVE_INFINITY,
+    )
+}
+
+
+//val verticalGradientBrush = Brush.verticalGradient(
+//    listOf( Color.Transparent, dark),
+//    startY = 500f,
+//    endY = 2000f
+//)
+
+
 @Composable
 fun FitQuestTxt(
     fontSize: TextUnit
@@ -60,7 +78,7 @@ fun FitQuestTxt(
                 append("Fit")
             }
             withStyle(style = SpanStyle(color = grayWhite)) {
-                append("Quest!")
+                append("Quest")
             }
         },
         fontSize = fontSize,
@@ -95,7 +113,7 @@ fun UserInputField(
             fontSize = 21.sp
         )
     }
-    Spacer(modifier = Modifier.height(5.dp))
+    Spacer(modifier = Modifier.height(3.dp))
 
     OutlinedTextField(
 
@@ -105,12 +123,9 @@ fun UserInputField(
         visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
         colors = TextFieldDefaults.outlinedTextFieldColors(
             focusedBorderColor = brightOrange,
-            unfocusedPlaceholderColor = brightOrange,
-            focusedLabelColor = Color.Transparent,
-            unfocusedLabelColor = grayWhite,
             containerColor = darker,
             unfocusedBorderColor = Color.Transparent,
-            focusedSupportingTextColor = brightOrange
+
         ),
         shape = RoundedCornerShape(size = 10.dp),
         modifier = Modifier
@@ -118,19 +133,21 @@ fun UserInputField(
             .height(65.dp)
     )
 
-    Spacer(modifier = Modifier.height(30.dp))
+    Spacer(modifier = Modifier.height(15.dp))
 }
 
 
 @Composable
 fun Title01(
     label: String,
+    color: Color,
+    fontSize: Float
 ) {
     Box(modifier = Modifier
         .fillMaxWidth()
 
     ){
-        Text(text = label, color = grayWhite, textAlign = TextAlign.Left, fontSize = 16.sp )
+        Text(text = label, color = color, textAlign = TextAlign.Left, fontSize = fontSize.sp )
     }
 }
 
@@ -183,7 +200,6 @@ fun HollowOrangeButton(
     ) {
         Text(text = label, color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
     }
-
 }
 
 

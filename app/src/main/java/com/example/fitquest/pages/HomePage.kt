@@ -221,7 +221,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(verticalGradientBrush)
+                .background(verticalGradientBrush())
                 .padding(30.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,

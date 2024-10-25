@@ -12,16 +12,17 @@ import com.example.fitquest.pages.SignupPage
 import com.example.fitquest.pages.LoggingPage
 import com.example.fitquest.pages.StatsPage
 import com.example.fitquest.pages.ForYouPage
+import com.example.fitquest.pages.SplashScreen
 import com.example.fitquest.pages.StorePage
 
 @Composable
 fun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel){
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "login", builder = {
+    NavHost(navController = navController, startDestination = "splash", builder = {
 
         composable("splash"){
-            LoginPage(modifier,navController,authViewModel)
+            SplashScreen(modifier,navController,authViewModel)
         }
         composable("login"){
             LoginPage(modifier,navController,authViewModel)
