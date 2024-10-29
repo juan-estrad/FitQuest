@@ -52,6 +52,7 @@ import com.example.fitquest.AuthViewModel
 import com.example.fitquest.Log
 import com.example.fitquest.Logging
 import com.example.fitquest.UserProfile
+import com.example.fitquest.ui.TopAndBottomAppBar
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
@@ -66,6 +67,25 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+
+
+    TopAndBottomAppBar(
+        contents = { LoggingPageContents(modifier,navController,authViewModel) },
+        modifier = modifier,
+        navController = navController,
+        authViewModel = authViewModel
+
+    )
+
+
+
+}
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LoggingPageContents(modifier: Modifier, navController: NavController, authViewModel: AuthViewModel) {
     var statname by remember {
         mutableStateOf("")
     }
@@ -127,7 +147,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
 
                     userRef.get().addOnSuccessListener { dataSnapshot ->     //sends a request to retrieve info in firebase
                         userProfile = dataSnapshot.getValue(UserProfile::class.java)
-                    //converts the info into a user profile object
+                        //converts the info into a user profile object
                     }.addOnFailureListener {
                         Toast.makeText(context, "Failed to retrieve user data", Toast.LENGTH_SHORT).show()
                     }
@@ -152,33 +172,6 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                 .background(verticalGradientBrush)
                 .padding(16.dp)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            )
-            {
-                Text(
-                    "FitQuest",
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFF6D00)
-                )
-
-
-                //Plan is to make the circle the pfp but for now i just put the username in there
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .background(Color.Gray),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
-                }
-            }
 
             // This displays the streak
             // i think the future plan is to have a fire emoji or something around it
@@ -259,8 +252,8 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                                 Spacer(modifier = Modifier.height(70.dp))
 
                                 LoggingInputField(
-                                label = "Workout",
-                                value = workout) { workout = it
+                                    label = "Workout",
+                                    value = workout) { workout = it
                                 }
 
                                 Spacer(modifier = Modifier.height(15.dp))

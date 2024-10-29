@@ -19,32 +19,33 @@ import com.example.fitquest.pages.StorePage
 fun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel){
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = "splash", builder = {
-
-        composable("splash"){
-            SplashScreen(modifier,navController,authViewModel)
+    NavHost(navController = navController, startDestination = "splash",
+        builder = {
+            composable("splash"){
+                SplashScreen(modifier,navController,authViewModel)
+            }
+            composable("login"){
+                LoginPage(modifier,navController,authViewModel)
+            }
+            composable("signup") {
+                SignupPage(modifier, navController, authViewModel)
+            }
+            composable("home") {
+                HomePage(modifier, navController, authViewModel)
+            }
+            composable("logging") {
+                LoggingPage(modifier, navController, authViewModel)
+            }
+            composable("stats") {
+                StatsPage(modifier, navController, authViewModel)
+            }
+            composable("foryou") {
+                ForYouPage(modifier, navController, authViewModel)
+            }
+            composable("store") {
+                StorePage(modifier, navController, authViewModel)
+            }
         }
-        composable("login"){
-            LoginPage(modifier,navController,authViewModel)
-        }
-        composable("signup") {
-            SignupPage(modifier, navController, authViewModel)
-        }
-        composable("home") {
-            HomePage(modifier, navController, authViewModel)
-        }
-        composable("logging") {
-            LoggingPage(modifier, navController, authViewModel)
-        }
-        composable("stats") {
-            StatsPage(modifier, navController, authViewModel)
-        }
-        composable("foryou") {
-            ForYouPage(modifier, navController, authViewModel)
-        }
-        composable("store") {
-            StorePage(modifier, navController, authViewModel)
-        }
-    })
+    )
 }
 

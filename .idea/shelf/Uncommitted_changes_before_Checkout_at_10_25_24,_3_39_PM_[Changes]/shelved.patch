@@ -1,0 +1,426 @@
+Index: app/src/main/java/com/example/fitquest/pages/HomePage.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.fitquest.pages\n\nimport android.content.Intent\nimport android.widget.Toast\nimport androidx.activity.compose.BackHandler\nimport androidx.compose.foundation.BorderStroke\nimport androidx.compose.foundation.background\nimport androidx.compose.foundation.layout.Arrangement\nimport androidx.compose.foundation.layout.Box\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.Row\nimport androidx.compose.foundation.layout.Spacer\nimport androidx.compose.foundation.layout.fillMaxHeight\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.height\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.foundation.layout.size\nimport androidx.compose.foundation.layout.width\nimport androidx.compose.foundation.shape.CircleShape\nimport androidx.compose.foundation.shape.RoundedCornerShape\nimport androidx.compose.material.icons.Icons\nimport androidx.compose.material.icons.filled.Add\nimport androidx.compose.material.icons.filled.Check\nimport androidx.compose.material.icons.filled.Home\nimport androidx.compose.material3.BottomAppBar\nimport androidx.compose.material3.BottomAppBarDefaults\nimport androidx.compose.material3.Button\nimport androidx.compose.material3.ButtonDefaults\nimport androidx.compose.material3.ExperimentalMaterial3Api\nimport androidx.compose.material3.FloatingActionButton\nimport androidx.compose.material3.FloatingActionButtonDefaults\nimport androidx.compose.material3.Icon\nimport androidx.compose.material3.IconButton\nimport androidx.compose.material3.Scaffold\nimport androidx.compose.material3.Text\nimport androidx.compose.material3.TextButton\nimport androidx.compose.material3.TopAppBar\nimport androidx.compose.material3.TopAppBarDefaults.topAppBarColors\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.LaunchedEffect\nimport androidx.compose.runtime.getValue\nimport androidx.compose.runtime.livedata.observeAsState\nimport androidx.compose.runtime.mutableStateOf\nimport androidx.compose.runtime.remember\nimport androidx.compose.runtime.setValue\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.draw.clip\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.platform.LocalContext\nimport androidx.compose.ui.text.font.FontWeight\nimport androidx.compose.ui.text.style.TextAlign\nimport androidx.compose.ui.unit.dp\nimport androidx.compose.ui.unit.sp\nimport androidx.navigation.NavController\nimport com.example.fitquest.AuthState\nimport com.example.fitquest.AuthViewModel\nimport com.example.fitquest.UserProfile\nimport com.example.fitquest.ui.theme.brightOrange\nimport com.example.fitquest.ui.theme.grayWhite\nimport com.example.fitquest.ui.theme.transparent\nimport com.example.fitquest.ui.verticalGradientBrush\nimport com.google.firebase.Firebase\nimport com.google.firebase.auth.FirebaseAuth\nimport com.google.firebase.database.database\nimport kotlin.system.exitProcess\n\n\n\n@OptIn(ExperimentalMaterial3Api::class)\n@Composable\nfun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {\n    val authState = authViewModel.authState.observeAsState()\n    val context = LocalContext.current\n\n    var userProfile by remember { mutableStateOf<UserProfile?>(null) }\n    val database = Firebase.database //initialize an instance of the realtime database\n    val userID = FirebaseAuth.getInstance().uid\n\n\n\n    LaunchedEffect(authState.value) {\n        when(authState.value) {\n            is AuthState.Unauthenticated -> navController.navigate(\"login\")\n            is AuthState.Authenticated -> {\n                userID?.let { id ->\n                    val userRef = database.getReference(\"Users\").child(id) // points to the Users node in firebase\n\n                    userRef.get().addOnSuccessListener { dataSnapshot ->     //sends a request to retrieve info in firebase\n                        userProfile = dataSnapshot.getValue(UserProfile::class.java) //converts the info into a user profile object\n                    }.addOnFailureListener {\n                        Toast.makeText(context, \"Failed to retrieve user data\", Toast.LENGTH_SHORT).show()\n                    }\n                }\n            }\n            else -> Unit\n        }\n    }\n\n\n    // display content if the userProfile is not null\n    userProfile?.let { profile ->\n\n\n//        Column(\n//            modifier = Modifier\n//                .fillMaxSize()\n//                .background(verticalGradientBrush)\n//                .padding(30.dp),\n//            verticalArrangement = Arrangement.Top,\n//            horizontalAlignment = Alignment.CenterHorizontally,\n//        ){\n\n\n\n        Scaffold(\n            topBar = {\n                TopAppBar(\n                    modifier = Modifier.height(150.dp),\n\n                    //THIS IS TO FILL THE TOP CAR CONTENT\n                    title = {\n                        Box(Modifier.fillMaxHeight(), contentAlignment = Alignment.Center) {\n                            Text(\"My App\")\n                        }\n                    }\n                    // Additional configurations\n                )\n            },\n            bottomBar = {\n                BottomAppBar(\n                    actions = {\n//                        IconButton(onClick = { /* do something */ }) {\n//                            Icon(Icons.Filled.Home, contentDescription = \"Localized description\")\n//                        }\n                        Box(\n                            modifier = Modifier\n                            .size(100.dp)\n                            .clip(CircleShape)\n                            .background(Color.Gray),\n                            contentAlignment = Alignment.Center\n\n                        ) {\n                            Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username\n                        }\n\n                    },\n                    floatingActionButton = {\n                        FloatingActionButton(\n                            onClick = { /* do something */ },\n                            containerColor = BottomAppBarDefaults.bottomAppBarFabColor,\n                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()\n                        ) {\n                            Icon(Icons.Filled.Add, \"Localized description\")\n                        }\n                    }\n\n                )\n            }\n\n        ) {\n            // Content of your main screen\n        }\n\n\n//        TopAppBar(\n//            colors = topAppBarColors(\n//                containerColor = brightOrange,\n//                titleContentColor = grayWhite,\n//            ),\n//\n//            title = {\n////                Text(\"Top app bar\")\n//                Box(\n//                    modifier = Modifier\n//                        .size(100.dp)\n//                        .clip(CircleShape)\n//                        .background(Color.Gray),\n//                    contentAlignment = Alignment.Center\n//\n//                ) {\n//                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username\n//                }\n//            },\n//            modifier = Modifier.height(300.dp),\n//\n//            )\n\n\n\n\n//        Row(\n//                modifier = Modifier\n//                    .background(verticalGradientBrush)\n//                    .fillMaxWidth()\n//                    .padding(bottom = 16.dp),\n//\n////                horizontalArrangement = Arrangement.,\n//                verticalAlignment = Alignment.CenterVertically\n//            )\n//            {\n//\n//                //Plan is to make the circle the pfp but for now i just put the username in there\n//                Box(\n//                    modifier = Modifier\n//                        .size(100.dp)\n//                        .clip(CircleShape)\n//                        .background(Color.Gray),\n//                    contentAlignment = Alignment.Center\n//\n//                ) {\n//                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username\n//                }\n//\n//                Spacer(modifier = Modifier.width(16.dp))\n//                Text(profile.username, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))\n//            }\n\n\n        Column(\n            modifier = Modifier\n                .fillMaxSize()\n                .background(verticalGradientBrush())\n                .padding(30.dp),\n            verticalArrangement = Arrangement.Center,\n            horizontalAlignment = Alignment.CenterHorizontally,\n        ) {\n//            Row(\n//                modifier = Modifier\n//\n//                    .fillMaxWidth()\n//                    .padding(bottom = 16.dp),\n//                horizontalArrangement = Arrangement.SpaceBetween,\n//                verticalAlignment = Alignment.Top\n//            ){}\n\n\n\n\n            Row(\n                verticalAlignment = Alignment.CenterVertically\n            ) {\n                Text(\n                    text = \"STREAK\",\n                    color = Color.White,\n                    fontWeight = FontWeight.Light,\n                    fontSize = 18.sp\n                )\n                Spacer(modifier = Modifier.width(8.dp))\n                Text(\n                    text = profile.streak.streak.toString(),\n                    color = Color.White,\n                    fontSize = 18.sp,\n                    fontWeight = FontWeight.Bold\n                )\n            }\n            Spacer(modifier = Modifier.height(16.dp))\n\n            // Logging\n            Button(\n                onClick = { navController.navigate(\"logging\") },\n                colors = ButtonDefaults.buttonColors(containerColor = transparent),\n                enabled = authState.value != AuthState.Loading,\n                modifier = Modifier\n                    .fillMaxWidth()\n                    .height(55.dp),\n//                .border(width = 5.dp, color = Color(0xFFD58D18)),\n                shape = RoundedCornerShape(size = 25.dp),\n                border = BorderStroke(4.5.dp, brightOrange)\n\n            ) {\n                Text(\n                    text = \"Log Workout\",\n                    color = brightOrange,\n                    fontSize = 18.sp,\n                    fontWeight = FontWeight.Bold\n                )\n            }\n            Spacer(modifier = Modifier.height(16.dp))\n\n            // Store\n            Button(\n                onClick = { navController.navigate(\"store\") },\n                colors = ButtonDefaults.buttonColors(containerColor = transparent),\n                enabled = authState.value != AuthState.Loading,\n                modifier = Modifier\n                    .fillMaxWidth()\n                    .height(55.dp),\n//                .border(width = 5.dp, color = Color(0xFFD58D18)),\n                shape = RoundedCornerShape(size = 25.dp),\n                border = BorderStroke(4.5.dp, brightOrange)\n\n            ) {\n                Text(\n                    text = \"Store\",\n                    color = brightOrange,\n                    fontSize = 18.sp,\n                    fontWeight = FontWeight.Bold\n                )\n            }\n            Spacer(modifier = Modifier.height(16.dp))\n\n            // Stats\n            Button(\n                onClick = { navController.navigate(\"stats\") },\n                colors = ButtonDefaults.buttonColors(containerColor = transparent),\n                enabled = authState.value != AuthState.Loading,\n                modifier = Modifier\n                    .fillMaxWidth()\n                    .height(55.dp),\n//                .border(width = 5.dp, color = Color(0xFFD58D18)),\n                shape = RoundedCornerShape(size = 25.dp),\n                border = BorderStroke(4.5.dp, brightOrange)\n\n            ) {\n                Text(\n                    text = \"Stats\",\n                    color = brightOrange,\n                    fontSize = 18.sp,\n                    fontWeight = FontWeight.Bold\n                )\n            }\n            Spacer(modifier = Modifier.height(16.dp))\n\n            // For You\n            Button(\n                onClick = { navController.navigate(\"foryou\") },\n                colors = ButtonDefaults.buttonColors(containerColor = transparent),\n                enabled = authState.value != AuthState.Loading,\n                modifier = Modifier\n                    .fillMaxWidth()\n                    .height(55.dp),\n//                .border(width = 5.dp, color = Color(0xFFD58D18)),\n                shape = RoundedCornerShape(size = 25.dp),\n                border = BorderStroke(4.5.dp, brightOrange)\n\n            ) {\n                Text(\n                    text = \"For You\",\n                    color = brightOrange,\n                    fontSize = 18.sp,\n                    fontWeight = FontWeight.Bold\n                )\n            }\n\n\n            TextButton(\n                onClick = { authViewModel.signout() }) {\n                Text(text = \"Sign Out\", color = Color.Red)\n            }\n\n\n\n\n        }\n    }\n\n\n    // This modify the device's back button to function like a the device's home button\n    // pressing it will make it minimize the app in stead of shutting it down completely\n    BackHandler(enabled = true ) {\n        val intent = Intent(Intent.ACTION_MAIN)\n        intent.addCategory(Intent.CATEGORY_HOME)\n        context.startActivity(intent)\n\n\n        // THIS FUNCTION BELOW WILL SHUTDOWN THE APP\n        // which the app has to be relaunch after\n\n        //exitProcess(1);\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/fitquest/pages/HomePage.kt b/app/src/main/java/com/example/fitquest/pages/HomePage.kt
+--- a/app/src/main/java/com/example/fitquest/pages/HomePage.kt	
++++ b/app/src/main/java/com/example/fitquest/pages/HomePage.kt	
+@@ -22,6 +22,7 @@
+ import androidx.compose.material.icons.Icons
+ import androidx.compose.material.icons.filled.Add
+ import androidx.compose.material.icons.filled.Check
++import androidx.compose.material.icons.filled.Edit
+ import androidx.compose.material.icons.filled.Home
+ import androidx.compose.material3.BottomAppBar
+ import androidx.compose.material3.BottomAppBarDefaults
+@@ -48,6 +49,7 @@
+ import androidx.compose.ui.Modifier
+ import androidx.compose.ui.draw.clip
+ import androidx.compose.ui.graphics.Color
++import androidx.compose.ui.platform.LocalConfiguration
+ import androidx.compose.ui.platform.LocalContext
+ import androidx.compose.ui.text.font.FontWeight
+ import androidx.compose.ui.text.style.TextAlign
+@@ -58,6 +60,7 @@
+ import com.example.fitquest.AuthViewModel
+ import com.example.fitquest.UserProfile
+ import com.example.fitquest.ui.theme.brightOrange
++import com.example.fitquest.ui.theme.darker
+ import com.example.fitquest.ui.theme.grayWhite
+ import com.example.fitquest.ui.theme.transparent
+ import com.example.fitquest.ui.verticalGradientBrush
+@@ -103,121 +106,61 @@
+     userProfile?.let { profile ->
+ 
+ 
+-//        Column(
+-//            modifier = Modifier
+-//                .fillMaxSize()
+-//                .background(verticalGradientBrush)
+-//                .padding(30.dp),
+-//            verticalArrangement = Arrangement.Top,
+-//            horizontalAlignment = Alignment.CenterHorizontally,
+-//        ){
+-
+-
++        val configuration = LocalConfiguration.current
++        val screenHeightDp = configuration.screenHeightDp
+ 
+-        Scaffold(
+-            topBar = {
+-                TopAppBar(
+-                    modifier = Modifier.height(150.dp),
++    Scaffold(
++        topBar = {
++            TopAppBar(
++                modifier = Modifier.height(150.dp),
+ 
+-                    //THIS IS TO FILL THE TOP CAR CONTENT
+-                    title = {
+-                        Box(Modifier.fillMaxHeight(), contentAlignment = Alignment.Center) {
+-                            Text("My App")
+-                        }
+-                    }
+-                    // Additional configurations
+-                )
+-            },
+-            bottomBar = {
+-                BottomAppBar(
+-                    actions = {
+-//                        IconButton(onClick = { /* do something */ }) {
+-//                            Icon(Icons.Filled.Home, contentDescription = "Localized description")
+-//                        }
+-                        Box(
+-                            modifier = Modifier
+-                            .size(100.dp)
+-                            .clip(CircleShape)
+-                            .background(Color.Gray),
+-                            contentAlignment = Alignment.Center
++                //THIS IS TO FILL THE TOP CAR CONTENT
++                title = {
++                    Box(Modifier.fillMaxHeight(), contentAlignment = Alignment.Center) {
++                        Text("My App")
++                    }
++                }
++                // Additional configurations
++            )
++        },
++
++        bottomBar = {
++
++            BottomAppBar(
++                containerColor = darker,
++                modifier = Modifier.height((screenHeightDp / 8).dp),
++                actions = {
++                    IconButton(
++                        onClick = { /* do something */ },
++                        modifier = Modifier.size(80.dp),
+ 
+                         ) {
+-                            Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
+-                        }
++                        Icon(
++                            Icons.Filled.Check,
++                            contentDescription = "Localized description",
++                            modifier = Modifier.size(80.dp),
++                            tint = grayWhite,
++                        )
+ 
+-                    },
+-                    floatingActionButton = {
+-                        FloatingActionButton(
+-                            onClick = { /* do something */ },
+-                            containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
+-                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
+-                        ) {
+-                            Icon(Icons.Filled.Add, "Localized description")
+-                        }
+-                    }
+-
+-                )
+-            }
+-
+-        ) {
+-            // Content of your main screen
+-        }
+-
+-
+-//        TopAppBar(
+-//            colors = topAppBarColors(
+-//                containerColor = brightOrange,
+-//                titleContentColor = grayWhite,
+-//            ),
+-//
+-//            title = {
+-////                Text("Top app bar")
+-//                Box(
+-//                    modifier = Modifier
+-//                        .size(100.dp)
+-//                        .clip(CircleShape)
+-//                        .background(Color.Gray),
+-//                    contentAlignment = Alignment.Center
+-//
+-//                ) {
+-//                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
+-//                }
+-//            },
+-//            modifier = Modifier.height(300.dp),
+-//
+-//            )
+-
+-
+-
+-
+-//        Row(
+-//                modifier = Modifier
+-//                    .background(verticalGradientBrush)
+-//                    .fillMaxWidth()
+-//                    .padding(bottom = 16.dp),
+-//
+-////                horizontalArrangement = Arrangement.,
+-//                verticalAlignment = Alignment.CenterVertically
+-//            )
+-//            {
+-//
+-//                //Plan is to make the circle the pfp but for now i just put the username in there
+-//                Box(
+-//                    modifier = Modifier
+-//                        .size(100.dp)
+-//                        .clip(CircleShape)
+-//                        .background(Color.Gray),
+-//                    contentAlignment = Alignment.Center
+-//
+-//                ) {
+-//                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
+-//                }
+-//
+-//                Spacer(modifier = Modifier.width(16.dp))
+-//                Text(profile.username, fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
+-//            }
+-
+-
++                    }
++                    IconButton(
++                        onClick = { /* do something */ },
++                        modifier = Modifier
++                            .size(80.dp)
++                            .background(brightOrange, CircleShape),
++                    ) {
++                        Icon(
++                            Icons.Filled.Edit,
++                            contentDescription = "Localized description",
++                            modifier = Modifier.size(80.dp),
++                            tint = grayWhite,
++                        )
++                    }
++                },
++            )
++        }
++    )
++    {
+         Column(
+             modifier = Modifier
+                 .fillMaxSize()
+@@ -225,135 +168,8 @@
+                 .padding(30.dp),
+             verticalArrangement = Arrangement.Center,
+             horizontalAlignment = Alignment.CenterHorizontally,
+-        ) {
+-//            Row(
+-//                modifier = Modifier
+-//
+-//                    .fillMaxWidth()
+-//                    .padding(bottom = 16.dp),
+-//                horizontalArrangement = Arrangement.SpaceBetween,
+-//                verticalAlignment = Alignment.Top
+-//            ){}
+-
+-
+-
+-
+-            Row(
+-                verticalAlignment = Alignment.CenterVertically
+-            ) {
+-                Text(
+-                    text = "STREAK",
+-                    color = Color.White,
+-                    fontWeight = FontWeight.Light,
+-                    fontSize = 18.sp
+-                )
+-                Spacer(modifier = Modifier.width(8.dp))
+-                Text(
+-                    text = profile.streak.streak.toString(),
+-                    color = Color.White,
+-                    fontSize = 18.sp,
+-                    fontWeight = FontWeight.Bold
+-                )
+-            }
+-            Spacer(modifier = Modifier.height(16.dp))
+-
+-            // Logging
+-            Button(
+-                onClick = { navController.navigate("logging") },
+-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
+-                enabled = authState.value != AuthState.Loading,
+-                modifier = Modifier
+-                    .fillMaxWidth()
+-                    .height(55.dp),
+-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
+-                shape = RoundedCornerShape(size = 25.dp),
+-                border = BorderStroke(4.5.dp, brightOrange)
+-
+-            ) {
+-                Text(
+-                    text = "Log Workout",
+-                    color = brightOrange,
+-                    fontSize = 18.sp,
+-                    fontWeight = FontWeight.Bold
+-                )
+-            }
+-            Spacer(modifier = Modifier.height(16.dp))
+-
+-            // Store
+-            Button(
+-                onClick = { navController.navigate("store") },
+-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
+-                enabled = authState.value != AuthState.Loading,
+-                modifier = Modifier
+-                    .fillMaxWidth()
+-                    .height(55.dp),
+-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
+-                shape = RoundedCornerShape(size = 25.dp),
+-                border = BorderStroke(4.5.dp, brightOrange)
+-
+-            ) {
+-                Text(
+-                    text = "Store",
+-                    color = brightOrange,
+-                    fontSize = 18.sp,
+-                    fontWeight = FontWeight.Bold
+-                )
+-            }
+-            Spacer(modifier = Modifier.height(16.dp))
+-
+-            // Stats
+-            Button(
+-                onClick = { navController.navigate("stats") },
+-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
+-                enabled = authState.value != AuthState.Loading,
+-                modifier = Modifier
+-                    .fillMaxWidth()
+-                    .height(55.dp),
+-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
+-                shape = RoundedCornerShape(size = 25.dp),
+-                border = BorderStroke(4.5.dp, brightOrange)
+-
+-            ) {
+-                Text(
+-                    text = "Stats",
+-                    color = brightOrange,
+-                    fontSize = 18.sp,
+-                    fontWeight = FontWeight.Bold
+-                )
+-            }
+-            Spacer(modifier = Modifier.height(16.dp))
+-
+-            // For You
+-            Button(
+-                onClick = { navController.navigate("foryou") },
+-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
+-                enabled = authState.value != AuthState.Loading,
+-                modifier = Modifier
+-                    .fillMaxWidth()
+-                    .height(55.dp),
+-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
+-                shape = RoundedCornerShape(size = 25.dp),
+-                border = BorderStroke(4.5.dp, brightOrange)
+-
+-            ) {
+-                Text(
+-                    text = "For You",
+-                    color = brightOrange,
+-                    fontSize = 18.sp,
+-                    fontWeight = FontWeight.Bold
+-                )
+-            }
+-
+-
+-            TextButton(
+-                onClick = { authViewModel.signout() }) {
+-                Text(text = "Sign Out", color = Color.Red)
+-            }
+-
+-
+-
+-
+-        }
++        ){}
++    }
+     }
+ 
+ 
+Index: app/src/main/java/com/example/fitquest/pages/SplashScreen.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.fitquest.pages\n\n\n\nimport android.content.Intent\nimport android.widget.Toast\nimport androidx.compose.runtime.Composable\n\n\nimport androidx.compose.ui.unit.dp\n\nimport androidx.compose.ui.platform.LocalContext\n\nimport androidx.compose.ui.Modifier\n\nimport androidx.navigation.NavController\nimport androidx.activity.compose.BackHandler\nimport androidx.compose.animation.core.animateDpAsState\nimport androidx.compose.animation.core.animateFloatAsState\nimport androidx.compose.animation.core.spring\nimport androidx.compose.animation.core.tween\nimport androidx.compose.foundation.Image\nimport androidx.compose.foundation.background\nimport androidx.compose.foundation.layout.Arrangement\nimport androidx.compose.foundation.layout.Box\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.aspectRatio\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.offset\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.foundation.layout.size\nimport androidx.compose.foundation.shape.CircleShape\nimport androidx.compose.material3.LocalTextStyle\nimport androidx.compose.material3.Text\nimport androidx.compose.runtime.LaunchedEffect\nimport androidx.compose.runtime.State\nimport androidx.compose.runtime.getValue\nimport androidx.compose.runtime.livedata.observeAsState\nimport androidx.compose.runtime.mutableFloatStateOf\nimport androidx.compose.runtime.mutableStateOf\nimport androidx.compose.runtime.remember\nimport androidx.compose.runtime.setValue\n\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.graphics.Brush\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.platform.LocalConfiguration\n\nimport androidx.compose.ui.res.painterResource\nimport androidx.compose.ui.text.ParagraphStyle\nimport androidx.compose.ui.text.PlatformTextStyle\nimport androidx.compose.ui.text.TextStyle\nimport androidx.compose.ui.text.style.LineHeightStyle\nimport androidx.compose.ui.unit.Dp\nimport androidx.compose.ui.unit.em\nimport androidx.compose.ui.unit.sp\nimport com.example.fitquest.AuthState\n\nimport com.example.fitquest.AuthViewModel\nimport com.example.fitquest.R\nimport com.example.fitquest.ui.theme.brightOrange\nimport com.example.fitquest.ui.theme.dark\nimport com.example.fitquest.ui.theme.darkOrange\nimport com.example.fitquest.ui.theme.grayWhite\nimport com.example.fitquest.ui.verticalGradientBrush\n\n\nimport kotlinx.coroutines.delay\nimport kotlin.random.Random\n\n\n@Composable\nfun SplashScreen(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {\n//    var email by remember { mutableStateOf(\"\") }\n//    var password by remember { mutableStateOf(\"\") }\n    val authState = authViewModel.authState.observeAsState()\n\n\n\n    val context = LocalContext.current\n\n\n    var isDelayDone by remember { mutableStateOf(false) }\n\n\n\n    val iconSize = 200f\n    val configuration = LocalConfiguration.current\n    val screenHeightDp = configuration.screenHeightDp\n    val iconOffset = screenHeightDp / 11\n\n\n\n\n    // Login page layout\n    Column(\n\n        modifier = Modifier\n            .fillMaxSize()\n            .background(FadeInBrush(verticalGradientBrush()))\n//            .padding(iconSize.dp)\n        ,\n//        verticalArrangement = Arrangement.Center,\n        horizontalAlignment = Alignment.CenterHorizontally,\n    ) {\n//\n//        Box(\n//            contentAlignment = Alignment.Center,\n//            modifier = Modifier\n//                .offset(y = dpSlide( 400f, iconOffset.toFloat()  ))\n//                .size(dpSlide( iconSize - 50f, iconSize) )\n//            ,\n//        ) {\n//            Box(\n//                contentAlignment = Alignment.Center,\n//                modifier = Modifier\n//                    .fillMaxWidth()// Outer Box size\n//                    .aspectRatio(1f)\n//                    .background(darkOrange, CircleShape) // Outer border\n//                    .padding(horizontal = 20.dp)\n//            ) {\n//                Image(\n//                    painter = painterResource(id = R.drawable.fit_quest_logo), // Replace with your image\n//                    contentDescription = null,\n//                )\n//            }\n//        }\n    }\n\n//    Column(\n//        modifier = Modifier\n//            .fillMaxSize()\n//            .padding(iconSize.dp),\n//        verticalArrangement = Arrangement.Center,\n//        horizontalAlignment = Alignment.CenterHorizontally,\n//    ) {\n//        FadeInText(\"Fade In Text\")\n//    }\n    Column(\n        modifier = Modifier\n            .fillMaxSize()\n\n//            .padding(iconSize.dp)\n            ,\n        verticalArrangement = Arrangement.Center,\n        horizontalAlignment = Alignment.CenterHorizontally,\n    ) {\n//        TextFadeIn(\"Fade In Text\", grayWhite, 24f)\n        val stringList = listOf(\n            \"Leg day?\",\n            \"LET's \" +\n                    \"\\nGOOOOOOO!\",\n            \"Start of the day\",\n            \"YOU GOT THIS!\" + \"\\nYOU GOT THIS!\" + \"\\nYOU GOT THIS!\",\n            \"Looking good!\",\n            \"Let's pump those\" +\n                    \"\\nMUSCLES!\",\n            \"KEEP ON\\nKEEPING ON\")\n\n        RandomStringPicker(stringList)\n\n    }\n\n    BackHandler(enabled = true ) {\n        val intent = Intent(Intent.ACTION_MAIN)\n        intent.addCategory(Intent.CATEGORY_HOME)\n        context.startActivity(intent)\n    }\n\n\n\n    LaunchedEffect(Unit) {\n        delay(2000)\n        isDelayDone = true // Set state to true after initial composition\n    }\n\n\nif(isDelayDone) {\n    LaunchedEffect(key1 = true) {\n\n        when (authState.value) {\n            is AuthState.Authenticated -> navController.navigate(\"home\")\n            is AuthState.Error -> Toast.makeText(\n                context,\n                (authState.value as AuthState.Error).message,\n                Toast.LENGTH_LONG\n            ).show()\n\n            else -> navController.navigate(\"login\")\n        }\n    }\n}\n\n\n\n\n}\n\n\n\n\n\n\n\n@Composable\nfun dpSlide(startNumber: Float, endNumber: Float) : Dp {\n    var target by remember { mutableStateOf(startNumber.dp) }\n\n    val dpMove by animateDpAsState(\n        targetValue = target,\n        animationSpec = tween(\n            durationMillis = 1000 // Animation duration in milliseconds\n        )\n\n    )\n\n    LaunchedEffect(Unit) {\n        target = endNumber.dp\n//        delay(0000) // Delay for the animation duration\n//        while (true) {\n//            offset = if (offset == (0).dp) 200.dp else (0).dp\n//\n//        }\n    }\n    return dpMove\n}\n\n@Composable\nfun floatSlide(startNumber: Float, endNumber: Float) : Float {\n    var target by remember { mutableFloatStateOf(startNumber) }\n\n    val floatMove by animateFloatAsState(\n        targetValue = target,\n        animationSpec = tween(\n            durationMillis = 1000 // Animation duration in milliseconds\n        ), label = \"\"\n\n    )\n\n    LaunchedEffect(Unit) {\n        target = endNumber\n        delay(6000) // Delay for the animation duration\n//        while (true) {\n//            offset = if (offset == (0).dp) 200.dp else (0).dp\n//\n//        }\n    }\n    return floatMove\n}\n\n\n@Composable\nfun TextAnimated(text: String, textColor: Color, fontSize: Float, startOffset: Float, endOffset: Float) {\n    var offset by remember { mutableStateOf(startOffset.dp) }\n\n    val animatedOffset by animateDpAsState(\n        targetValue = offset,\n        animationSpec = tween(\n            durationMillis = 1000 // Animation duration in milliseconds\n        )\n    )\n\n    LaunchedEffect(Unit) {\n        offset = endOffset.dp\n        delay(10000) // Delay for the animation duration\n//        while (true) {\n//            offset = if (offset == (0).dp) 200.dp else (0).dp\n//\n//        }\n    }\n    Box(\n        contentAlignment = Alignment.Center,\n        modifier = Modifier\n//            .fillMaxWidth()\n//            .padding(16.dp)\n//            .background(Color.LightGray)\n\n    ) {\n        Text(\n            text = text,\n            fontSize = fontSize.sp,\n            color = textColor,\n            modifier = Modifier.offset(y = animatedOffset),\n            style = LocalTextStyle.current.merge(\n                TextStyle(\n                    lineHeight = 2.sp,\n                    platformStyle = PlatformTextStyle(\n                        includeFontPadding = false\n                    ),\n                    lineHeightStyle = LineHeightStyle(\n                        alignment = LineHeightStyle.Alignment.Center,\n                        trim = LineHeightStyle.Trim.None\n                    )\n                )\n            )\n        )\n    }\n\n}\n\n\n\n\n\n\n@Composable\nfun RandomStringPicker(strings: List<String>) {\n    val randomIndex = remember { Random.nextInt(strings.size) }\n    val randomString = strings[randomIndex]\n\n    TextAnimated(randomString, brightOrange, floatSlide(18f, 38f), 200f, -90f )\n}\n\n\n\n\n\n\n\n@Composable\nfun TextFadeIn(text: String, textColor: Color, fontSize: Float) {\n    var alpha by remember { mutableFloatStateOf(0f) }\n\n    Box(\n        modifier = Modifier\n        ,\n        contentAlignment = Alignment.Center // Center the text within the Box\n    ) {\n        Text(\n            text = text,\n            fontSize = fontSize.sp,\n            color = textColor.copy(alpha = floatSlide(0f, 1f))\n        )\n    }\n}\n\n@Composable\nfun FadeInBrush(brush: Brush): Brush {\n    var alpha by remember { mutableFloatStateOf(0f) }\n\n    val animatedAlpha by animateFloatAsState(\n        targetValue = alpha,\n        animationSpec = tween(\n            durationMillis = 2000 // Animation duration in milliseconds\n        ), label = \"\"\n    )\n\n    LaunchedEffect(Unit) {\n        alpha = 1f // Start the fade-in effect\n    }\n\n    return Brush.verticalGradient(\n        colors = listOf(\n            Color.Transparent,\n            dark.copy(alpha = animatedAlpha)\n        ),\n        startY = 250f,\n        endY = Float.POSITIVE_INFINITY,\n    )\n}\n\n\n\n\n\n@Composable\nfun AuthNavigation(authState: State<AuthState>, navController: NavController, isDelayDone: Boolean) {\n    val context = LocalContext.current\n\n    LaunchedEffect(key1 = isDelayDone) {\n        if (isDelayDone) {\n            when (authState.value) {\n                is AuthState.Authenticated -> navController.navigate(\"home\")\n                is AuthState.Error -> Toast.makeText(\n                    context,\n                    (authState.value as AuthState.Error).message,\n                    Toast.LENGTH_LONG\n                ).show()\n                else -> navController.navigate(\"login\")\n            }\n        }\n    }\n}\n\n
+===================================================================
+diff --git a/app/src/main/java/com/example/fitquest/pages/SplashScreen.kt b/app/src/main/java/com/example/fitquest/pages/SplashScreen.kt
+--- a/app/src/main/java/com/example/fitquest/pages/SplashScreen.kt	
++++ b/app/src/main/java/com/example/fitquest/pages/SplashScreen.kt	
+@@ -52,6 +52,7 @@
+ import androidx.compose.ui.text.PlatformTextStyle
+ import androidx.compose.ui.text.TextStyle
+ import androidx.compose.ui.text.style.LineHeightStyle
++import androidx.compose.ui.text.style.TextAlign
+ import androidx.compose.ui.unit.Dp
+ import androidx.compose.ui.unit.em
+ import androidx.compose.ui.unit.sp
+@@ -149,7 +150,7 @@
+ //        TextFadeIn("Fade In Text", grayWhite, 24f)
+         val stringList = listOf(
+             "Leg day?",
+-            "LET's " +
++            "LET's" +
+                     "\nGOOOOOOO!",
+             "Start of the day",
+             "YOU GOT THIS!" + "\nYOU GOT THIS!" + "\nYOU GOT THIS!",
+@@ -281,10 +282,11 @@
+             text = text,
+             fontSize = fontSize.sp,
+             color = textColor,
+-            modifier = Modifier.offset(y = animatedOffset),
++            modifier = Modifier.offset(y = animatedOffset - 10.dp),
+             style = LocalTextStyle.current.merge(
+                 TextStyle(
+-                    lineHeight = 2.sp,
++                    textAlign = TextAlign.Center,
++                    lineHeight = 1.5.em,
+                     platformStyle = PlatformTextStyle(
+                         includeFontPadding = false
+                     ),
+@@ -355,7 +357,8 @@
+             Color.Transparent,
+             dark.copy(alpha = animatedAlpha)
+         ),
+-        startY = 250f,
++
++        startY = 0f,
+         endY = Float.POSITIVE_INFINITY,
+     )
+ }
+Index: app/src/main/java/com/example/fitquest/ui/Components.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.fitquest.ui\n\nimport androidx.compose.foundation.BorderStroke\nimport androidx.compose.foundation.background\nimport androidx.compose.foundation.layout.Arrangement\nimport androidx.compose.foundation.layout.Box\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.Row\nimport androidx.compose.foundation.layout.Spacer\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.height\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.foundation.layout.size\nimport androidx.compose.foundation.shape.CircleShape\nimport androidx.compose.foundation.shape.RoundedCornerShape\nimport androidx.compose.material3.Button\nimport androidx.compose.material3.ButtonDefaults\nimport androidx.compose.material3.ExperimentalMaterial3Api\nimport androidx.compose.material3.OutlinedTextField\nimport androidx.compose.material3.Text\nimport androidx.compose.material3.TextFieldDefaults\nimport androidx.compose.runtime.Composable\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.draw.clip\nimport androidx.compose.ui.graphics.Brush\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.platform.LocalConfiguration\nimport androidx.compose.ui.text.SpanStyle\nimport androidx.compose.ui.text.buildAnnotatedString\nimport androidx.compose.ui.text.font.FontWeight\nimport androidx.compose.ui.text.input.PasswordVisualTransformation\nimport androidx.compose.ui.text.input.VisualTransformation\nimport androidx.compose.ui.text.style.TextAlign\nimport androidx.compose.ui.text.withStyle\nimport androidx.compose.ui.unit.TextUnit\nimport androidx.compose.ui.unit.dp\nimport androidx.compose.ui.unit.sp\nimport com.example.fitquest.AuthState\nimport com.example.fitquest.ui.theme.brightOrange\nimport com.example.fitquest.ui.theme.dark\nimport com.example.fitquest.ui.theme.darker\nimport com.example.fitquest.ui.theme.grayWhite\nimport com.example.fitquest.ui.theme.transparent\n\n\n@Composable\nfun verticalGradientBrush(): Brush {\n    val configuration = LocalConfiguration.current\n    val screenHeight = configuration.screenHeightDp.toFloat()\n\n    return Brush.verticalGradient(\n        colors = listOf(transparent, dark),\n\n        startY = 250f,\n        endY = Float.POSITIVE_INFINITY,\n    )\n}\n\n\n//val verticalGradientBrush = Brush.verticalGradient(\n//    listOf( Color.Transparent, dark),\n//    startY = 500f,\n//    endY = 2000f\n//)\n\n\n@Composable\nfun FitQuestTxt(\n    fontSize: TextUnit\n    // DEFAUT 68.sp\n) {\n    Text(\n        text =\n        buildAnnotatedString {\n            withStyle(style = SpanStyle(color = brightOrange)) {\n                append(\"Fit\")\n            }\n            withStyle(style = SpanStyle(color = grayWhite)) {\n                append(\"Quest\")\n            }\n        },\n        fontSize = fontSize,\n        fontWeight = FontWeight.Bold,\n        textAlign = TextAlign.Center\n    )\n}\n\n\n@OptIn(ExperimentalMaterial3Api::class)\n@Composable\nfun UserInputField(\n    label: String,\n    value: String,\n    onValueChange: (String) -> Unit,\n    isPassword: Boolean = false\n) {\n    Row(\n        modifier = Modifier.fillMaxWidth(),\n        verticalAlignment= Alignment.CenterVertically\n    ) {\n        Text(\n            text = label,\n            color = grayWhite,\n            textAlign = TextAlign.Left,\n            fontSize = 21.sp\n        )\n\n        Text(\n            text = \"*\",\n            color = Color.Red,\n            fontSize = 21.sp\n        )\n    }\n    Spacer(modifier = Modifier.height(3.dp))\n\n    OutlinedTextField(\n\n        value = value,\n        onValueChange = onValueChange,\n        singleLine = true,\n        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,\n        colors = TextFieldDefaults.outlinedTextFieldColors(\n            focusedBorderColor = brightOrange,\n            containerColor = darker,\n            unfocusedBorderColor = Color.Transparent,\n\n        ),\n        shape = RoundedCornerShape(size = 10.dp),\n        modifier = Modifier\n            .fillMaxWidth()\n            .height(65.dp)\n    )\n\n    Spacer(modifier = Modifier.height(15.dp))\n}\n\n\n@Composable\nfun Title01(\n    label: String,\n    color: Color,\n    fontSize: Float\n) {\n    Box(modifier = Modifier\n        .fillMaxWidth()\n\n    ){\n        Text(text = label, color = color, textAlign = TextAlign.Left, fontSize = fontSize.sp )\n    }\n}\n\n\n\n//\n\n\n\n@Composable\nfun OrangeFilledButton(\n    label: String,\n    onClickFunction: () -> Unit,\n    enabled: Boolean\n) {\n    Button(\n        onClick = onClickFunction,\n        colors = ButtonDefaults.buttonColors(containerColor = brightOrange),\n        enabled = enabled,\n        modifier = Modifier.fillMaxWidth().height(65.dp),\n        shape = RoundedCornerShape(size = 18.dp)\n    ) {\n        Text(\n            text = label,\n            color = grayWhite,\n            fontSize = 40.sp,\n            fontWeight = FontWeight.Bold\n        )\n    }\n    Spacer(modifier = Modifier.height(16.dp))\n}\n\n\n\n@Composable\nfun HollowOrangeButton(\n    label: String,\n    onClickFunction: () -> Unit,\n    enabled: Boolean\n) {\n    Button(\n        onClick = onClickFunction,\n        colors = ButtonDefaults.buttonColors(containerColor = transparent),\n        enabled = enabled,\n        modifier = Modifier\n            .fillMaxWidth()\n            .height(55.dp),\n        shape = RoundedCornerShape(size = 25.dp),\n        border = BorderStroke(4.5.dp, brightOrange)\n    ) {\n        Text(text = label, color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)\n    }\n}\n\n\n\n\n\n//@Composable\n//fun FitQuestBackground(function: () -> Unit) {\n//    Column(\n//        modifier = Modifier\n//            .fillMaxSize()\n//            .background(verticalGradientBrush)\n//            .padding(30.dp)\n//        ,\n//        verticalArrangement = Arrangement.Center,\n//        horizontalAlignment = Alignment.CenterHorizontally,\n//    ){}\n//}
+===================================================================
+diff --git a/app/src/main/java/com/example/fitquest/ui/Components.kt b/app/src/main/java/com/example/fitquest/ui/Components.kt
+--- a/app/src/main/java/com/example/fitquest/ui/Components.kt	
++++ b/app/src/main/java/com/example/fitquest/ui/Components.kt	
+@@ -53,7 +53,7 @@
+     return Brush.verticalGradient(
+         colors = listOf(transparent, dark),
+ 
+-        startY = 250f,
++        startY = 0f,
+         endY = Float.POSITIVE_INFINITY,
+     )
+ }
+@@ -116,7 +116,6 @@
+     Spacer(modifier = Modifier.height(3.dp))
+ 
+     OutlinedTextField(
+-
+         value = value,
+         onValueChange = onValueChange,
+         singleLine = true,
+@@ -145,7 +144,6 @@
+ ) {
+     Box(modifier = Modifier
+         .fillMaxWidth()
+-
+     ){
+         Text(text = label, color = color, textAlign = TextAlign.Left, fontSize = fontSize.sp )
+     }

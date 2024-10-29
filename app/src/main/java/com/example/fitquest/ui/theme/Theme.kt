@@ -7,15 +7,14 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
+import com.example.fitquest.ui.verticalGradientBrush
 
 
-val verticalGradientBrush = Brush.verticalGradient(
-    listOf(Color(0xFF222831) , Color(0xFF393E46)),
-    startY = 0.0f,
-    endY = Float.POSITIVE_INFINITY
-)
 
-
+val verticalGradientBrush: Brush
+    @Composable
+    get() = verticalGradientBrush()
 
 
 public val DarkColorScheme = darkColorScheme(

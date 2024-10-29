@@ -284,7 +284,7 @@ fun TextAnimated(text: String, textColor: Color, fontSize: Float, startOffset: F
             modifier = Modifier.offset(y = animatedOffset),
             style = LocalTextStyle.current.merge(
                 TextStyle(
-                    lineHeight = 2.sp,
+                    lineHeight = 50.sp,
                     platformStyle = PlatformTextStyle(
                         includeFontPadding = false
                     ),
