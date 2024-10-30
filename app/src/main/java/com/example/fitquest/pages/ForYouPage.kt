@@ -58,7 +58,11 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.Date
 import com.example.fitquest.UserProfile
+import com.example.fitquest.UserStats
+import com.example.fitquest.Workout
+import com.example.fitquest.WorkoutViewModel
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.transparent
 //import com.google.ai.client.generativeai.type.content
@@ -76,6 +80,7 @@ import java.util.concurrent.TimeUnit
 import kotlin.random.Random
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 import androidx.compose.material3.Text as Text
 
@@ -195,40 +200,13 @@ fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, auth
                 Column {
                     LazyRow {
                         items(1) { index ->
-                            DailyBox(
-                                name = " ",
-                                title = "My Title",
-                                text = "This is some text in the box.",
-                                workouts = " ",
-                                onClick = {
-
-                                }
-                            )
-                            DailyBox(
-                                name = " ",
-
-                                title = "My Title",
-                                text = "This is some text in the box.",
-                                workouts = " ",
-                                onClick = {
-
-                                }
-                            )
-                            DailyBox(
-                                name = " ",
-                                title = "My Title",
-                                text = "This is some text in the box.",
-                                workouts = " ",
-                                onClick = {
-
-                                }
-                            )
+                            WorkoutScreen()
+                            WorkoutScreen()
+                            WorkoutScreen()
                         }
                     }
 
                 }
-                Text(text = "hello")
-
                 Row (
                     modifier = Modifier
                     .fillMaxWidth()
@@ -500,6 +478,8 @@ fun DailyBox(name: String, title: String, text: String, workouts: String, onClic
     var childValue2 by remember { mutableStateOf("") }
     var childValue3 by remember { mutableStateOf("") }
 
+    val ref1 = database.getReference("workouts/$childValue1")
+    val ref2 = database.getReference("workouts/$childValue1/$childValue2")
 
     LaunchedEffect(Unit) {
         while (true) {
@@ -624,5 +604,160 @@ fun RandomChildDisplay() {
     }
 
     Text(text = childValue)
+}
+
+/*fun fetchRandomWorkout(onResult: (Workout?) -> Unit) {
+    val database = FirebaseDatabase.getInstance().getReference("workouts")
+
+    database.addListenerForSingleValueEvent(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val workoutList = mutableListOf<Workout?>() // Pair of (workout name, description)
+            for (category in snapshot.children) {
+                for (workout in category.children) {
+                    val workoutName = workout.key ?: continue
+                    val description = workout.child("description").getValue(String::class.java) ?: continue
+                    workoutList.add(Workout)
+                }
+            }
+
+            // Randomly select a workout
+            if (workoutList.isNotEmpty()) {
+                val randomWorkout = workoutList.random()
+                onResult(randomWorkout) // Pass the selected workout as a pair
+            } else {
+                onResult(null) // No workouts found
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            onResult(null) // Handle errors
+        }
+    })
+}
+
+@Composable
+fun RandomWorkoutCard() {
+    var workoutName by remember { mutableStateOf<String?>(null) }
+    var workoutDescription by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(Unit) {
+        fetchRandomWorkout { result ->
+            result?.let { (name, description) ->
+                workoutName = name
+                workoutDescription = description
+            } ?: run {
+                workoutName = "No Workout Available"
+                workoutDescription = ""
+            }
+        }
+    }
+
+    Card(
+        modifier = Modifier.padding(16.dp),
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            workoutName?.let {
+                Text(text = it, fontWeight = FontWeight.Bold)
+            } ?: Text("Loading...")
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            workoutDescription?.let {
+                Text(text = it)
+            } ?: Text("...")
+        }
+    }
+}
+
+fun fetchDailyCard(onResult: (Workouts?) -> Unit) {
+    val database = FirebaseDatabase.getInstance().getReference("workouts").child("Arms")
+
+    database.addListenerForSingleValueEvent(object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            val cardList = mutableListOf<Workouts>()
+            for (child in snapshot.children) {
+                val card = child.getValue(Workouts::class.java)
+                if (card != null) {
+                    cardList.add(card)
+                }
+            }
+
+            // Get the current day of the month and use it to select a card
+            val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+            val index = (currentDay - 1) % cardList.size // Using modulo to wrap around
+            onResult(cardList.getOrNull(index))
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            onResult(null) // Handle errors
+        }
+    })
+}
+
+@Composable
+fun DailyCard() {
+    var cardContent by remember { mutableStateOf<Workouts?>(null) }
+    val referenceWorkoutTitle = database.getReference("workouts")
+    var childValue1 by remember { mutableStateOf("") }
+    var childValue2 by remember { mutableStateOf("") }
+    var childValue3 by remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit) {
+        fetchDailyCard { content ->
+            cardContent = content
+        }
+        val snapshot1 = referenceWorkoutTitle.get().await()
+
+        childValue1 = snapshot1.key.toString()
+    }
+
+    Card(
+        modifier = Modifier.padding(16.dp)
+    ) {
+        cardContent?.let {
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(text = it.workoutTypes, fontWeight = FontWeight.Bold)
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = childValue1)
+            }
+        } ?: Text("Loading...")
+    }
+}*/
+
+@Composable
+fun WorkoutScreen(viewModel: WorkoutViewModel = WorkoutViewModel()) {
+
+    LaunchedEffect(Unit) {
+        viewModel.loadRandomWorkout()
+    }
+
+    Card(
+        modifier = Modifier
+            .padding(7.dp)
+            .width(325.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Display workout details if available
+            viewModel.todayWorkout.value?.let { workout ->
+                Text(text = "Workout Name: ${workout.name}")
+                Text(text = "Workout: ${workout.description}")
+                Text(text = "Strength: +${workout.strength}")
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = { viewModel.completeWorkout() }) {
+                    Text(text = "Complete Workout")
+                }
+            } ?: Text(text = "No workout loaded.")
+        }
+    }
 }
 

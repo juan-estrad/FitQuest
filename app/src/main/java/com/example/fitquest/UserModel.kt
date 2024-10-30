@@ -2,6 +2,12 @@ package com.example.fitquest
 
 import java.time.LocalDateTime
 
+data class Workout(
+    val name: String = "",
+    val description: String = "",
+    var strength: Int = 0,
+)
+
 data class UserProfile(
     val username: String = "",
     val flexcoins: Int = 0,
@@ -11,11 +17,11 @@ data class UserProfile(
 )
 
 data class UserStats(
-    val agility: Int = 0,
-    val consistency: Int = 0,
-    val dexterity: Int = 0,
-    val stamina: Int = 0,
-    val strength: Int = 0
+    var agility: Int = 0,
+    var consistency: Int = 0,
+    var dexterity: Int = 0,
+    var stamina: Int = 0,
+    var strength: Int = 0
 )
 
 data class UserStreak(

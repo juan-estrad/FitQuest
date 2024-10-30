@@ -17,6 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.fitquest.pages.WorkoutScreen
 import com.example.fitquest.ui.theme.FitQuestTheme
 
 class MainActivity : ComponentActivity() {
@@ -28,6 +29,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
+            val workoutViewModel: WorkoutViewModel = viewModel()
+            WorkoutScreen(viewModel = workoutViewModel)
 //            FitQuestTheme {
 //                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 //                    MyAppNavigation(modifier = Modifier.padding(innerPadding), authViewModel = authViewModel)
