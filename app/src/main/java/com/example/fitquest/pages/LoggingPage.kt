@@ -363,6 +363,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                                         userRef.child("reps").setValue(reps)
                                         userRef.child("weight").setValue(weight)
                                         userRef.child("time").setValue(workouttime)
+                                        userRef.child("time")
                                         count ++
                                         workout = ""
                                         sets = ""

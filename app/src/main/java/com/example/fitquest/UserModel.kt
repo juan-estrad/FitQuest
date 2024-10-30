@@ -2,6 +2,12 @@ package com.example.fitquest
 
 import java.time.LocalDateTime
 
+data class MyContent(
+    val id: Int,
+    val title: String,
+    val description: String
+)
+
 data class UserProfile(
     val username: String = "",
     val flexcoins: Int = 0,
