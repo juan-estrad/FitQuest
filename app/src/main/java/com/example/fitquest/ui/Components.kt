@@ -8,9 +8,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,11 +35,13 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -51,6 +56,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.BeyondBoundsLayout
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
@@ -60,6 +66,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -86,6 +93,19 @@ fun verticalGradientBrush(): Brush {
         colors = listOf(transparent, dark),
         startY = 250f,
         endY = Float.POSITIVE_INFINITY,
+    )
+}
+
+
+@Composable
+fun horizontalGradientBrush(): Brush {
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.toFloat()
+
+    return Brush.horizontalGradient(
+        colors = listOf(transparent, dark),
+        startX = 250f,
+        endX = Float.POSITIVE_INFINITY,
     )
 }
 
@@ -310,78 +330,95 @@ fun TopAndBottomAppBar(
 
     Scaffold(
         topBar = {
-            TopAppBar(
+            LargeTopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = transparent,
+//                    titleContentColor = grayWhite,
+                )
+                ,
                 modifier = Modifier
-                    .height(screenHeightDp.dp / 5)
+//                    .size(screenHeightDp.dp / 3)
+                    .fillMaxWidth()
+//                    .height(screenHeightDp.dp / 6)
                     .padding(0.dp)
-//                    .background(dark)
-
+                    .background(grayWhite)
                 ,
 
 
-
-
+//                title = {},
                 //THIS IS TO FILL THE TOP CAR CONTENT
                 title = {
-                    Column(
+                    Box(
                         modifier = modifier
-                            .fillMaxHeight()
-                            .background(com.example.fitquest.ui.theme.verticalGradientBrush)
-                            .padding(0.dp),
-                            horizontalAlignment = AbsoluteAlignment.Left,
 
-
-                    ) {
-
-                        // This displays the streak
-                        // i think the future plan is to have a fire emoji or something around it
-
-                        userProfile?.let { profile ->
-                            Row(
-                                verticalAlignment = Alignment.CenterVertically,
-                                modifier = Modifier
-//                                    .height(screenHeightDp.dp / 5)
-//                                    .fillMaxSize()
+                            .fillMaxSize()
+//                            .height(screenHeightDp.dp / 2)
+//                            .fillMaxWidth()
+//                            .aspectRatio(1f)
+                            .background(darker)
+                    )
+                    {}
+//                    Column(
+//                        modifier = modifier
+//                            .fillMaxSize()
+//                            .fillMaxHeight()
+//                            .background(com.example.fitquest.ui.theme.verticalGradientBrush)
+////                            .padding(0.dp),
+////                            horizontalAlignment = AbsoluteAlignment.Left,
+//
+//
+//                    ) {
+//
+//                        // This displays the streak
+//                        // i think the future plan is to have a fire emoji or something around it
+//
+//                        userProfile?.let { profile ->
+//                            Row(
+//                                verticalAlignment = Alignment.CenterVertically,
+//                                modifier = Modifier
+////                                    .height(screenHeightDp.dp / 5)
+////                                    .fillMaxSize()
 //                                    .fillMaxHeight()
-                                    .padding(0.dp)
-//                                    .background(grayWhite)
-                                ,
-
-                            ) {
-                                Text(
-                                    text = "\uD83D\uDD25 STREAK:",
-                                    color = grayWhite,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 18.sp
-                                )
-                                Spacer(modifier = Modifier.width(8.dp))
-                                Text(
-                                    text = userProfile?.let
-                                    { profile ->
-                                        profile.streak.streak.toString()
-
-                                    } ?: "Loading Streaks...",
-                                    color = grayWhite,
-                                    fontSize = 18.sp,
-                                    fontWeight = FontWeight.Bold
-                                )
-                                Box(
-                                    modifier = Modifier
-                                        .size(100.dp)
-                                        .aspectRatio(1f)
-                                        .clip(CircleShape)
-                                        .background(Color.Gray),
-                                    contentAlignment = Alignment.Center
-                                ) {
-                                    Text(
-                                        profile.username,
-                                        fontSize = 20.sp,
-                                        color = Color.White
-                                    ) //profile username
-                                }
-                            }
-                        }
-                    }
+//                                    .padding(0.dp)
+////                                    .background(grayWhite)
+//                                ,
+//
+//                            ) {
+//                                Text(
+//                                    text = "\uD83D\uDD25 STREAK:",
+//                                    color = grayWhite,
+//                                    fontWeight = FontWeight.Bold,
+//                                    fontSize = 18.sp
+//                                )
+//
+//                                Text(
+//                                    text = userProfile?.let
+//                                    { profile ->
+//                                        profile.streak.streak.toString()
+//
+//                                    } ?: "Loading Streaks...",
+//                                    color = grayWhite,
+//                                    fontSize = 18.sp,
+//                                    fontWeight = FontWeight.Bold
+//                                )
+//
+//                                Box(
+//                                    modifier = Modifier
+//                                        .size(100.dp)
+//                                        .aspectRatio(1f)
+//                                        .clip(CircleShape)
+//                                        .background(Color.Gray),
+//                                    contentAlignment = Alignment.Center
+//                                ) {
+//                                    Text(
+//                                        profile.username,
+//                                        fontSize = 20.sp,
+//                                        color = Color.White
+//                                    ) //profile username
+//                                }
+//                            }
+//                        }
+//                    }
                 }
                 // Additional configurations
             )
@@ -449,7 +486,18 @@ fun TopAndBottomAppBar(
 
     ){paddingValues ->
         Box(
-            modifier = Modifier.padding(paddingValues)
+            modifier = Modifier
+                .padding(
+                        start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
+                        top = screenHeightDp.dp / 7 ,
+//                        top = paddingValues.calculateTopPadding(),
+//                        top = 0.dp,
+
+                        end = paddingValues.calculateEndPadding(LayoutDirection.Rtl),
+                        bottom = screenHeightDp.dp / 13f,
+                    )
+                .fillMaxSize()
+                .background(verticalGradientBrush())
         ){
             contents();
         }
