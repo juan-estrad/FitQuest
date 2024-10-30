@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,6 +39,7 @@ import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.UserProfile
+import com.example.fitquest.ui.TopAndBottomAppBar
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.transparent
 import com.google.firebase.Firebase
@@ -45,8 +47,21 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StorePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+
+    TopAndBottomAppBar(
+        contents = { StorePageContents(modifier,navController,authViewModel) },
+        modifier = modifier,
+        navController = navController,
+        authViewModel = authViewModel
+    )
+
+}
+
+@Composable
+fun StorePageContents(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
