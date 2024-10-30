@@ -105,7 +105,12 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
     val userID = FirebaseAuth.getInstance().uid
     var workoutCategories by remember { mutableStateOf(listOf<String>()) }
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("Select a Workout") }
+    var expandedWorkout by remember { mutableStateOf(false) }
+
+    var selectedText by remember { mutableStateOf("Select a Type of Workout") }
+    var selectedWorkoutType by remember { mutableStateOf("Select Workout") } // Selected workout type
+    var workoutTypes by remember { mutableStateOf(listOf<String>()) } // List of workout types for selected category
+
 
 
     LaunchedEffect(authState.value) {
@@ -143,6 +148,17 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                 }
             }
             else -> Unit
+        }
+    }
+    LaunchedEffect(selectedText) {
+        if (selectedText.isNotEmpty()) {
+            val ref = Firebase.database.reference.child("workouts").child(selectedText)
+            ref.get().addOnSuccessListener { snapshot ->
+                val types = snapshot.children.mapNotNull { it.key }
+                workoutTypes = types
+            }.addOnFailureListener {
+                Toast.makeText(context, "Failed to load workout types", Toast.LENGTH_SHORT).show()
+            }
         }
     }
     userProfile?.let { profile ->
@@ -204,6 +220,8 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                 fontSize = 32.sp
             )
 
+
+        // LOGGING STARTS HERE
             Column(
                 modifier = modifier
                     .fillMaxSize()
@@ -212,7 +230,8 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Workoutname
+
+                // This is the dropdown menu to select focus
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -255,13 +274,52 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                         val monthday :String= formatMonthDay.format(time)
                         val year :String= formatYear.format(time)
                         if (selectedText != "Cardio") {
+
                             Column {
                                 Spacer(modifier = Modifier.height(70.dp))
 
-                                LoggingInputField(
-                                label = "Workout",
-                                value = workout) { workout = it
+                                // This is the dropdown menu to select workout type
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(32.dp)
+                                ) {
+                                    ExposedDropdownMenuBox(
+                                        expanded = expandedWorkout,
+                                        onExpandedChange = { expandedWorkout = !expandedWorkout }
+                                    ) {
+                                        TextField(
+                                            value = selectedWorkoutType,
+                                            onValueChange = {},
+                                            readOnly = true,
+                                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedWorkout) },
+                                            modifier = Modifier.menuAnchor()
+                                        )
+
+                                        ExposedDropdownMenu(
+                                            expanded = expandedWorkout,
+                                            onDismissRequest = { expandedWorkout = false }
+                                        ) {
+                                            workoutTypes.forEach { workout ->
+                                                DropdownMenuItem(
+                                                    text = { Text(text = workout) },
+                                                    onClick = {
+                                                        selectedWorkoutType = workout
+                                                        expandedWorkout = false
+                                                        Toast.makeText(context, workout, Toast.LENGTH_SHORT).show()
+
+                                                    }
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
+
+                                Spacer(modifier = Modifier.height(70.dp))
+//                                LoggingInputField(
+//                                label = "Workout",
+//                                value = workout) { workout = it
+//                                }
 
                                 Spacer(modifier = Modifier.height(15.dp))
 
@@ -305,6 +363,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                                         userRef.child("reps").setValue(reps)
                                         userRef.child("weight").setValue(weight)
                                         userRef.child("time").setValue(workouttime)
+                                        userRef.child("time")
                                         count ++
                                         workout = ""
                                         sets = ""
@@ -440,66 +499,67 @@ fun LoggingInputField(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Demo_ExposedDropdownMenuBox() {
-    val context = LocalContext.current
-    val database = Firebase.database.reference.child("workouts")
-    var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("Select a Workout") }
-    var workoutCategories by remember { mutableStateOf(listOf<String>()) }
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun Demo_ExposedDropdownMenuBox() {
+//    val context = LocalContext.current
+//    val database = Firebase.database.reference.child("workouts")
+//    var expanded by remember { mutableStateOf(false) }
+//    var selectedText by remember { mutableStateOf("Select a Workout") }
+//    var workoutCategories by remember { mutableStateOf(listOf<String>()) }
+//
+//
+//    LaunchedEffect(Unit) {
+//        database.get().addOnSuccessListener { dataSnapshot ->
+//            val categories = mutableListOf<String>()
+//            dataSnapshot.children.forEach {
+//                it.key?.let { key -> categories.add(key) }
+//            }
+//            workoutCategories = categories
+//        }.addOnFailureListener {
+//            Toast.makeText(context, "Failed to fetch workouts", Toast.LENGTH_SHORT).show()
+//        }
+//    }
+//    Box(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(32.dp)
+//    ) {
+//        ExposedDropdownMenuBox(
+//            expanded = expanded,
+//            onExpandedChange = {
+//                expanded = !expanded
+//            }
+//        ) {
+//            TextField(
+//                value = selectedText,
+//                onValueChange = {},
+//                readOnly = true,
+//                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+//                modifier = Modifier.menuAnchor()
+//            )
+//
+//            ExposedDropdownMenu(
+//                expanded = expanded,
+//                onDismissRequest = { expanded = false }
+//            ) {
+//                workoutCategories.forEach { category ->
+//                    DropdownMenuItem(
+//                        text = { Text(text = category) },
+//                        onClick = {
+//                            selectedText = category
+//                            expanded = false
+//                            Toast.makeText(context, category, Toast.LENGTH_SHORT).show()
+//                            when (selectedText) {
+//                                "Cardio" -> {
+//
+//                                }
+//                            }
+//                        }
+//                    )
+//                }
+//            }
+//        }
+//    }
+//}
 
-
-    LaunchedEffect(Unit) {
-        database.get().addOnSuccessListener { dataSnapshot ->
-            val categories = mutableListOf<String>()
-            dataSnapshot.children.forEach {
-                it.key?.let { key -> categories.add(key) }
-            }
-            workoutCategories = categories
-        }.addOnFailureListener {
-            Toast.makeText(context, "Failed to fetch workouts", Toast.LENGTH_SHORT).show()
-        }
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(32.dp)
-    ) {
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = {
-                expanded = !expanded
-            }
-        ) {
-            TextField(
-                value = selectedText,
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                modifier = Modifier.menuAnchor()
-            )
-
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                workoutCategories.forEach { category ->
-                    DropdownMenuItem(
-                        text = { Text(text = category) },
-                        onClick = {
-                            selectedText = category
-                            expanded = false
-                            Toast.makeText(context, category, Toast.LENGTH_SHORT).show()
-                            when (selectedText) {
-                                "Cardio" -> {
-
-                                }
-                            }
-                        }
-                    )
-                }
-            }
-        }
-    }
-}

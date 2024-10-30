@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
@@ -141,91 +142,74 @@ fun StorePage(modifier: Modifier = Modifier, navController: NavController, authV
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Logging
-            Button(
-                onClick = { navController.navigate("logging") },
-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
-                enabled = authState.value != AuthState.Loading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
-                shape = RoundedCornerShape(size = 25.dp),
-                border = BorderStroke(4.5.dp, brightOrange)
+            Column {
+                Text("Store", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
+                Spacer(modifier = Modifier.height(30.dp))
 
-            ) {
-                Text(
-                    text = "Log Workout",
-                    color = brightOrange,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
+                Row (modifier = Modifier
+                    .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    Box(modifier = Modifier
+                        .clip(shape = RoundedCornerShape(20.dp))
+                        .size(width = 180.dp, height = 120.dp)
+                        .background(Color.Gray)
+                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
 
-            // Store
-            Button(
-                onClick = { navController.navigate("store") },
-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
-                enabled = authState.value != AuthState.Loading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
-                shape = RoundedCornerShape(size = 25.dp),
-                border = BorderStroke(4.5.dp, brightOrange)
+                    }
+                    Box(modifier = Modifier
+                        .clip(shape = RoundedCornerShape(20.dp))
+                        .size(width = 150.dp, height = 120.dp)
+                        .background(Color.Gray)
+                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
 
-            ) {
-                Text(
-                    text = "Store",
-                    color = brightOrange,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
+                    }
+                }
 
-            // Stats
-            Button(
-                onClick = { navController.navigate("stats") },
-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
-                enabled = authState.value != AuthState.Loading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
-                shape = RoundedCornerShape(size = 25.dp),
-                border = BorderStroke(4.5.dp, brightOrange)
+                Spacer(modifier = Modifier.height(30.dp))
 
-            ) {
-                Text(
-                    text = "Stats",
-                    color = brightOrange,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
+                Row (modifier = Modifier
+                    .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    Box(modifier = Modifier
+                        .clip(shape = RoundedCornerShape(20.dp))
+                        .size(width = 400.dp, height = 120 .dp)
+                        .background(Color.Gray)
+                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
+                    }
+                }
 
-            // For You
-            Button(
-                onClick = { navController.navigate("foryou") },
-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
-                enabled = authState.value != AuthState.Loading,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(55.dp),
-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
-                shape = RoundedCornerShape(size = 25.dp),
-                border = BorderStroke(4.5.dp, brightOrange)
+                Spacer(modifier = Modifier.height(30.dp))
 
-            ) {
-                Text(
-                    text = "For You",
-                    color = brightOrange,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                Row (modifier = Modifier
+                    .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    Box(modifier = Modifier
+                        .clip(shape = RoundedCornerShape(20.dp))
+                        .size(width = 150.dp, height = 120.dp)
+                        .background(Color.Gray)
+                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
+
+                    }
+                    Box(modifier = Modifier
+                        .clip(shape = RoundedCornerShape(20.dp))
+                        .size(width = 180.dp, height = 120.dp)
+                        .background(Color.Gray)
+                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(30.dp))
+
+                Row (modifier = Modifier
+                    .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween) {
+                    Box(modifier = Modifier
+                        .clip(shape = RoundedCornerShape(20.dp))
+                        .size(width = 400.dp, height = 120 .dp)
+                        .background(Color.Gray)
+                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
+                    }
+                }
             }
         }
     }
