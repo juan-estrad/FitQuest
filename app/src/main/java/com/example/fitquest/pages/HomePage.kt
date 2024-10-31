@@ -1,10 +1,14 @@
 package com.example.fitquest.pages
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -48,7 +52,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -56,6 +62,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.R
 import com.example.fitquest.UserProfile
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.grayWhite
@@ -68,6 +75,7 @@ import kotlin.system.exitProcess
 
 
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
@@ -159,7 +167,8 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                 )
             }
 
-        ) {
+        )
+        {
             // Content of your main screen
         }
 
@@ -257,48 +266,73 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Logging
-            Button(
-                onClick = { navController.navigate("logging") },
-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
-                enabled = authState.value != AuthState.Loading,
+            // Logging page button
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp),
-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
-                shape = RoundedCornerShape(size = 25.dp),
-                border = BorderStroke(4.5.dp, brightOrange)
-
+                    .height(150.dp)
+                    .clickable(
+                        enabled = authState.value != AuthState.Loading,
+                        onClick = { navController.navigate("logging") }
+                    )
+                    .border(BorderStroke(5.dp, brightOrange), RoundedCornerShape(30.dp))
+                    .clip(RoundedCornerShape(30.dp))
             ) {
+                // Background Image
+                Image(
+                    painter = painterResource(id = R.drawable.logpagebtn),
+                    contentDescription = "Store Background",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+
+                // Text on top of the image
                 Text(
                     text = "Log Workout",
-                    color = brightOrange,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    color = Color.White,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(15.dp)
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Store
-            Button(
-                onClick = { navController.navigate("store") },
-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
-                enabled = authState.value != AuthState.Loading,
+            //STORE PAGE
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp),
-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
-                shape = RoundedCornerShape(size = 25.dp),
-                border = BorderStroke(4.5.dp, brightOrange)
-
+                    .height(150.dp)
+                    .clickable(
+                        enabled = authState.value != AuthState.Loading,
+                        onClick = { navController.navigate("store") }
+                    )
+                    .border(BorderStroke(5.dp, brightOrange), RoundedCornerShape(30.dp))
+                    .clip(RoundedCornerShape(30.dp))
             ) {
+                // Background Image
+                Image(
+                    painter = painterResource(id = R.drawable.storepagebtn),
+                    contentDescription = "Log Workout Background",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+
+                // Text on top of the image
                 Text(
                     text = "Store",
-                    color = brightOrange,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    color = Color.White,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(15.dp)
                 )
             }
+
+            // Store
+
             Spacer(modifier = Modifier.height(16.dp))
 
             // Stats
