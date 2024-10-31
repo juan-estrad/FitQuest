@@ -43,6 +43,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -264,13 +265,15 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                     fontWeight = FontWeight.Bold
                 )
             }
+
+
             Spacer(modifier = Modifier.height(16.dp))
 
             // Logging page button
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
+                    .height(140.dp)
                     .clickable(
                         enabled = authState.value != AuthState.Loading,
                         onClick = { navController.navigate("logging") }
@@ -303,7 +306,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(150.dp)
+                    .height(140.dp)
                     .clickable(
                         enabled = authState.value != AuthState.Loading,
                         onClick = { navController.navigate("store") }
@@ -331,50 +334,70 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
                 )
             }
 
-            // Store
-
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Stats
-            Button(
-                onClick = { navController.navigate("stats") },
-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
-                enabled = authState.value != AuthState.Loading,
+            // STATS PAGE
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp),
-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
-                shape = RoundedCornerShape(size = 25.dp),
-                border = BorderStroke(4.5.dp, brightOrange)
-
+                    .height(140.dp)
+                    .clickable(
+                        enabled = authState.value != AuthState.Loading,
+                        onClick = { navController.navigate("stats") }
+                    )
+                    .border(BorderStroke(5.dp, brightOrange), RoundedCornerShape(30.dp))
+                    .clip(RoundedCornerShape(30.dp))
             ) {
+                // Background Image
+                Image(
+                    painter = painterResource(id = R.drawable.statspagebtn),
+                    contentDescription = "Stats page Background",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+
+                // Text on top of the image
                 Text(
                     text = "Stats",
-                    color = brightOrange,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    color = Color.White,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(15.dp)
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
 
-            // For You
-            Button(
-                onClick = { navController.navigate("foryou") },
-                colors = ButtonDefaults.buttonColors(containerColor = transparent),
-                enabled = authState.value != AuthState.Loading,
+            // FYP BUTTON
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(55.dp),
-//                .border(width = 5.dp, color = Color(0xFFD58D18)),
-                shape = RoundedCornerShape(size = 25.dp),
-                border = BorderStroke(4.5.dp, brightOrange)
-
+                    .height(140.dp)
+                    .clickable(
+                        enabled = authState.value != AuthState.Loading,
+                        onClick = { navController.navigate("foryou") }
+                    )
+                    .border(BorderStroke(5.dp, brightOrange), RoundedCornerShape(30.dp))
+                    .clip(RoundedCornerShape(30.dp))
             ) {
+                // Background Image
+                Image(
+                    painter = painterResource(id = R.drawable.fypbtn),
+                    contentDescription = "FYP Background",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
+                )
+
+                // Text on top of the image
                 Text(
                     text = "For You",
-                    color = brightOrange,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
+                    color = Color.White,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .padding(15.dp)
                 )
             }
 
@@ -405,3 +428,4 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
         //exitProcess(1);
     }
 }
+
