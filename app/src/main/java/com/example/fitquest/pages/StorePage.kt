@@ -14,8 +14,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -74,6 +77,7 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
             is AuthState.Unauthenticated -> navController.navigate("login")
             is AuthState.Authenticated -> {
                 userID?.let { id ->
+                    val userFlexCoins = userProfile?.flexcoins ?: 0
                     val userRef = database.getReference("Users")
                         .child(id) // points to the Users node in firebase
 
@@ -93,139 +97,136 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
     }
 
     userProfile?.let { profile ->
+        val userFlexCoins = userProfile?.flexcoins ?: 0
         Column(
             modifier = modifier
                 .fillMaxSize()
                 .background(Color.DarkGray)
-                .padding(16.dp)
+                .padding(8.dp),
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Row(
+            Column(
+                modifier = Modifier.weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                Text("FitQuest Store", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color(0xFFCCAA00))
+                Spacer(modifier = Modifier.height(12.dp))
+
+                // Backgrounds Category
+                Text("Backgrounds", fontSize = 40.sp, color = Color(0xFFB0BEC5), fontWeight = FontWeight.SemiBold)
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    StoreItemBox("Background 1", userFlexCoins, navController, authViewModel)
+                    StoreItemBox("Background 2", userFlexCoins, navController, authViewModel)
+                    StoreItemBox("Background 3", userFlexCoins, navController, authViewModel)
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Borders Category
+                Text("Borders", fontSize = 40.sp, color = Color(0xFFB0BEC5), fontWeight = FontWeight.SemiBold)
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    StoreItemBox("Border 1", userFlexCoins, navController, authViewModel)
+                    StoreItemBox("Border 2", userFlexCoins, navController, authViewModel)
+                    StoreItemBox("Border 3", userFlexCoins, navController, authViewModel)
+                }
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Avatars Category
+                Text("Avatars", fontSize = 40.sp, color = Color(0xFFB0BEC5), fontWeight = FontWeight.SemiBold)
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
+                    StoreItemBox("Avatar 1", userFlexCoins, navController, authViewModel)
+                    StoreItemBox("Avatar 2", userFlexCoins, navController, authViewModel)
+                    StoreItemBox("Avatar 3", userFlexCoins, navController, authViewModel)
+                }
+            }
+
+            // Smaller Home Button at the Bottom
+        }
+    }
+}
+
+@Composable
+fun StoreItemBox(title: String, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel) {
+    val showConfirmationDialog = remember { mutableStateOf(false) }
+    val showInsufficientFundsDialog = remember { mutableStateOf(false) }
+    val itemCost = 100
+
+    Box(
+        modifier = Modifier
+            .size(120.dp)
+            .height(120.dp)
+            .background(Color.Gray, shape = RoundedCornerShape(12.dp))
+            .padding(4.dp)
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = title,
+                color = Color.Black,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Button(
+                onClick = {
+                    if (userFlexCoins >= itemCost) {
+                        showConfirmationDialog.value = true
+                    } else {
+                        showInsufficientFundsDialog.value = true
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFCCAA00)),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            )
-            {
-                Text("FitQuest", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
-
-
-                //Plan is to make the circle the pfp but for now i just put the username in there
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .background(Color.Gray),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
-                }
-            }
-
-//            // Display XP Progress Bar probably dont need this
-//            Text("XP", color = Color.White, fontSize = 14.sp)
-//            LinearProgressIndicator(
-//                progress = 0.7f,
-//                color = Color(0xFFFF6D00),
-//                trackColor = Color.LightGray,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(8.dp)
-//                    .padding(vertical = 8.dp)
-//            )
-
-
-            // This displays the streak
-            // i think the future plan is to have a fire emoji or something around it
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+                    .height(30.dp)
             ) {
-                Text(
-                    text = "STREAK",
-                    color = Color.White,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 18.sp
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = profile.streak.streak.toString(),
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-            Spacer(modifier = Modifier.height(16.dp))
-
-            // Logging
-            Column {
-                Text("Store", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
-                Spacer(modifier = Modifier.height(30.dp))
-
-                Row (modifier = Modifier
-                    .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween) {
-                    Box(modifier = Modifier
-                        .clip(shape = RoundedCornerShape(20.dp))
-                        .size(width = 180.dp, height = 120.dp)
-                        .background(Color.Gray)
-                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
-
-                    }
-                    Box(modifier = Modifier
-                        .clip(shape = RoundedCornerShape(20.dp))
-                        .size(width = 150.dp, height = 120.dp)
-                        .background(Color.Gray)
-                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
-
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                Row (modifier = Modifier
-                    .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween) {
-                    Box(modifier = Modifier
-                        .clip(shape = RoundedCornerShape(20.dp))
-                        .size(width = 400.dp, height = 120 .dp)
-                        .background(Color.Gray)
-                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                Row (modifier = Modifier
-                    .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween) {
-                    Box(modifier = Modifier
-                        .clip(shape = RoundedCornerShape(20.dp))
-                        .size(width = 150.dp, height = 120.dp)
-                        .background(Color.Gray)
-                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
-
-                    }
-                    Box(modifier = Modifier
-                        .clip(shape = RoundedCornerShape(20.dp))
-                        .size(width = 180.dp, height = 120.dp)
-                        .background(Color.Gray)
-                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(30.dp))
-
-                Row (modifier = Modifier
-                    .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween) {
-                    Box(modifier = Modifier
-                        .clip(shape = RoundedCornerShape(20.dp))
-                        .size(width = 400.dp, height = 120 .dp)
-                        .background(Color.Gray)
-                        .padding(horizontal = 10.dp, vertical = 10.dp)) {
-                    }
-                }
+                Text("100 FlexCoins", color = Color.Black, fontSize = 12.sp)
             }
         }
+    }
+
+    if (showConfirmationDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showConfirmationDialog.value = false },
+            title = { Text("Confirm Purchase") },
+            text = { Text("Are you sure you want to purchase $title for 100 FlexCoins?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showConfirmationDialog.value = false
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB58900))
+                ) {
+                    Text("Confirm", color = Color.White)
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showConfirmationDialog.value = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                ) {
+                    Text("Cancel", color = Color.White)
+                }
+            }
+        )
+    }
+
+    if (showInsufficientFundsDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showInsufficientFundsDialog.value = false },
+            title = { Text("Insufficient FlexCoins") },
+            text = { Text("You do not have enough FlexCoins to purchase $title.") },
+            confirmButton = {
+                Button(
+                    onClick = { showInsufficientFundsDialog.value = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                ) {
+                    Text("OK", color = Color.White)
+                }
+            }
+        )
     }
 }

@@ -55,6 +55,7 @@ import androidx.core.app.ActivityCompat.recreate
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.Date
 import com.example.fitquest.Logging
 import com.example.fitquest.R
 import com.example.fitquest.R.drawable.ellipse_2
@@ -73,6 +74,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -222,7 +226,7 @@ fun StatsPageContents(modifier: Modifier = Modifier, navController: NavControlle
 //                Text("Test")
 //            }
             Button(
-                onClick = { navController.navigate("home") },
+                onClick = { navController.navigate("foryou") },
                 colors = ButtonDefaults.buttonColors(containerColor = transparent),
                 enabled = authState.value != AuthState.Loading,
                 modifier = Modifier
@@ -233,13 +237,14 @@ fun StatsPageContents(modifier: Modifier = Modifier, navController: NavControlle
                 border = BorderStroke(4.5.dp, brightOrange)
 
             ) {
-                Text(text = "HomePage", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text(text = "For You Page", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
             }
             Spacer(modifier = Modifier.height(15.dp))
             //VisibilityToggleButtons()
             //test()
             //MyScreen()
             //DisplayChildrenButton()
+            //UserLoggingButton()
         }
     }
 }
@@ -499,3 +504,48 @@ fun BoxWithPngBorder() {
         )
     }
 }
+
+/*@Composable
+fun UserLoggingButton() {
+    val myRef = database.getReference("Users")
+    val userID = FirebaseAuth.getInstance().uid
+    val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
+    val currentYear = Calendar.getInstance().get(Calendar.YEAR).toString()
+    val monthDayState = remember { mutableStateOf<List<String>?>(null) }
+    val loggingDataState = remember { mutableStateOf<List<String>?>(null) }
+
+    Column {
+        // Button to load data for the current date
+        Button(onClick = {
+            // Fetch monthday entries for the current date under the current year
+            myRef.child("$userID").child("logging").child("Date").child(currentYear).get()
+                .addOnSuccessListener { snapshot ->
+                    // Collect monthday children (e.g., each logged day for that month)
+                    val monthDayList = snapshot.children.map { it.key ?: "Unnamed Day" }
+                    monthDayState.value = monthDayList
+                }
+        }) {
+            Text(text = "Load $currentDate - $currentYear")
+        }
+
+        // Display buttons for each monthday under the current year and date
+        monthDayState.value?.forEach { day ->
+            Button(onClick = {
+                // Fetch content for the specific monthday
+                myRef.child("Users").child("$userID").child("logging").child(currentDate)
+                    .child(currentYear).child(day).get()
+                    .addOnSuccessListener { snapshot ->
+                        val loggingData = snapshot.children.map { it.value.toString() }
+                        loggingDataState.value = loggingData
+                    }
+            }) {
+                Text(text = day)
+            }
+        }
+
+        // Display the content for the selected monthday
+        loggingDataState.value?.forEach { logData ->
+            Text(text = logData)
+        }
+    }
+}*/

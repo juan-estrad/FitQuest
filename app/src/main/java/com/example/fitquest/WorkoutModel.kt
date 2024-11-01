@@ -11,14 +11,14 @@ class WorkoutViewModel : ViewModel() {
     // Observables for UI
     val todayWorkout = mutableStateOf<Workout?>(null)
     val userStats = mutableStateOf(UserStats())
-
-    private var workoutloaded = false
+    private var workoutLoaded = false
 
     // Load a random workout
     fun loadRandomWorkout() {
-        if (workoutloaded) {
+        if (workoutLoaded) {
             return
         }
+
         val workoutsRef = database.getReference("workouts")
 
         workoutsRef.get().addOnSuccessListener { snapshot ->
@@ -43,18 +43,28 @@ class WorkoutViewModel : ViewModel() {
                                 // Include the workout name when setting today's workout
                                 if (workout != null) {
                                     todayWorkout.value = workout.copy(name = workoutName)
-                                    workoutloaded = true
+                                    workoutLoaded = true
                                 }
+                            }
+                            .addOnFailureListener { error ->
+                                // Handle error while fetching workout
+                                println("Error fetching workout: ${error.message}")
                             }
                     }
                 }
             }
+        }.addOnFailureListener { error ->
+            // Handle error while fetching body locations
+            println("Error fetching body locations: ${error.message}")
         }
     }
 
     private fun loadUserStats() {
         database.getReference("Users").child("$userID").child("userStats").get().addOnSuccessListener { snapshot ->
             userStats.value = snapshot.getValue(UserStats::class.java) ?: UserStats()
+        }.addOnFailureListener { error ->
+            // Handle error while fetching user stats
+            println("Error fetching user stats: ${error.message}")
         }
     }
 
@@ -65,6 +75,10 @@ class WorkoutViewModel : ViewModel() {
             )
             // Update the user's stats in Firebase
             database.getReference("Users").child("$userID").child("userStats").setValue(userStats.value)
+                .addOnFailureListener { error ->
+                    // Handle error while updating user stats
+                    println("Error updating user stats: ${error.message}")
+                }
         }
     }
 

@@ -81,7 +81,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
     // Handle authentication state changes
     LaunchedEffect(authState.value) {
         when (authState.value) {
-            is AuthState.Authenticated -> navController.navigate("foryou")
+            is AuthState.Authenticated -> navController.navigate("home")
             is AuthState.Error -> Toast.makeText(
                 context,
                 (authState.value as AuthState.Error).message,
