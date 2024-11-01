@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
 
 
         val authViewModel : AuthViewModel by viewModels()
-        val splashScreen = installSplashScreen()
+        //val splashScreen = installSplashScreen()
 //        splashScreen.setKeepOnScreenCondition{true};
 
         enableEdgeToEdge()

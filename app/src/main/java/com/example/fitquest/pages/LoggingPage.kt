@@ -50,16 +50,22 @@ import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.Log
-import com.example.fitquest.Logging
+//import com.example.fitquest.Logging
 import com.example.fitquest.UserProfile
+//import com.example.fitquest.isStreakExpired
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.verticalGradientBrush
+import com.example.fitquest.updateStreak
+//import com.example.fitquest.updateStreak
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
@@ -110,7 +116,6 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
     var selectedText by remember { mutableStateOf("Select a Type of Workout") }
     var selectedWorkoutType by remember { mutableStateOf("Select Workout") } // Selected workout type
     var workoutTypes by remember { mutableStateOf(listOf<String>()) } // List of workout types for selected category
-
 
 
     LaunchedEffect(authState.value) {
@@ -370,6 +375,15 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                                         reps = ""
                                         weight = ""
                                         workouttime = ""
+
+                                        //updateStreak(profile)
+                                        updateStreak(profile, LocalDate.now().format(DateTimeFormatter.ISO_DATE), LocalDate.now().minusDays(1).format(
+                                            DateTimeFormatter.ISO_DATE))
+                                        val userRef2 = database.getReference("Users").child("$userID")
+                                        userRef2.child("streak").child("streak").setValue(profile.streak.streak)
+                                        userRef2.child("streak").child("longestStreak").setValue(profile.streak.longestStreak)
+                                        userRef2.child("streak").child("lastUpdate").setValue(profile.streak.lastUpdate)
+                                        navController.navigate("logging")
                                     }
                                 ) {
                                     Text("Add value")

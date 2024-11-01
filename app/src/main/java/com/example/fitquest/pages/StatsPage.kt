@@ -51,9 +51,9 @@ import androidx.core.app.ActivityCompat.recreate
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
-import com.example.fitquest.Logging
+//import com.example.fitquest.Logging
 import com.example.fitquest.UserProfile
-import com.example.fitquest.Year
+//import com.example.fitquest.Year
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.transparent
 import com.google.firebase.Firebase

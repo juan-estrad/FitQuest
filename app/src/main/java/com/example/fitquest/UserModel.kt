@@ -1,5 +1,6 @@
 package com.example.fitquest
 
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class MyContent(
@@ -12,8 +13,8 @@ data class UserProfile(
     val username: String = "",
     val flexcoins: Int = 0,
     val userStats: UserStats = UserStats(),
-    val logging: Logging = Logging(),
-    val streak: UserStreak = UserStreak() //Need to add to DB to work
+    //val logging: Logging = Logging(),
+    val streak: UserStreak = UserStreak()
 )
 
 data class UserStats(
@@ -26,11 +27,11 @@ data class UserStats(
 
 data class UserStreak(
     var streak:Int = 0,
-    var lastUpdate: LocalDateTime? = LocalDateTime.now(),
-    var streakExpiration:LocalDateTime? = lastUpdate?.plusDays(2)
+    var longestStreak:Int = 0,
+    var lastUpdate: String = ""
 )
 
-data class Logging(
+/*data class Logging(
     val date: Date = Date()
 )
 
@@ -45,7 +46,7 @@ data class Year(
 data class Monthday(
     val log: Log = Log()
 )
-
+*/
 data class Log(
     val workout: String = "",
     val type: String = "",
@@ -55,16 +56,13 @@ data class Log(
     val workouttime: String = ""
 )
 
-fun isStreakExpired(user:UserProfile):Boolean{
-    return user.streak.lastUpdate!!.isAfter(user.streak.streakExpiration)
-}
-
-fun updateStreak(user:UserProfile){
-    if(isStreakExpired(user)){
-        user.streak.streak = 0
-    } else {
+fun updateStreak(user:UserProfile, today: String, yesterday: String){
+    if(user.streak.lastUpdate == yesterday){
         user.streak.streak++
-        user.streak.lastUpdate = LocalDateTime.now()
-        user.streak.streakExpiration = user.streak.lastUpdate?.plusDays(2)
+        user.streak.longestStreak = maxOf(user.streak.longestStreak, user.streak.streak)
+        user.streak.lastUpdate = today
+    } else if (user.streak.lastUpdate != today){
+        user.streak.streak = 1
+        user.streak.lastUpdate = today
     }
 }
