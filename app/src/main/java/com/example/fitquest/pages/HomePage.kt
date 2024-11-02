@@ -103,6 +103,7 @@ fun HomePage(modifier: Modifier = Modifier, navController: NavController, authVi
 
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomePageContents(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
@@ -150,56 +151,6 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
 //        ){
 
 
-
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    modifier = Modifier.height(150.dp),
-
-                    //THIS IS TO FILL THE TOP CAR CONTENT
-                    title = {
-                        Box(Modifier.fillMaxHeight(), contentAlignment = Alignment.Center) {
-                            Text("My App")
-                        }
-                    }
-                    // Additional configurations
-                )
-            },
-            bottomBar = {
-                BottomAppBar(
-                    actions = {
-//                        IconButton(onClick = { /* do something */ }) {
-//                            Icon(Icons.Filled.Home, contentDescription = "Localized description")
-//                        }
-                        Box(
-                            modifier = Modifier
-                            .size(100.dp)
-                            .clip(CircleShape)
-                            .background(Color.Gray),
-                            contentAlignment = Alignment.Center
-
-                        ) {
-                            Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
-                        }
-
-                    },
-                    floatingActionButton = {
-                        FloatingActionButton(
-                            onClick = { /* do something */ },
-                            containerColor = BottomAppBarDefaults.bottomAppBarFabColor,
-                            elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-                        ) {
-                            Icon(Icons.Filled.Add, "Localized description")
-                        }
-                    }
-
-                )
-            }
-
-        )
-        {
-            // Content of your main screen
-        }
 
 
 //        TopAppBar(
@@ -259,7 +210,7 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(verticalGradientBrush)
+                .background(verticalGradientBrush())
                 .padding(30.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,

@@ -50,7 +50,7 @@ import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.Log
-import com.example.fitquest.Logging
+//import com.example.fitquest.Logging
 import com.example.fitquest.UserProfile
 import com.example.fitquest.ui.TopAndBottomAppBar
 //import com.example.fitquest.isStreakExpired
@@ -193,33 +193,33 @@ fun LoggingPageContents(modifier: Modifier, navController: NavController, authVi
                 .background(verticalGradientBrush)
                 .padding(16.dp)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            )
-            {
-                Text(
-                    "FitQuest",
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFF6D00)
-                )
-
-
-                //Plan is to make the circle the pfp but for now i just put the username in there
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .background(Color.Gray),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
-                }
-            }
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(bottom = 16.dp),
+//                horizontalArrangement = Arrangement.SpaceBetween,
+//                verticalAlignment = Alignment.CenterVertically
+//            )
+//            {
+//                Text(
+//                    "FitQuest",
+//                    fontSize = 32.sp,
+//                    fontWeight = FontWeight.Bold,
+//                    color = Color(0xFFFF6D00)
+//                )
+//
+//
+//                //Plan is to make the circle the pfp but for now i just put the username in there
+//                Box(
+//                    modifier = Modifier
+//                        .size(100.dp)
+//                        .clip(CircleShape)
+//                        .background(Color.Gray),
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
+//                }
+//            }
 
             // This displays the streak
             // i think the future plan is to have a fire emoji or something around it

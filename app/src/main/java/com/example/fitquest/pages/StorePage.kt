@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,6 +40,7 @@ import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.UserProfile
+import com.example.fitquest.ui.TopAndBottomAppBar
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.transparent
 import com.google.firebase.Firebase
@@ -46,8 +48,24 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StorePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+
+    TopAndBottomAppBar(
+        contents = { StorePageContents(modifier,navController,authViewModel) },
+        modifier = modifier,
+        navController = navController,
+        authViewModel = authViewModel
+    )
+
+
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun StorePageContents(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
@@ -85,28 +103,28 @@ fun StorePage(modifier: Modifier = Modifier, navController: NavController, authV
                 .background(Color.DarkGray)
                 .padding(16.dp)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            )
-            {
-                Text("FitQuest", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
-
-
-                //Plan is to make the circle the pfp but for now i just put the username in there
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .background(Color.Gray),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
-                }
-            }
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(bottom = 16.dp),
+//                horizontalArrangement = Arrangement.SpaceBetween,
+//                verticalAlignment = Alignment.CenterVertically
+//            )
+//            {
+//                Text("FitQuest", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
+//
+//
+//                //Plan is to make the circle the pfp but for now i just put the username in there
+//                Box(
+//                    modifier = Modifier
+//                        .size(100.dp)
+//                        .clip(CircleShape)
+//                        .background(Color.Gray),
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
+//                }
+//            }
 
 //            // Display XP Progress Bar probably dont need this
 //            Text("XP", color = Color.White, fontSize = 14.sp)

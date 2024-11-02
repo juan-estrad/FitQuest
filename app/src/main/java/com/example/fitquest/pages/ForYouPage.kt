@@ -91,12 +91,12 @@ import androidx.compose.material3.Text as Text
 
 @Composable
 fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
-    
+
 }
 
 
 @Composable
-fun ReccomendedBox(name: String, title: String, text: String, workouts: String, onClick:  () -> Unit) {
+fun ReccomendedBox(name: String, title: String, text: String, workouts: String, onClick:  () -> Unit, modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
@@ -131,7 +131,7 @@ fun ReccomendedBox(name: String, title: String, text: String, workouts: String, 
 
     userProfile?.let { profile ->
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .background(Color.DarkGray)
                 .padding(16.dp)

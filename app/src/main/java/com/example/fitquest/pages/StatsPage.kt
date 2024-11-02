@@ -28,6 +28,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -53,6 +54,7 @@ import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 //import com.example.fitquest.Logging
 import com.example.fitquest.UserProfile
+import com.example.fitquest.ui.TopAndBottomAppBar
 //import com.example.fitquest.Year
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.transparent
@@ -66,8 +68,24 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StatsPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+
+    TopAndBottomAppBar(
+        contents = { StatsPageContents(modifier,navController,authViewModel) },
+        modifier = modifier,
+        navController = navController,
+        authViewModel = authViewModel
+    )
+
+
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun StatsPageContents(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
@@ -102,28 +120,28 @@ fun StatsPage(modifier: Modifier = Modifier, navController: NavController, authV
                 .padding(16.dp)
         ) {
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            )
-            {
-                Text("FitQuest", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
-
-
-                //Plan is to make the circle the pfp but for now i just put the username in there
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .background(Color.Gray),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
-                }
-            }
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(bottom = 16.dp),
+//                horizontalArrangement = Arrangement.SpaceBetween,
+//                verticalAlignment = Alignment.CenterVertically
+//            )
+//            {
+//                Text("FitQuest", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
+//
+//
+//                //Plan is to make the circle the pfp but for now i just put the username in there
+//                Box(
+//                    modifier = Modifier
+//                        .size(100.dp)
+//                        .clip(CircleShape)
+//                        .background(Color.Gray),
+//                    contentAlignment = Alignment.Center
+//                ) {
+//                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
+//                }
+//            }
 
 //            // Display XP Progress Bar probably dont need this
 //            Text("XP", color = Color.White, fontSize = 14.sp)
