@@ -138,6 +138,8 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
         }
     }
 
+
+    // display content if the userProfile is not null
     userProfile?.let { profile ->
 
 
