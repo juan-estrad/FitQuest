@@ -126,7 +126,7 @@ fun StatsPageContents(modifier: Modifier = Modifier, navController: NavControlle
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(Color.DarkGray)
+//                .background(Color.DarkGray)
                 .padding(16.dp)
         ) {
 

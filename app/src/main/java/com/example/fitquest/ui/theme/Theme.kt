@@ -14,7 +14,7 @@ import com.example.fitquest.ui.verticalGradientBrush
 
 val verticalGradientBrush: Brush
     @Composable
-    get() = verticalGradientBrush()
+    get() = verticalGradientBrush(transparent, dark)
 
 
 public val DarkColorScheme = darkColorScheme(

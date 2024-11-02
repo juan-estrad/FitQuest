@@ -3,12 +3,9 @@ package com.example.fitquest.pages
 
 
 import android.content.Intent
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,10 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
@@ -47,7 +41,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.vector.PathNode
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.painterResource
 
@@ -58,18 +51,16 @@ import com.example.fitquest.R
 
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.brightOrange
-import com.example.fitquest.ui.theme.transparent
 import com.example.fitquest.ui.verticalGradientBrush
 
 
 import com.example.fitquest.ui.UserInputField
-import com.example.fitquest.ui.Title01
+import com.example.fitquest.ui.Title01_LEFT
 import com.example.fitquest.ui.OrangeFilledButton
 import com.example.fitquest.ui.HollowOrangeButton
-import kotlin.system.exitProcess
 import com.example.fitquest.ui.theme.dark
 import com.example.fitquest.ui.theme.darkOrange
-import kotlin.system.exitProcess
+import com.example.fitquest.ui.theme.transparent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -106,7 +97,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
         modifier = Modifier
             .fillMaxSize()
-            .background(verticalGradientBrush())
+            .background(verticalGradientBrush(transparent, dark))
 
 //            .padding(iconSize.dp)
         ,
@@ -201,7 +192,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
         Spacer(modifier = Modifier.height( (configuration.screenHeightDp /14 ) .dp) )
 
-        Title01("NEED AN ACCOUNT?", grayWhite, 16f)
+        Title01_LEFT("NEED AN ACCOUNT?", grayWhite, 16f)
 
 
         // Signup navigation text

@@ -1,21 +1,19 @@
 package com.example.fitquest.pages
 
 import android.widget.Toast
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
@@ -32,8 +30,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -42,12 +40,14 @@ import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.UserProfile
+import com.example.fitquest.ui.Title01_LEFT
 import com.example.fitquest.ui.TopAndBottomAppBar
 import com.example.fitquest.ui.theme.brightOrange
-import com.example.fitquest.ui.theme.transparent
+import com.example.fitquest.ui.theme.dark
+import com.example.fitquest.ui.theme.darker
+import com.example.fitquest.ui.theme.grayWhite
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.database
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -104,7 +104,7 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(Color.DarkGray)
+//                .background(Color.DarkGray)
                 .padding(8.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
@@ -117,29 +117,35 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
                 Spacer(modifier = Modifier.height(12.dp))
 
                 // Backgrounds Category
-                Text("Backgrounds", fontSize = 40.sp, color = Color(0xFFB0BEC5), fontWeight = FontWeight.SemiBold)
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                    StoreItemBox("Background 1", userFlexCoins, navController, authViewModel)
-                    StoreItemBox("Background 2", userFlexCoins, navController, authViewModel)
-                    StoreItemBox("Background 3", userFlexCoins, navController, authViewModel)
+                Title01_LEFT("Backgrounds", grayWhite, 40f);
+                LazyRow {
+                    items(1) { index ->
+                        StoreItemBox("Background 1", userFlexCoins, navController, authViewModel)
+                        StoreItemBox("Background 2", userFlexCoins, navController, authViewModel)
+                        StoreItemBox("Background 3", userFlexCoins, navController, authViewModel)
+                    }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // Borders Category
-                Text("Borders", fontSize = 40.sp, color = Color(0xFFB0BEC5), fontWeight = FontWeight.SemiBold)
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                    StoreItemBox("Border 1", userFlexCoins, navController, authViewModel)
-                    StoreItemBox("Border 2", userFlexCoins, navController, authViewModel)
-                    StoreItemBox("Border 3", userFlexCoins, navController, authViewModel)
+                Title01_LEFT("Borders", grayWhite, 40f);
+                LazyRow {
+                    items(1) { index ->
+                        StoreItemBox("Border 1", userFlexCoins, navController, authViewModel)
+                        StoreItemBox("Border 2", userFlexCoins, navController, authViewModel)
+                        StoreItemBox("Border 3", userFlexCoins, navController, authViewModel)
+                }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
 
                 // Avatars Category
-                Text("Avatars", fontSize = 40.sp, color = Color(0xFFB0BEC5), fontWeight = FontWeight.SemiBold)
-                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
-                    StoreItemBox("Avatar 1", userFlexCoins, navController, authViewModel)
-                    StoreItemBox("Avatar 2", userFlexCoins, navController, authViewModel)
-                    StoreItemBox("Avatar 3", userFlexCoins, navController, authViewModel)
+                Title01_LEFT("Avatars", grayWhite, 40f);
+                LazyRow {
+                    items(1) { index ->
+                        StoreItemBox("Avatar 1", userFlexCoins, navController, authViewModel)
+                        StoreItemBox("Avatar 2", userFlexCoins, navController, authViewModel)
+                        StoreItemBox("Avatar 3", userFlexCoins, navController, authViewModel)
+                    }
                 }
             }
 
@@ -154,19 +160,27 @@ fun StoreItemBox(title: String, userFlexCoins: Int, navController: NavController
     val showInsufficientFundsDialog = remember { mutableStateOf(false) }
     val itemCost = 100
 
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp
+    val screenWidthDp = configuration.screenWidthDp
+
     Box(
         modifier = Modifier
-            .size(120.dp)
-            .height(120.dp)
-            .background(Color.Gray, shape = RoundedCornerShape(12.dp))
-            .padding(4.dp)
+            .size((screenHeightDp / 8).dp)
+//            .height( (screenHeightDp / 51).dp )
+            .background(darker, shape = RoundedCornerShape(12.dp))
+            .border(3.dp, dark,  RoundedCornerShape(12.dp))
+            .padding(
+                start = 20.dp,
+                end = 20.dp,
+            )
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = title,
-                color = Color.Black,
+                color = grayWhite,
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(bottom = 4.dp)
@@ -181,10 +195,10 @@ fun StoreItemBox(title: String, userFlexCoins: Int, navController: NavController
                         showInsufficientFundsDialog.value = true
                     }
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFCCAA00)),
+                colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(30.dp)
+                    .height(40.dp)
             ) {
                 Text("100 FlexCoins", color = Color.Black, fontSize = 12.sp)
             }

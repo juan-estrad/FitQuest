@@ -58,6 +58,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -75,8 +76,10 @@ import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.R
 import com.example.fitquest.UserProfile
+import com.example.fitquest.ui.ClickableImageWithText
 import com.example.fitquest.ui.TopAndBottomAppBar
 import com.example.fitquest.ui.theme.brightOrange
+import com.example.fitquest.ui.theme.dark
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.transparent
 import com.example.fitquest.ui.verticalGradientBrush
@@ -212,8 +215,17 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(verticalGradientBrush())
-                .padding(30.dp),
+                .background(verticalGradientBrush(transparent, dark))
+                .padding(
+                    start = 20.dp,
+//                    top = screenHeightDp.dp / 7 - 15.dp,
+//                    top = paddingValues.calculateTopPadding(),
+                    top = 0.dp,
+                    end = 20.dp,
+                    bottom = 0.dp
+                )
+                .verticalScroll(rememberScrollState())
+            ,
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -248,142 +260,81 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
                 )
             }
 
-
             Spacer(modifier = Modifier.height(16.dp))
+
             val database = Firebase.database
             val myRef = database.getReference("Users")
 
-            // Logging page button
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(140.dp)
-                    .clickable(
-                        enabled = authState.value != AuthState.Loading,
-                        onClick = { navController.navigate("logging") }
-                    )
-                    .border(BorderStroke(5.dp, brightOrange), RoundedCornerShape(30.dp))
-                    .clip(RoundedCornerShape(30.dp))
+            //LOG WORK OUT PAGE
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // Background Image
-                Image(
-                    painter = painterResource(id = R.drawable.logpagebtn),
-                    contentDescription = "Store Background",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
+
+                // STATS PAGE
+                ClickableImageWithText(
+                    "Log Workout",
+                    "Stats page Background",
+                    {navController.navigate("logging")},
+                    authState.value != AuthState.Loading,
+                    R.drawable.logpagebtn
                 )
 
-                // Text on top of the image
-                Text(
-                    text = "Log Workout",
-                    color = Color.White,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(15.dp)
-                )
             }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             //STORE PAGE
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(140.dp)
-                    .clickable(
-                        enabled = authState.value != AuthState.Loading,
-                        onClick = { navController.navigate("store") }
-                    )
-                    .border(BorderStroke(5.dp, brightOrange), RoundedCornerShape(30.dp))
-                    .clip(RoundedCornerShape(30.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // Background Image
-                Image(
-                    painter = painterResource(id = R.drawable.storepagebtn),
-                    contentDescription = "Log Workout Background",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
+
+                // STATS PAGE
+                ClickableImageWithText(
+                    "Store",
+                    "Stats page Background",
+                    { navController.navigate("store") },
+                    authState.value != AuthState.Loading,
+                    R.drawable.storepagebtn
                 )
 
-                // Text on top of the image
-                Text(
-                    text = "Store",
-                    color = Color.White,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(15.dp)
-                )
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // STATS PAGE
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(140.dp)
-                    .clickable(
-                        enabled = authState.value != AuthState.Loading,
-                        onClick = { navController.navigate("stats") }
-                    )
-                    .border(BorderStroke(5.dp, brightOrange), RoundedCornerShape(30.dp))
-                    .clip(RoundedCornerShape(30.dp))
+            //STATS PAGE
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // Background Image
-                Image(
-                    painter = painterResource(id = R.drawable.statspagebtn),
-                    contentDescription = "Stats page Background",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
+
+                ClickableImageWithText(
+                    "Stats",
+                    "Stats page Background",
+                    {navController.navigate("stats")},
+                    authState.value != AuthState.Loading,
+                    R.drawable.statspagebtn
                 )
 
-                // Text on top of the image
-                Text(
-                    text = "Stats",
-                    color = Color.White,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(15.dp)
-                )
             }
+
             Spacer(modifier = Modifier.height(16.dp))
 
             // FYP BUTTON
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(140.dp)
-                    .clickable(
-                        enabled = authState.value != AuthState.Loading,
-                        onClick = { navController.navigate("foryou") }
-                    )
-                    .border(BorderStroke(5.dp, brightOrange), RoundedCornerShape(30.dp))
-                    .clip(RoundedCornerShape(30.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                // Background Image
-                Image(
-                    painter = painterResource(id = R.drawable.fypbtn),
-                    contentDescription = "FYP Background",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxSize()
+
+                ClickableImageWithText(
+                    "Recommended Work Outs",
+                    "Recommended Work Outs image",
+                    { navController.navigate("foryou") },
+                    authState.value != AuthState.Loading,
+                    R.drawable.fypbtn
                 )
 
-                // Text on top of the image
-                Text(
-                    text = "For You",
-                    color = Color.White,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier
-                        .align(Alignment.BottomStart)
-                        .padding(15.dp)
-                )
             }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
 
 
             TextButton(

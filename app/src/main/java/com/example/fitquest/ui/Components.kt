@@ -4,23 +4,26 @@ package com.example.fitquest.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -35,13 +38,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -49,16 +49,18 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.AbsoluteAlignment
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.BeyondBoundsLayout
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -76,6 +78,7 @@ import com.example.fitquest.AuthViewModel
 import com.example.fitquest.UserProfile
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.dark
+import com.example.fitquest.ui.theme.darkOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.transparent
@@ -85,12 +88,12 @@ import com.google.firebase.database.database
 
 
     @Composable
-fun verticalGradientBrush(): Brush {
+fun verticalGradientBrush(colorTOP: Color, colorBOTTOM: Color): Brush {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.toFloat()
 
     return Brush.verticalGradient(
-        colors = listOf(transparent, dark),
+        colors = listOf(colorTOP, colorBOTTOM),
         startY = 250f,
         endY = Float.POSITIVE_INFINITY,
     )
@@ -98,12 +101,12 @@ fun verticalGradientBrush(): Brush {
 
 
 @Composable
-fun horizontalGradientBrush(): Brush {
+fun horizontalGradientBrush(color1: Color, color2: Color): Brush {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.toFloat()
 
     return Brush.horizontalGradient(
-        colors = listOf(transparent, dark),
+        colors = listOf(color1, color2),
         startX = 250f,
         endX = Float.POSITIVE_INFINITY,
     )
@@ -189,7 +192,7 @@ fun UserInputField(
 
 
 @Composable
-fun Title01(
+fun Title01_LEFT(
     label: String,
     color: Color,
     fontSize: Float
@@ -198,7 +201,30 @@ fun Title01(
         .fillMaxWidth()
 
     ){
-        Text(text = label, color = color, textAlign = TextAlign.Left, fontSize = fontSize.sp )
+        Text(
+            text = label,
+            color = color,
+            textAlign = TextAlign.Left,
+            fontSize = fontSize.sp )
+    }
+}
+
+@Composable
+fun Title01(
+    label: String,
+    color: Color,
+    fontSize: Float,
+) {
+    Box(modifier = Modifier
+//        .fillMaxWidth()
+
+    ){
+        Text(
+            text = label,
+            color = color,
+//            textAlign = TextAlign.Center,
+            fontSize = fontSize.sp
+        )
     }
 }
 
@@ -283,6 +309,54 @@ fun NavigationBarItem(
 
 
 
+@ExperimentalMaterial3Api
+@Composable
+fun ClickableImageWithText(
+    label: String,
+    contentDescription: String,
+    onClickFunction: () -> Unit,
+    enabled: Boolean,
+    imageID: Int
+){
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(140.dp)
+            .clickable(
+                enabled = enabled,
+                onClick = onClickFunction
+            )
+//            .padding(8.dp)
+            .border(7.dp, brightOrange, RoundedCornerShape(30.dp))
+            .padding(0.dp)
+            .clip(RoundedCornerShape(30.dp))
+    ) {
+        // Background Image
+        Image(
+            painter = painterResource(id = imageID),
+            contentDescription = contentDescription,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxSize()
+                .scale(1.15f)
+        )
+
+        // Text on top of the image
+        Text(
+            text = label,
+            color = grayWhite,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(15.dp)
+        )
+    }
+}
+
+
+
 
 
 @ExperimentalMaterial3Api
@@ -327,101 +401,65 @@ fun TopAndBottomAppBar(
     val screenHeightDp = configuration.screenHeightDp
     val screenWidthDp = configuration.screenWidthDp
 
+    val paddingValues = WindowInsets.systemBars.asPaddingValues()
+
 
     Scaffold(
         topBar = {
-            LargeTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = transparent,
-//                    titleContentColor = grayWhite,
+
+            userProfile?.let { profile ->
+                Box(
+                    modifier = Modifier
+                        .height(paddingValues.calculateTopPadding())
+                        .fillMaxWidth()
+                        .background(horizontalGradientBrush(dark, brightOrange))
                 )
-                ,
-                modifier = Modifier
-//                    .size(screenHeightDp.dp / 3)
-                    .fillMaxWidth()
-//                    .height(screenHeightDp.dp / 6)
-                    .padding(0.dp)
-                    .background(grayWhite)
-                ,
+
+                Box(
+                    modifier = modifier
+                        .height((screenHeightDp / 7).dp)
+                        .fillMaxWidth()
+
+                        .background(horizontalGradientBrush(dark, brightOrange)),
+                    contentAlignment = Alignment.Center
+
+                )
+                {
 
 
-//                title = {},
-                //THIS IS TO FILL THE TOP CAR CONTENT
-                title = {
+
+                    //Plan is to make the circle the pfp but for now i just put the username in there
                     Box(
-                        modifier = modifier
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(CircleShape)
+                            .background(verticalGradientBrush(darker, dark)),
+                        contentAlignment = Alignment.Center
 
-                            .fillMaxSize()
-//                            .height(screenHeightDp.dp / 2)
-//                            .fillMaxWidth()
-//                            .aspectRatio(1f)
-                            .background(darker)
+                    ) {
+                        Text(profile.username, fontSize = 35.sp, color = Color.White) //profile username
+                    }
+
+                    Text(
+                        text = "\uD83E\uDEB5" + profile.streak.streak.toString() + " days",
+                        modifier = Modifier
+                            .offset(x =(-150).dp, y = (40).dp)
+//                            .border(8.dp, verticalGradientBrush(darker, darkOrange), shape = RoundedCornerShape(4.dp))
+                            .padding(8.dp)
+                        ,
+                        color = brightOrange,
+                        fontSize = 35.sp,
+                        textAlign = TextAlign.Left
                     )
-                    {}
-//                    Column(
-//                        modifier = modifier
-//                            .fillMaxSize()
-//                            .fillMaxHeight()
-//                            .background(com.example.fitquest.ui.theme.verticalGradientBrush)
-////                            .padding(0.dp),
-////                            horizontalAlignment = AbsoluteAlignment.Left,
-//
-//
-//                    ) {
-//
-//                        // This displays the streak
-//                        // i think the future plan is to have a fire emoji or something around it
-//
-//                        userProfile?.let { profile ->
-//                            Row(
-//                                verticalAlignment = Alignment.CenterVertically,
-//                                modifier = Modifier
-////                                    .height(screenHeightDp.dp / 5)
-////                                    .fillMaxSize()
-//                                    .fillMaxHeight()
-//                                    .padding(0.dp)
-////                                    .background(grayWhite)
-//                                ,
-//
-//                            ) {
-//                                Text(
-//                                    text = "\uD83D\uDD25 STREAK:",
-//                                    color = grayWhite,
-//                                    fontWeight = FontWeight.Bold,
-//                                    fontSize = 18.sp
-//                                )
-//
-//                                Text(
-//                                    text = userProfile?.let
-//                                    { profile ->
-//                                        profile.streak.streak.toString()
-//
-//                                    } ?: "Loading Streaks...",
-//                                    color = grayWhite,
-//                                    fontSize = 18.sp,
-//                                    fontWeight = FontWeight.Bold
-//                                )
-//
-//                                Box(
-//                                    modifier = Modifier
-//                                        .size(100.dp)
-//                                        .aspectRatio(1f)
-//                                        .clip(CircleShape)
-//                                        .background(Color.Gray),
-//                                    contentAlignment = Alignment.Center
-//                                ) {
-//                                    Text(
-//                                        profile.username,
-//                                        fontSize = 20.sp,
-//                                        color = Color.White
-//                                    ) //profile username
-//                                }
-//                            }
-//                        }
-//                    }
+
+
+
                 }
-                // Additional configurations
-            )
+
+
+
+            }
+
         },
         bottomBar = {
             BottomAppBar(
@@ -497,7 +535,7 @@ fun TopAndBottomAppBar(
                         bottom = screenHeightDp.dp / 13f,
                     )
                 .fillMaxSize()
-                .background(verticalGradientBrush())
+                .background(verticalGradientBrush(transparent, dark))
         ){
             contents();
         }

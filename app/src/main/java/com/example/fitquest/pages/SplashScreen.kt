@@ -63,6 +63,7 @@ import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.dark
 import com.example.fitquest.ui.theme.darkOrange
 import com.example.fitquest.ui.theme.grayWhite
+import com.example.fitquest.ui.theme.transparent
 import com.example.fitquest.ui.verticalGradientBrush
 
 
@@ -98,7 +99,7 @@ fun SplashScreen(modifier: Modifier = Modifier, navController: NavController, au
 
         modifier = Modifier
             .fillMaxSize()
-            .background(FadeInBrush(verticalGradientBrush()))
+            .background(FadeInBrush(verticalGradientBrush(transparent, dark)))
 //            .padding(iconSize.dp)
         ,
 //        verticalArrangement = Arrangement.Center,
