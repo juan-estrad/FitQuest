@@ -14,7 +14,7 @@ import com.example.fitquest.pages.StatsPage
 import com.example.fitquest.pages.ForYouPage
 import com.example.fitquest.pages.SplashScreen
 import com.example.fitquest.pages.StorePage
-import com.example.fitquest.pages.WorkoutScreen
+//import com.example.fitquest.pages.WorkoutScreen
 
 @Composable
 fun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel){

@@ -55,8 +55,8 @@ import androidx.core.app.ActivityCompat.recreate
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
-import com.example.fitquest.Date
-import com.example.fitquest.Logging
+//import com.example.fitquest.Date
+//import com.example.fitquest.Logging
 import com.example.fitquest.R
 import com.example.fitquest.R.drawable.ellipse_2
 import com.example.fitquest.R.drawable.img
