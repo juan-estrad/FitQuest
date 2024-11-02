@@ -22,17 +22,30 @@ import com.example.fitquest.ui.theme.FitQuestTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         val authViewModel : AuthViewModel by viewModels()
         val splashScreen = installSplashScreen()
 //        splashScreen.setKeepOnScreenCondition{true};
         enableEdgeToEdge()
 
+        //val splashScreen = installSplashScreen()
+//        splashScreen.setKeepOnScreenCondition{true};
+
+        enableEdgeToEdge()
         setContent {
-//            FitQuestTheme {
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    MyAppNavigation(modifier = Modifier.padding(innerPadding), authViewModel = authViewModel)
-//                }
-//            }
+
+
+            FitQuestTheme {
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    MyAppNavigation(modifier = Modifier.padding(innerPadding), authViewModel = authViewModel)
+
+                }
+            }
+
+
+
+
         }
     }
 }

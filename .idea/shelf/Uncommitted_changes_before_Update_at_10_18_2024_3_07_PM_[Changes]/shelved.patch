@@ -1,0 +1,294 @@
+Index: app/src/main/java/com/example/fitquest/MyAppNavigation.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.fitquest\r\n\r\n\r\nimport androidx.compose.runtime.Composable\r\nimport androidx.compose.ui.Modifier\r\nimport androidx.navigation.compose.NavHost\r\nimport androidx.navigation.compose.composable\r\nimport androidx.navigation.compose.rememberNavController\r\nimport com.example.fitquest.pages.HomePage\r\nimport com.example.fitquest.pages.LoginPage\r\nimport com.example.fitquest.pages.SignupPage\r\nimport com.example.fitquest.pages.LoggingPage\r\nimport com.example.fitquest.pages.StatsPage\r\nimport com.example.fitquest.pages.ForYouPage\r\nimport com.example.fitquest.pages.StorePage\r\n\r\n@Composable\r\nfun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel){\r\n    val navController = rememberNavController()\r\n\r\n    NavHost(navController = navController, startDestination = \"login\", builder = {\r\n        composable(\"login\"){\r\n            LoginPage(modifier,navController,authViewModel)\r\n        }\r\n        composable(\"signup\") {\r\n            SignupPage(modifier, navController, authViewModel)\r\n        }\r\n        composable(\"home\") {\r\n            HomePage(modifier, navController, authViewModel)\r\n        }\r\n        composable(\"logging\") {\r\n            LoggingPage(modifier, navController, authViewModel)\r\n        }\r\n        composable(\"stats\") {\r\n            StatsPage(modifier, navController, authViewModel)\r\n        }\r\n        composable(\"foryou\") {\r\n            ForYouPage(modifier, navController, authViewModel)\r\n        }\r\n        composable(\"store\") {\r\n            StorePage(modifier, navController, authViewModel)\r\n        }\r\n    })\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/fitquest/MyAppNavigation.kt b/app/src/main/java/com/example/fitquest/MyAppNavigation.kt
+--- a/app/src/main/java/com/example/fitquest/MyAppNavigation.kt	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
++++ b/app/src/main/java/com/example/fitquest/MyAppNavigation.kt	(date 1729281646799)
+@@ -18,7 +18,7 @@
+ fun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel){
+     val navController = rememberNavController()
+ 
+-    NavHost(navController = navController, startDestination = "login", builder = {
++    NavHost(navController = navController, startDestination = "signup", builder = {
+         composable("login"){
+             LoginPage(modifier,navController,authViewModel)
+         }
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24__3_27_PM__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24__3_27_PM__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24__3_27_PM__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24__3_27_PM__Changes_.xml	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
++++ /dev/null	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_10_4_24,_3_27_PM_[Changes]" date="1728070062140" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_3_27_PM_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 10/4/24, 3:27 PM [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_3_27_PM_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_3_27_PM_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_3_27_PM_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_3_27_PM_[Changes]/shelved.patch	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
++++ /dev/null	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
+@@ -1,60 +0,0 @@
+-Index: app/src/main/java/com/example/fitquest/pages/HomePage.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.fitquest.pages\n\nimport androidx.compose.foundation.background\nimport androidx.compose.foundation.layout.Arrangement\nimport androidx.compose.foundation.layout.Box\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.Row\nimport androidx.compose.foundation.layout.Spacer\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.height\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.foundation.layout.size\nimport androidx.compose.foundation.shape.CircleShape\nimport androidx.compose.foundation.shape.RoundedCornerShape\nimport androidx.compose.foundation.text.BasicText\nimport androidx.compose.material3.Button\nimport androidx.compose.material3.Card\nimport androidx.compose.material3.CardDefaults\nimport androidx.compose.material3.LinearProgressIndicator\nimport androidx.compose.material3.Text\nimport androidx.compose.material3.TextButton\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.LaunchedEffect\nimport androidx.compose.runtime.livedata.observeAsState\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.draw.clip\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.text.font.FontWeight\nimport androidx.compose.ui.unit.dp\nimport androidx.compose.ui.unit.sp\nimport androidx.navigation.NavController\nimport com.example.fitquest.AuthState\nimport com.example.fitquest.AuthViewModel\n\n@Composable\nfun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel){\n    val authState=authViewModel.authState.observeAsState()\n\n    LaunchedEffect(authState.value) {\n        when(authState.value){\n            is AuthState.Unauthenticated -> navController.navigate(\"login\")\n            else -> Unit\n        }\n    }\n    Column(\n        modifier = modifier\n            .fillMaxSize()\n            .background(Color.DarkGray)\n            .padding(16.dp)\n    ) {\n        // Top section with title and user icon\n        Row(\n            modifier = Modifier\n                .fillMaxWidth()\n                .padding(bottom = 16.dp),\n            horizontalArrangement = Arrangement.SpaceBetween,\n            verticalAlignment = Alignment.CenterVertically\n        ) {\n            Text(\"FitQuest\", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))\n            Box(\n                modifier = Modifier\n                    .size(40.dp)\n                    .clip(CircleShape)\n                    .background(Color.Gray),\n                contentAlignment = Alignment.Center\n            ) {\n                Text(\"USER\", fontSize = 12.sp, color = Color.White)\n            }\n        }\n\n        // XP Progress Bar\n        Text(\"XP\", color = Color.White, fontSize = 14.sp)\n        LinearProgressIndicator(\n            progress = 0.7f, // Replace with dynamic XP progress\n            color = Color(0xFFFF6D00),\n            trackColor = Color.LightGray,\n            modifier = Modifier\n                .fillMaxWidth()\n                .height(8.dp)\n                .padding(vertical = 8.dp)\n        )\n\n        // Streak Section\n        Text(\"STREAK\", color = Color.White, fontWeight = FontWeight.Light, fontSize = 18.sp)\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Stats Section\n        Box(\n            modifier = Modifier\n                .fillMaxWidth()\n                .padding(vertical = 16.dp),\n            contentAlignment = Alignment.Center\n        ) {\n            Column(\n                horizontalAlignment = Alignment.CenterHorizontally\n            ) {\n                Row(\n                    modifier = Modifier.fillMaxWidth(),\n                    horizontalArrangement = Arrangement.SpaceAround\n                ) {\n                    StatItem(\"Strength\", \"85\")\n                    StatItem(\"Consistency\", \"78\")\n                    StatItem(\"Stamina\", \"90\")\n                }\n                Spacer(modifier = Modifier.height(16.dp))\n                Row(\n                    modifier = Modifier.fillMaxWidth(),\n                    horizontalArrangement = Arrangement.SpaceAround\n                ) {\n                    StatItem(\"Dexterity\", \"65\")\n                    StatItem(\"Agility\", \"72\")\n                }\n            }\n        }\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Featured Workouts Section\n        Text(\"Featured Workouts\", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)\n        Row(\n            modifier = Modifier\n                .fillMaxWidth()\n                .padding(top = 8.dp),\n            horizontalArrangement = Arrangement.SpaceEvenly\n        ) {\n            Box(\n                modifier = Modifier\n                    .size(100.dp)\n                    .background(Color.Gray)\n            )\n            Box(\n                modifier = Modifier\n                    .size(100.dp)\n                    .background(Color.Gray)\n            )\n        }\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Sign Out Button\n        TextButton(onClick = { authViewModel.signout() }) {\n            Text(text = \"Sign Out\", color = Color.Red)\n        }\n    }\n}\n\n@Composable\nfun StatItem(statName: String, statValue: String) {\n    Column(\n        horizontalAlignment = Alignment.CenterHorizontally\n    ) {\n        Text(text = statName, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)\n        Text(text = statValue, color = Color.White, fontSize = 18.sp)\n    }\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/fitquest/pages/HomePage.kt b/app/src/main/java/com/example/fitquest/pages/HomePage.kt
+---- a/app/src/main/java/com/example/fitquest/pages/HomePage.kt	(revision f84b50dac3881c670abdbeeea936c3d80e678e32)
+-+++ b/app/src/main/java/com/example/fitquest/pages/HomePage.kt	(date 1728066608533)
+-@@ -34,6 +34,11 @@
+- import com.example.fitquest.AuthState
+- import com.example.fitquest.AuthViewModel
+- 
+-+
+-+
+-+// 123
+-+
+-+
+- @Composable
+- fun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel){
+-     val authState=authViewModel.authState.observeAsState()
+-@@ -45,6 +50,7 @@
+-         }
+-     }
+-     Column(
+-+
+-         modifier = modifier
+-             .fillMaxSize()
+-             .background(Color.DarkGray)
+-Index: app/src/main/java/com/example/fitquest/pages/LoginPage.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.fitquest.pages\n\nimport android.widget.Toast\nimport androidx.compose.foundation.Image\nimport androidx.compose.foundation.background\nimport androidx.compose.foundation.layout.Arrangement\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.Spacer\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.height\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.foundation.layout.size\nimport androidx.compose.material3.Button\nimport androidx.compose.material3.ButtonDefaults\nimport androidx.compose.material3.ExperimentalMaterial3Api\nimport androidx.compose.material3.OutlinedTextField\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.getValue\nimport androidx.compose.runtime.mutableStateOf\nimport androidx.compose.runtime.remember\nimport androidx.compose.runtime.setValue\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.unit.dp\nimport androidx.compose.ui.unit.sp\nimport androidx.navigation.NavController\nimport com.example.fitquest.AuthViewModel\nimport androidx.compose.material3.Text\nimport androidx.compose.material3.TextButton\nimport androidx.compose.material3.TextFieldDefaults\nimport androidx.compose.runtime.LaunchedEffect\nimport androidx.compose.runtime.livedata.observeAsState\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.platform.LocalContext\nimport androidx.compose.ui.res.painterResource\nimport androidx.compose.ui.text.font.FontWeight\nimport com.example.fitquest.AuthState\nimport com.example.fitquest.R\n\n\n@OptIn(ExperimentalMaterial3Api::class)\n@Composable\nfun LoginPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {\n    var email by remember { mutableStateOf(\"\") }\n    var password by remember { mutableStateOf(\"\") }\n\n    val authState = authViewModel.authState.observeAsState()\n    val context = LocalContext.current\n\n    // Handle authentication state changes\n    LaunchedEffect(authState.value) {\n        when (authState.value) {\n            is AuthState.Authenticated -> navController.navigate(\"home\")\n            is AuthState.Error -> Toast.makeText(\n                context,\n                (authState.value as AuthState.Error).message,\n                Toast.LENGTH_LONG\n            ).show()\n\n            else -> Unit\n        }\n    }\n\n    // Login page layout\n    Column(\n        modifier = modifier\n            .fillMaxSize()\n            .background(Color.DarkGray)\n            .padding(16.dp),\n        verticalArrangement = Arrangement.Center,\n        horizontalAlignment = Alignment.CenterHorizontally\n    ) {\n        // Title\n        Text(\n            text = \"Login Page\",\n            fontSize = 32.sp,\n            fontWeight = FontWeight.Bold,\n            color = Color.White\n        )\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Email input field\n        OutlinedTextField(\n            value = email,\n            onValueChange = { email = it },\n            label = { Text(text = \"Email\", color = Color.White) },\n            colors = TextFieldDefaults.outlinedTextFieldColors(\n                focusedBorderColor = Color(0xFFFF6D00), // Orange color for focused border\n                unfocusedBorderColor = Color.LightGray,\n                focusedLabelColor = Color(0xFFFF6D00),\n                unfocusedLabelColor = Color.White,\n\n                ),\n            modifier = Modifier.fillMaxWidth()\n        )\n\n        Spacer(modifier = Modifier.height(8.dp))\n\n        // Password input field\n        OutlinedTextField(\n            value = password,\n            onValueChange = { password = it },\n            label = { Text(text = \"Password\", color = Color.White) },\n            colors = TextFieldDefaults.outlinedTextFieldColors(\n                focusedBorderColor = Color(0xFFFF6D00),\n                unfocusedBorderColor = Color.LightGray,\n                focusedLabelColor = Color(0xFFFF6D00),\n                unfocusedLabelColor = Color.White,\n\n                ),\n            modifier = Modifier.fillMaxWidth()\n        )\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Login button\n        Button(\n            onClick = { authViewModel.login(email, password) },\n            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6D00)),\n            enabled = authState.value != AuthState.Loading,\n            modifier = Modifier.fillMaxWidth()\n        ) {\n            Text(text = \"Login\", color = Color.White)\n        }\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Signup navigation text\n        TextButton(onClick = { navController.navigate(\"signup\") }) {\n            Text(text = \"Don't have an account? Sign up\", color = Color.White)\n        }\n    }\n\n\n}\n\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/fitquest/pages/LoginPage.kt b/app/src/main/java/com/example/fitquest/pages/LoginPage.kt
+---- a/app/src/main/java/com/example/fitquest/pages/LoginPage.kt	(revision f84b50dac3881c670abdbeeea936c3d80e678e32)
+-+++ b/app/src/main/java/com/example/fitquest/pages/LoginPage.kt	(date 1728069708931)
+-@@ -118,7 +118,7 @@
+-         // Login button
+-         Button(
+-             onClick = { authViewModel.login(email, password) },
+--            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6D00)),
+-+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD58D18)),
+-             enabled = authState.value != AuthState.Loading,
+-             modifier = Modifier.fillMaxWidth()
+-         ) {
+-@@ -131,6 +131,10 @@
+-         TextButton(onClick = { navController.navigate("signup") }) {
+-             Text(text = "Don't have an account? Sign up", color = Color.White)
+-         }
+-+//        Modifier
+-+//          .width(335.dp)
+-+//          .height(55.dp)
+-+//          .background(color = Color(0xFFD58D18), shape = RoundedCornerShape(size = 18.dp))
+-     }
+- 
+- 
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24__10_33_PM__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24__10_33_PM__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24__10_33_PM__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24__10_33_PM__Changes_.xml	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
++++ /dev/null	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_10_4_24,_10_33_PM_[Changes]" date="1728095609274" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_10_33_PM_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 10/4/24, 10:33 PM [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24__3_27_PM__Changes_1.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24__3_27_PM__Changes_1.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24__3_27_PM__Changes_1.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24__3_27_PM__Changes_1.xml	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
++++ /dev/null	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_10_4_24,_3_27_PM_[Changes]1" date="1728070078662" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_3_27_PM_[Changes]1/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 10/4/24, 3:27 PM [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_3_27_PM_[Changes]1/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_3_27_PM_[Changes]1/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_3_27_PM_[Changes]1/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_3_27_PM_[Changes]1/shelved.patch	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
++++ /dev/null	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
+@@ -1,60 +0,0 @@
+-Index: app/src/main/java/com/example/fitquest/pages/HomePage.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.fitquest.pages\n\nimport androidx.compose.foundation.background\nimport androidx.compose.foundation.layout.Arrangement\nimport androidx.compose.foundation.layout.Box\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.Row\nimport androidx.compose.foundation.layout.Spacer\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.height\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.foundation.layout.size\nimport androidx.compose.foundation.shape.CircleShape\nimport androidx.compose.foundation.shape.RoundedCornerShape\nimport androidx.compose.foundation.text.BasicText\nimport androidx.compose.material3.Button\nimport androidx.compose.material3.Card\nimport androidx.compose.material3.CardDefaults\nimport androidx.compose.material3.LinearProgressIndicator\nimport androidx.compose.material3.Text\nimport androidx.compose.material3.TextButton\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.LaunchedEffect\nimport androidx.compose.runtime.livedata.observeAsState\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.draw.clip\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.text.font.FontWeight\nimport androidx.compose.ui.unit.dp\nimport androidx.compose.ui.unit.sp\nimport androidx.navigation.NavController\nimport com.example.fitquest.AuthState\nimport com.example.fitquest.AuthViewModel\n\n@Composable\nfun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel){\n    val authState=authViewModel.authState.observeAsState()\n\n    LaunchedEffect(authState.value) {\n        when(authState.value){\n            is AuthState.Unauthenticated -> navController.navigate(\"login\")\n            else -> Unit\n        }\n    }\n    Column(\n        modifier = modifier\n            .fillMaxSize()\n            .background(Color.DarkGray)\n            .padding(16.dp)\n    ) {\n        // Top section with title and user icon\n        Row(\n            modifier = Modifier\n                .fillMaxWidth()\n                .padding(bottom = 16.dp),\n            horizontalArrangement = Arrangement.SpaceBetween,\n            verticalAlignment = Alignment.CenterVertically\n        ) {\n            Text(\"FitQuest\", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))\n            Box(\n                modifier = Modifier\n                    .size(40.dp)\n                    .clip(CircleShape)\n                    .background(Color.Gray),\n                contentAlignment = Alignment.Center\n            ) {\n                Text(\"USER\", fontSize = 12.sp, color = Color.White)\n            }\n        }\n\n        // XP Progress Bar\n        Text(\"XP\", color = Color.White, fontSize = 14.sp)\n        LinearProgressIndicator(\n            progress = 0.7f, // Replace with dynamic XP progress\n            color = Color(0xFFFF6D00),\n            trackColor = Color.LightGray,\n            modifier = Modifier\n                .fillMaxWidth()\n                .height(8.dp)\n                .padding(vertical = 8.dp)\n        )\n\n        // Streak Section\n        Text(\"STREAK\", color = Color.White, fontWeight = FontWeight.Light, fontSize = 18.sp)\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Stats Section\n        Box(\n            modifier = Modifier\n                .fillMaxWidth()\n                .padding(vertical = 16.dp),\n            contentAlignment = Alignment.Center\n        ) {\n            Column(\n                horizontalAlignment = Alignment.CenterHorizontally\n            ) {\n                Row(\n                    modifier = Modifier.fillMaxWidth(),\n                    horizontalArrangement = Arrangement.SpaceAround\n                ) {\n                    StatItem(\"Strength\", \"85\")\n                    StatItem(\"Consistency\", \"78\")\n                    StatItem(\"Stamina\", \"90\")\n                }\n                Spacer(modifier = Modifier.height(16.dp))\n                Row(\n                    modifier = Modifier.fillMaxWidth(),\n                    horizontalArrangement = Arrangement.SpaceAround\n                ) {\n                    StatItem(\"Dexterity\", \"65\")\n                    StatItem(\"Agility\", \"72\")\n                }\n            }\n        }\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Featured Workouts Section\n        Text(\"Featured Workouts\", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)\n        Row(\n            modifier = Modifier\n                .fillMaxWidth()\n                .padding(top = 8.dp),\n            horizontalArrangement = Arrangement.SpaceEvenly\n        ) {\n            Box(\n                modifier = Modifier\n                    .size(100.dp)\n                    .background(Color.Gray)\n            )\n            Box(\n                modifier = Modifier\n                    .size(100.dp)\n                    .background(Color.Gray)\n            )\n        }\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Sign Out Button\n        TextButton(onClick = { authViewModel.signout() }) {\n            Text(text = \"Sign Out\", color = Color.Red)\n        }\n    }\n}\n\n@Composable\nfun StatItem(statName: String, statValue: String) {\n    Column(\n        horizontalAlignment = Alignment.CenterHorizontally\n    ) {\n        Text(text = statName, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)\n        Text(text = statValue, color = Color.White, fontSize = 18.sp)\n    }\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/fitquest/pages/HomePage.kt b/app/src/main/java/com/example/fitquest/pages/HomePage.kt
+---- a/app/src/main/java/com/example/fitquest/pages/HomePage.kt	(revision a68150509c2d1a33e31d41c1a310e3988f3090e5)
+-+++ b/app/src/main/java/com/example/fitquest/pages/HomePage.kt	(date 1728070062123)
+-@@ -34,6 +34,11 @@
+- import com.example.fitquest.AuthState
+- import com.example.fitquest.AuthViewModel
+- 
+-+
+-+
+-+// 123
+-+
+-+
+- @Composable
+- fun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel){
+-     val authState=authViewModel.authState.observeAsState()
+-@@ -45,6 +50,7 @@
+-         }
+-     }
+-     Column(
+-+
+-         modifier = modifier
+-             .fillMaxSize()
+-             .background(Color.DarkGray)
+-Index: app/src/main/java/com/example/fitquest/pages/LoginPage.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.fitquest.pages\n\nimport android.widget.Toast\nimport androidx.compose.foundation.Image\nimport androidx.compose.foundation.background\nimport androidx.compose.foundation.layout.Arrangement\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.Spacer\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.height\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.foundation.layout.size\nimport androidx.compose.material3.Button\nimport androidx.compose.material3.ButtonDefaults\nimport androidx.compose.material3.ExperimentalMaterial3Api\nimport androidx.compose.material3.OutlinedTextField\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.getValue\nimport androidx.compose.runtime.mutableStateOf\nimport androidx.compose.runtime.remember\nimport androidx.compose.runtime.setValue\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.unit.dp\nimport androidx.compose.ui.unit.sp\nimport androidx.navigation.NavController\nimport com.example.fitquest.AuthViewModel\nimport androidx.compose.material3.Text\nimport androidx.compose.material3.TextButton\nimport androidx.compose.material3.TextFieldDefaults\nimport androidx.compose.runtime.LaunchedEffect\nimport androidx.compose.runtime.livedata.observeAsState\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.platform.LocalContext\nimport androidx.compose.ui.res.painterResource\nimport androidx.compose.ui.text.font.FontWeight\nimport com.example.fitquest.AuthState\nimport com.example.fitquest.R\n\n\n@OptIn(ExperimentalMaterial3Api::class)\n@Composable\nfun LoginPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {\n    var email by remember { mutableStateOf(\"\") }\n    var password by remember { mutableStateOf(\"\") }\n\n    val authState = authViewModel.authState.observeAsState()\n    val context = LocalContext.current\n\n    // Handle authentication state changes\n    LaunchedEffect(authState.value) {\n        when (authState.value) {\n            is AuthState.Authenticated -> navController.navigate(\"home\")\n            is AuthState.Error -> Toast.makeText(\n                context,\n                (authState.value as AuthState.Error).message,\n                Toast.LENGTH_LONG\n            ).show()\n\n            else -> Unit\n        }\n    }\n\n    // Login page layout\n    Column(\n        modifier = modifier\n            .fillMaxSize()\n            .background(Color.Gray)\n            .padding(16.dp),\n        verticalArrangement = Arrangement.Center,\n        horizontalAlignment = Alignment.CenterHorizontally\n    ) {\n        // Title\n        Text(\n            text = \"Login Page\",\n            fontSize = 32.sp,\n            fontWeight = FontWeight.Bold,\n            color = Color.White\n        )\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Email input field\n        OutlinedTextField(\n            value = email,\n            onValueChange = { email = it },\n            label = { Text(text = \"Email\", color = Color.White) },\n            colors = TextFieldDefaults.outlinedTextFieldColors(\n                focusedBorderColor = Color(0xFFFF6D00), // Orange color for focused border\n                unfocusedBorderColor = Color.LightGray,\n                focusedLabelColor = Color(0xFFFF6D00),\n                unfocusedLabelColor = Color.White,\n\n                ),\n            modifier = Modifier.fillMaxWidth()\n        )\n\n        Spacer(modifier = Modifier.height(8.dp))\n\n        // Password input field\n        OutlinedTextField(\n            value = password,\n            onValueChange = { password = it },\n            label = { Text(text = \"Password\", color = Color.White) },\n            colors = TextFieldDefaults.outlinedTextFieldColors(\n                focusedBorderColor = Color(0xFFFF6D00),\n                unfocusedBorderColor = Color.LightGray,\n                focusedLabelColor = Color(0xFFFF6D00),\n                unfocusedLabelColor = Color.White,\n\n                ),\n            modifier = Modifier.fillMaxWidth()\n        )\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Login button\n        Button(\n            onClick = { authViewModel.login(email, password) },\n            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6D00)),\n            enabled = authState.value != AuthState.Loading,\n            modifier = Modifier.fillMaxWidth()\n        ) {\n            Text(text = \"Login\", color = Color.White)\n        }\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Signup navigation text\n        TextButton(onClick = { navController.navigate(\"signup\") }) {\n            Text(text = \"Don't have an account? Sign up\", color = Color.White)\n        }\n    }\n\n\n}\n\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/fitquest/pages/LoginPage.kt b/app/src/main/java/com/example/fitquest/pages/LoginPage.kt
+---- a/app/src/main/java/com/example/fitquest/pages/LoginPage.kt	(revision a68150509c2d1a33e31d41c1a310e3988f3090e5)
+-+++ b/app/src/main/java/com/example/fitquest/pages/LoginPage.kt	(date 1728070062131)
+-@@ -118,7 +118,7 @@
+-         // Login button
+-         Button(
+-             onClick = { authViewModel.login(email, password) },
+--            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6D00)),
+-+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD58D18)),
+-             enabled = authState.value != AuthState.Loading,
+-             modifier = Modifier.fillMaxWidth()
+-         ) {
+-@@ -131,6 +131,10 @@
+-         TextButton(onClick = { navController.navigate("signup") }) {
+-             Text(text = "Don't have an account? Sign up", color = Color.White)
+-         }
+-+//        Modifier
+-+//          .width(335.dp)
+-+//          .height(55.dp)
+-+//          .background(color = Color(0xFFD58D18), shape = RoundedCornerShape(size = 18.dp))
+-     }
+- 
+- 
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_10_33_PM_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_10_33_PM_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_10_33_PM_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_10_4_24,_10_33_PM_[Changes]/shelved.patch	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
++++ /dev/null	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
+@@ -1,19 +0,0 @@
+-Index: app/src/main/java/com/example/fitquest/pages/LoginPage.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.fitquest.pages\n\nimport android.widget.Toast\n\nimport androidx.compose.foundation.background\nimport androidx.compose.foundation.layout.Arrangement\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.Spacer\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.height\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.material3.Button\nimport androidx.compose.material3.ButtonDefaults\nimport androidx.compose.material3.ExperimentalMaterial3Api\nimport androidx.compose.material3.OutlinedTextField\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.getValue\nimport androidx.compose.runtime.mutableStateOf\nimport androidx.compose.runtime.remember\nimport androidx.compose.runtime.setValue\nimport androidx.compose.ui.Alignment\n\nimport androidx.compose.ui.unit.dp\nimport androidx.compose.ui.unit.sp\nimport androidx.navigation.NavController\nimport com.example.fitquest.AuthViewModel\nimport androidx.compose.material3.Text\nimport androidx.compose.material3.TextButton\nimport androidx.compose.material3.TextFieldDefaults\nimport androidx.compose.runtime.LaunchedEffect\nimport androidx.compose.runtime.livedata.observeAsState\n\nimport androidx.compose.ui.platform.LocalContext\nimport androidx.compose.ui.text.font.FontWeight\nimport com.example.fitquest.AuthState\n\nimport androidx.compose.foundation.shape.RoundedCornerShape\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.graphics.Brush\nimport androidx.compose.ui.graphics.Color\n\n//import com.example.composeapp.ui.theme.color1\n//import com.example.composeapp.ui.theme.color2\n\n@OptIn(ExperimentalMaterial3Api::class)\n@Composable\nfun LoginPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {\n    var email by remember { mutableStateOf(\"\") }\n    var password by remember { mutableStateOf(\"\") }\n\n    val authState = authViewModel.authState.observeAsState()\n    val context = LocalContext.current\n\n    // Handle authentication state changes\n    LaunchedEffect(authState.value) {\n        when (authState.value) {\n            is AuthState.Authenticated -> navController.navigate(\"home\")\n            is AuthState.Error -> Toast.makeText(\n                context,\n                (authState.value as AuthState.Error).message,\n                Toast.LENGTH_LONG\n            ).show()\n\n            else -> Unit\n        }\n    }\n\n\n\n    val verticalGradientBrush = Brush.verticalGradient(\n        listOf(Color(0xFF222831) , Color(0xFF393E46)),\n        startY = 20.0f,\n        endY = Float.POSITIVE_INFINITY\n    )\n\n\n    val linear = Brush.linearGradient(listOf(Color.Red, Color.Blue));\n\n\n    // Login page layout\n    Column(\n        modifier = modifier\n            .fillMaxSize()\n            .background(verticalGradientBrush)\n            .padding(16.dp)\n        ,\n        verticalArrangement = Arrangement.Center,\n        horizontalAlignment = Alignment.CenterHorizontally,\n\n    ) {\n\n//        Box(\n//            modifier = Modifier\n//                .fillMaxSize()\n//                .size(120.dp)\n//                .background(linear)\n//        );\n\n\n//        Box(\n//            modifier = modifier\n//                .fillMaxSize()\n//                .background(gradient)\n//                .padding(horizontal = 16.dp, vertical = 8.dp),\n//            contentAlignment = Alignment.Center\n//        ) {}\n\n        // Title\n        Text(\n            text = \"Login Page\",\n            fontSize = 32.sp,\n            fontWeight = FontWeight.Bold,\n            color = Color.White\n        )\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Email input field\n        OutlinedTextField(\n            value = email,\n            onValueChange = { email = it },\n            label = { Text(text = \"Email\", color = Color.White) },\n            colors = TextFieldDefaults.outlinedTextFieldColors(\n                focusedBorderColor = Color(0xFFFF6D00), // Orange color for focused border\n                unfocusedBorderColor = Color.LightGray,\n                focusedLabelColor = Color(0xFFFF6D00),\n                unfocusedLabelColor = Color.White,\n\n                ),\n            shape = RoundedCornerShape(size = 10.dp),\n            modifier = Modifier.fillMaxWidth()\n        )\n\n        Spacer(modifier = Modifier.height(8.dp))\n\n        // Password input field\n        OutlinedTextField(\n            value = password,\n            onValueChange = { password = it },\n            label = { Text(text = \"Password\", color = Color.White) },\n            colors = TextFieldDefaults.outlinedTextFieldColors(\n                focusedBorderColor = Color(0xFFFF6D00),\n                unfocusedBorderColor = Color.LightGray,\n                focusedLabelColor = Color(0xFFFF6D00),\n                unfocusedLabelColor = Color.White,\n\n                ),\n            modifier = Modifier.fillMaxWidth()\n        )\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Login button\n        Button(\n            onClick = { authViewModel.login(email, password) },\n            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6D00)),\n            enabled = authState.value != AuthState.Loading,\n            modifier = Modifier.fillMaxWidth()\n        ) {\n            Text(text = \"Login\", color = Color.White)\n        }\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Signup navigation text\n        TextButton(onClick = { navController.navigate(\"signup\") }) {\n            Text(text = \"Don't have an account? Sign up\", color = Color.White)\n        }\n\n\n\n    }\n\n\n}\n\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/fitquest/pages/LoginPage.kt b/app/src/main/java/com/example/fitquest/pages/LoginPage.kt
+---- a/app/src/main/java/com/example/fitquest/pages/LoginPage.kt	(revision 92d3639a3a31fb914fb4782b13382f212a319adf)
+-+++ b/app/src/main/java/com/example/fitquest/pages/LoginPage.kt	(date 1728095544601)
+-@@ -82,7 +82,7 @@
+-     Column(
+-         modifier = modifier
+-             .fillMaxSize()
+--            .background(verticalGradientBrush)
+-+            .background(Color.Transparent)
+-             .padding(16.dp)
+-         ,
+-         verticalArrangement = Arrangement.Center,
+Index: .idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch b/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
++++ /dev/null	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
+@@ -1,60 +0,0 @@
+-Index: app/src/main/java/com/example/fitquest/pages/LoginPage.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.fitquest.pages\n\nimport android.widget.Toast\nimport androidx.compose.foundation.Image\nimport androidx.compose.foundation.background\nimport androidx.compose.foundation.layout.Arrangement\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.Spacer\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.height\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.foundation.layout.size\nimport androidx.compose.material3.Button\nimport androidx.compose.material3.ButtonDefaults\nimport androidx.compose.material3.ExperimentalMaterial3Api\nimport androidx.compose.material3.OutlinedTextField\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.getValue\nimport androidx.compose.runtime.mutableStateOf\nimport androidx.compose.runtime.remember\nimport androidx.compose.runtime.setValue\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.unit.dp\nimport androidx.compose.ui.unit.sp\nimport androidx.navigation.NavController\nimport com.example.fitquest.AuthViewModel\nimport androidx.compose.material3.Text\nimport androidx.compose.material3.TextButton\nimport androidx.compose.material3.TextFieldDefaults\nimport androidx.compose.runtime.LaunchedEffect\nimport androidx.compose.runtime.livedata.observeAsState\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.platform.LocalContext\nimport androidx.compose.ui.res.painterResource\nimport androidx.compose.ui.text.font.FontWeight\nimport com.example.fitquest.AuthState\nimport com.example.fitquest.R\n\n\n@OptIn(ExperimentalMaterial3Api::class)\n@Composable\nfun LoginPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {\n    var email by remember { mutableStateOf(\"\") }\n    var password by remember { mutableStateOf(\"\") }\n\n    val authState = authViewModel.authState.observeAsState()\n    val context = LocalContext.current\n\n    // Handle authentication state changes\n    LaunchedEffect(authState.value) {\n        when (authState.value) {\n            is AuthState.Authenticated -> navController.navigate(\"home\")\n            is AuthState.Error -> Toast.makeText(\n                context,\n                (authState.value as AuthState.Error).message,\n                Toast.LENGTH_LONG\n            ).show()\n\n            else -> Unit\n        }\n    }\n\n    // Login page layout\n    Column(\n        modifier = modifier\n            .fillMaxSize()\n            .background(Color.DarkGray)\n            .padding(16.dp),\n        verticalArrangement = Arrangement.Center,\n        horizontalAlignment = Alignment.CenterHorizontally\n    ) {\n        // Title\n        Text(\n            text = \"Login Page\",\n            fontSize = 32.sp,\n            fontWeight = FontWeight.Bold,\n            color = Color.White\n        )\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Email input field\n        OutlinedTextField(\n            value = email,\n            onValueChange = { email = it },\n            label = { Text(text = \"Email\", color = Color.White) },\n            colors = TextFieldDefaults.outlinedTextFieldColors(\n                focusedBorderColor = Color(0xFFFF6D00), // Orange color for focused border\n                unfocusedBorderColor = Color.LightGray,\n                focusedLabelColor = Color(0xFFFF6D00),\n                unfocusedLabelColor = Color.White,\n\n                ),\n            modifier = Modifier.fillMaxWidth()\n        )\n\n        Spacer(modifier = Modifier.height(8.dp))\n\n        // Password input field\n        OutlinedTextField(\n            value = password,\n            onValueChange = { password = it },\n            label = { Text(text = \"Password\", color = Color.White) },\n            colors = TextFieldDefaults.outlinedTextFieldColors(\n                focusedBorderColor = Color(0xFFFF6D00),\n                unfocusedBorderColor = Color.LightGray,\n                focusedLabelColor = Color(0xFFFF6D00),\n                unfocusedLabelColor = Color.White,\n\n                ),\n            modifier = Modifier.fillMaxWidth()\n        )\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Login button\n        Button(\n            onClick = { authViewModel.login(email, password) },\n            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6D00)),\n            enabled = authState.value != AuthState.Loading,\n            modifier = Modifier.fillMaxWidth()\n        ) {\n            Text(text = \"Login\", color = Color.White)\n        }\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Signup navigation text\n        TextButton(onClick = { navController.navigate(\"signup\") }) {\n            Text(text = \"Don't have an account? Sign up\", color = Color.White)\n        }\n    }\n\n\n}\n\n
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/fitquest/pages/LoginPage.kt b/app/src/main/java/com/example/fitquest/pages/LoginPage.kt
+---- a/app/src/main/java/com/example/fitquest/pages/LoginPage.kt	(revision f84b50dac3881c670abdbeeea936c3d80e678e32)
+-+++ b/app/src/main/java/com/example/fitquest/pages/LoginPage.kt	(date 1727819397149)
+-@@ -118,7 +118,7 @@
+-         // Login button
+-         Button(
+-             onClick = { authViewModel.login(email, password) },
+--            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF6D00)),
+-+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFD58D18)),
+-             enabled = authState.value != AuthState.Loading,
+-             modifier = Modifier.fillMaxWidth()
+-         ) {
+-@@ -131,6 +131,10 @@
+-         TextButton(onClick = { navController.navigate("signup") }) {
+-             Text(text = "Don't have an account? Sign up", color = Color.White)
+-         }
+-+        Modifier
+-+  .width(335.dp)
+-+  .height(55.dp)
+-+  .background(color = Color(0xFFD58D18), shape = RoundedCornerShape(size = 18.dp))
+-     }
+- 
+- 
+-Index: app/src/main/java/com/example/fitquest/pages/HomePage.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.fitquest.pages\n\nimport androidx.compose.foundation.background\nimport androidx.compose.foundation.layout.Arrangement\nimport androidx.compose.foundation.layout.Box\nimport androidx.compose.foundation.layout.Column\nimport androidx.compose.foundation.layout.Row\nimport androidx.compose.foundation.layout.Spacer\nimport androidx.compose.foundation.layout.fillMaxSize\nimport androidx.compose.foundation.layout.fillMaxWidth\nimport androidx.compose.foundation.layout.height\nimport androidx.compose.foundation.layout.padding\nimport androidx.compose.foundation.layout.size\nimport androidx.compose.foundation.shape.CircleShape\nimport androidx.compose.foundation.shape.RoundedCornerShape\nimport androidx.compose.foundation.text.BasicText\nimport androidx.compose.material3.Button\nimport androidx.compose.material3.Card\nimport androidx.compose.material3.CardDefaults\nimport androidx.compose.material3.LinearProgressIndicator\nimport androidx.compose.material3.Text\nimport androidx.compose.material3.TextButton\nimport androidx.compose.runtime.Composable\nimport androidx.compose.runtime.LaunchedEffect\nimport androidx.compose.runtime.livedata.observeAsState\nimport androidx.compose.ui.Alignment\nimport androidx.compose.ui.Modifier\nimport androidx.compose.ui.draw.clip\nimport androidx.compose.ui.graphics.Color\nimport androidx.compose.ui.text.font.FontWeight\nimport androidx.compose.ui.unit.dp\nimport androidx.compose.ui.unit.sp\nimport androidx.navigation.NavController\nimport com.example.fitquest.AuthState\nimport com.example.fitquest.AuthViewModel\n\n@Composable\nfun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel){\n    val authState=authViewModel.authState.observeAsState()\n\n    LaunchedEffect(authState.value) {\n        when(authState.value){\n            is AuthState.Unauthenticated -> navController.navigate(\"login\")\n            else -> Unit\n        }\n    }\n    Column(\n        modifier = modifier\n            .fillMaxSize()\n            .background(Color.DarkGray)\n            .padding(16.dp)\n    ) {\n        // Top section with title and user icon\n        Row(\n            modifier = Modifier\n                .fillMaxWidth()\n                .padding(bottom = 16.dp),\n            horizontalArrangement = Arrangement.SpaceBetween,\n            verticalAlignment = Alignment.CenterVertically\n        ) {\n            Text(\"FitQuest\", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))\n            Box(\n                modifier = Modifier\n                    .size(40.dp)\n                    .clip(CircleShape)\n                    .background(Color.Gray),\n                contentAlignment = Alignment.Center\n            ) {\n                Text(\"USER\", fontSize = 12.sp, color = Color.White)\n            }\n        }\n\n        // XP Progress Bar\n        Text(\"XP\", color = Color.White, fontSize = 14.sp)\n        LinearProgressIndicator(\n            progress = 0.7f, // Replace with dynamic XP progress\n            color = Color(0xFFFF6D00),\n            trackColor = Color.LightGray,\n            modifier = Modifier\n                .fillMaxWidth()\n                .height(8.dp)\n                .padding(vertical = 8.dp)\n        )\n\n        // Streak Section\n        Text(\"STREAK\", color = Color.White, fontWeight = FontWeight.Light, fontSize = 18.sp)\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Stats Section\n        Box(\n            modifier = Modifier\n                .fillMaxWidth()\n                .padding(vertical = 16.dp),\n            contentAlignment = Alignment.Center\n        ) {\n            Column(\n                horizontalAlignment = Alignment.CenterHorizontally\n            ) {\n                Row(\n                    modifier = Modifier.fillMaxWidth(),\n                    horizontalArrangement = Arrangement.SpaceAround\n                ) {\n                    StatItem(\"Strength\", \"85\")\n                    StatItem(\"Consistency\", \"78\")\n                    StatItem(\"Stamina\", \"90\")\n                }\n                Spacer(modifier = Modifier.height(16.dp))\n                Row(\n                    modifier = Modifier.fillMaxWidth(),\n                    horizontalArrangement = Arrangement.SpaceAround\n                ) {\n                    StatItem(\"Dexterity\", \"65\")\n                    StatItem(\"Agility\", \"72\")\n                }\n            }\n        }\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Featured Workouts Section\n        Text(\"Featured Workouts\", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)\n        Row(\n            modifier = Modifier\n                .fillMaxWidth()\n                .padding(top = 8.dp),\n            horizontalArrangement = Arrangement.SpaceEvenly\n        ) {\n            Box(\n                modifier = Modifier\n                    .size(100.dp)\n                    .background(Color.Gray)\n            )\n            Box(\n                modifier = Modifier\n                    .size(100.dp)\n                    .background(Color.Gray)\n            )\n        }\n\n        Spacer(modifier = Modifier.height(16.dp))\n\n        // Sign Out Button\n        TextButton(onClick = { authViewModel.signout() }) {\n            Text(text = \"Sign Out\", color = Color.Red)\n        }\n    }\n}\n\n@Composable\nfun StatItem(statName: String, statValue: String) {\n    Column(\n        horizontalAlignment = Alignment.CenterHorizontally\n    ) {\n        Text(text = statName, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)\n        Text(text = statValue, color = Color.White, fontSize = 18.sp)\n    }\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/fitquest/pages/HomePage.kt b/app/src/main/java/com/example/fitquest/pages/HomePage.kt
+---- a/app/src/main/java/com/example/fitquest/pages/HomePage.kt	(revision f84b50dac3881c670abdbeeea936c3d80e678e32)
+-+++ b/app/src/main/java/com/example/fitquest/pages/HomePage.kt	(date 1727818159877)
+-@@ -34,6 +34,11 @@
+- import com.example.fitquest.AuthState
+- import com.example.fitquest.AuthViewModel
+- 
+-+
+-+
+-+// 123
+-+
+-+
+- @Composable
+- fun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel){
+-     val authState=authViewModel.authState.observeAsState()
+-@@ -45,6 +50,7 @@
+-         }
+-     }
+-     Column(
+-+
+-         modifier = modifier
+-             .fillMaxSize()
+-             .background(Color.DarkGray)
+Index: .idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_rebase__Changes_.xml	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
++++ /dev/null	(revision 9b3de5a1cf36caa06bbc3f590c3401ec876f16af)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_rebase_[Changes]" date="1728066608549" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before rebase [Changes]" />
+-</changelist>
+\ No newline at end of file

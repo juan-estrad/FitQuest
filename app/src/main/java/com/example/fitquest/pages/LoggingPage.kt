@@ -53,14 +53,20 @@ import com.example.fitquest.Log
 import com.example.fitquest.Logging
 import com.example.fitquest.UserProfile
 import com.example.fitquest.ui.TopAndBottomAppBar
+//import com.example.fitquest.isStreakExpired
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.verticalGradientBrush
+import com.example.fitquest.updateStreak
+//import com.example.fitquest.updateStreak
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 
@@ -125,7 +131,11 @@ fun LoggingPageContents(modifier: Modifier, navController: NavController, authVi
     val userID = FirebaseAuth.getInstance().uid
     var workoutCategories by remember { mutableStateOf(listOf<String>()) }
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("Select a Workout") }
+    var expandedWorkout by remember { mutableStateOf(false) }
+
+    var selectedText by remember { mutableStateOf("Select a Type of Workout") }
+    var selectedWorkoutType by remember { mutableStateOf("Select Workout") } // Selected workout type
+    var workoutTypes by remember { mutableStateOf(listOf<String>()) } // List of workout types for selected category
 
 
     LaunchedEffect(authState.value) {
@@ -147,7 +157,7 @@ fun LoggingPageContents(modifier: Modifier, navController: NavController, authVi
 
                     userRef.get().addOnSuccessListener { dataSnapshot ->     //sends a request to retrieve info in firebase
                         userProfile = dataSnapshot.getValue(UserProfile::class.java)
-                        //converts the info into a user profile object
+                    //converts the info into a user profile object
                     }.addOnFailureListener {
                         Toast.makeText(context, "Failed to retrieve user data", Toast.LENGTH_SHORT).show()
                     }
@@ -165,6 +175,17 @@ fun LoggingPageContents(modifier: Modifier, navController: NavController, authVi
             else -> Unit
         }
     }
+    LaunchedEffect(selectedText) {
+        if (selectedText.isNotEmpty()) {
+            val ref = Firebase.database.reference.child("workouts").child(selectedText)
+            ref.get().addOnSuccessListener { snapshot ->
+                val types = snapshot.children.mapNotNull { it.key }
+                workoutTypes = types
+            }.addOnFailureListener {
+                Toast.makeText(context, "Failed to load workout types", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
     userProfile?.let { profile ->
         Column(
             modifier = modifier
@@ -172,6 +193,33 @@ fun LoggingPageContents(modifier: Modifier, navController: NavController, authVi
                 .background(verticalGradientBrush)
                 .padding(16.dp)
         ) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            )
+            {
+                Text(
+                    "FitQuest",
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFFFF6D00)
+                )
+
+
+                //Plan is to make the circle the pfp but for now i just put the username in there
+                Box(
+                    modifier = Modifier
+                        .size(100.dp)
+                        .clip(CircleShape)
+                        .background(Color.Gray),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
+                }
+            }
 
             // This displays the streak
             // i think the future plan is to have a fire emoji or something around it
@@ -197,6 +245,8 @@ fun LoggingPageContents(modifier: Modifier, navController: NavController, authVi
                 fontSize = 32.sp
             )
 
+
+        // LOGGING STARTS HERE
             Column(
                 modifier = modifier
                     .fillMaxSize()
@@ -205,7 +255,8 @@ fun LoggingPageContents(modifier: Modifier, navController: NavController, authVi
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                // Workoutname
+
+                // This is the dropdown menu to select focus
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -248,13 +299,52 @@ fun LoggingPageContents(modifier: Modifier, navController: NavController, authVi
                         val monthday :String= formatMonthDay.format(time)
                         val year :String= formatYear.format(time)
                         if (selectedText != "Cardio") {
+
                             Column {
                                 Spacer(modifier = Modifier.height(70.dp))
 
-                                LoggingInputField(
-                                    label = "Workout",
-                                    value = workout) { workout = it
+                                // This is the dropdown menu to select workout type
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(32.dp)
+                                ) {
+                                    ExposedDropdownMenuBox(
+                                        expanded = expandedWorkout,
+                                        onExpandedChange = { expandedWorkout = !expandedWorkout }
+                                    ) {
+                                        TextField(
+                                            value = selectedWorkoutType,
+                                            onValueChange = {},
+                                            readOnly = true,
+                                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedWorkout) },
+                                            modifier = Modifier.menuAnchor()
+                                        )
+
+                                        ExposedDropdownMenu(
+                                            expanded = expandedWorkout,
+                                            onDismissRequest = { expandedWorkout = false }
+                                        ) {
+                                            workoutTypes.forEach { workout ->
+                                                DropdownMenuItem(
+                                                    text = { Text(text = workout) },
+                                                    onClick = {
+                                                        selectedWorkoutType = workout
+                                                        expandedWorkout = false
+                                                        Toast.makeText(context, workout, Toast.LENGTH_SHORT).show()
+
+                                                    }
+                                                )
+                                            }
+                                        }
+                                    }
                                 }
+
+                                Spacer(modifier = Modifier.height(70.dp))
+//                                LoggingInputField(
+//                                label = "Workout",
+//                                value = workout) { workout = it
+//                                }
 
                                 Spacer(modifier = Modifier.height(15.dp))
 
@@ -298,12 +388,22 @@ fun LoggingPageContents(modifier: Modifier, navController: NavController, authVi
                                         userRef.child("reps").setValue(reps)
                                         userRef.child("weight").setValue(weight)
                                         userRef.child("time").setValue(workouttime)
+                                        userRef.child("time")
                                         count ++
                                         workout = ""
                                         sets = ""
                                         reps = ""
                                         weight = ""
                                         workouttime = ""
+
+                                        //updateStreak(profile)
+                                        updateStreak(profile, LocalDate.now().format(DateTimeFormatter.ISO_DATE), LocalDate.now().minusDays(1).format(
+                                            DateTimeFormatter.ISO_DATE))
+                                        val userRef2 = database.getReference("Users").child("$userID")
+                                        userRef2.child("streak").child("streak").setValue(profile.streak.streak)
+                                        userRef2.child("streak").child("longestStreak").setValue(profile.streak.longestStreak)
+                                        userRef2.child("streak").child("lastUpdate").setValue(profile.streak.lastUpdate)
+                                        navController.navigate("logging")
                                     }
                                 ) {
                                     Text("Add value")
@@ -433,66 +533,67 @@ fun LoggingInputField(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Demo_ExposedDropdownMenuBox() {
-    val context = LocalContext.current
-    val database = Firebase.database.reference.child("workouts")
-    var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("Select a Workout") }
-    var workoutCategories by remember { mutableStateOf(listOf<String>()) }
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun Demo_ExposedDropdownMenuBox() {
+//    val context = LocalContext.current
+//    val database = Firebase.database.reference.child("workouts")
+//    var expanded by remember { mutableStateOf(false) }
+//    var selectedText by remember { mutableStateOf("Select a Workout") }
+//    var workoutCategories by remember { mutableStateOf(listOf<String>()) }
+//
+//
+//    LaunchedEffect(Unit) {
+//        database.get().addOnSuccessListener { dataSnapshot ->
+//            val categories = mutableListOf<String>()
+//            dataSnapshot.children.forEach {
+//                it.key?.let { key -> categories.add(key) }
+//            }
+//            workoutCategories = categories
+//        }.addOnFailureListener {
+//            Toast.makeText(context, "Failed to fetch workouts", Toast.LENGTH_SHORT).show()
+//        }
+//    }
+//    Box(
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .padding(32.dp)
+//    ) {
+//        ExposedDropdownMenuBox(
+//            expanded = expanded,
+//            onExpandedChange = {
+//                expanded = !expanded
+//            }
+//        ) {
+//            TextField(
+//                value = selectedText,
+//                onValueChange = {},
+//                readOnly = true,
+//                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+//                modifier = Modifier.menuAnchor()
+//            )
+//
+//            ExposedDropdownMenu(
+//                expanded = expanded,
+//                onDismissRequest = { expanded = false }
+//            ) {
+//                workoutCategories.forEach { category ->
+//                    DropdownMenuItem(
+//                        text = { Text(text = category) },
+//                        onClick = {
+//                            selectedText = category
+//                            expanded = false
+//                            Toast.makeText(context, category, Toast.LENGTH_SHORT).show()
+//                            when (selectedText) {
+//                                "Cardio" -> {
+//
+//                                }
+//                            }
+//                        }
+//                    )
+//                }
+//            }
+//        }
+//    }
+//}
 
-
-    LaunchedEffect(Unit) {
-        database.get().addOnSuccessListener { dataSnapshot ->
-            val categories = mutableListOf<String>()
-            dataSnapshot.children.forEach {
-                it.key?.let { key -> categories.add(key) }
-            }
-            workoutCategories = categories
-        }.addOnFailureListener {
-            Toast.makeText(context, "Failed to fetch workouts", Toast.LENGTH_SHORT).show()
-        }
-    }
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(32.dp)
-    ) {
-        ExposedDropdownMenuBox(
-            expanded = expanded,
-            onExpandedChange = {
-                expanded = !expanded
-            }
-        ) {
-            TextField(
-                value = selectedText,
-                onValueChange = {},
-                readOnly = true,
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                modifier = Modifier.menuAnchor()
-            )
-
-            ExposedDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                workoutCategories.forEach { category ->
-                    DropdownMenuItem(
-                        text = { Text(text = category) },
-                        onClick = {
-                            selectedText = category
-                            expanded = false
-                            Toast.makeText(context, category, Toast.LENGTH_SHORT).show()
-                            when (selectedText) {
-                                "Cardio" -> {
-
-                                }
-                            }
-                        }
-                    )
-                }
-            }
-        }
-    }
-}

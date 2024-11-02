@@ -66,15 +66,19 @@ import com.example.fitquest.ui.UserInputField
 import com.example.fitquest.ui.Title01
 import com.example.fitquest.ui.OrangeFilledButton
 import com.example.fitquest.ui.HollowOrangeButton
+import kotlin.system.exitProcess
 import com.example.fitquest.ui.theme.dark
 import com.example.fitquest.ui.theme.darkOrange
 import kotlin.system.exitProcess
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
+
+
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
