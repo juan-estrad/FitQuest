@@ -318,11 +318,13 @@ fun ClickableImageWithText(
     enabled: Boolean,
     imageID: Int
 ){
-
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp
+    val screenWidthDp = configuration.screenWidthDp
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(140.dp)
+            .height((screenHeightDp/6.4).dp)
             .clickable(
                 enabled = enabled,
                 onClick = onClickFunction

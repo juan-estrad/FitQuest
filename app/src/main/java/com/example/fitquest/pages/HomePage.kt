@@ -61,6 +61,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -80,6 +81,8 @@ import com.example.fitquest.ui.ClickableImageWithText
 import com.example.fitquest.ui.TopAndBottomAppBar
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.dark
+import com.example.fitquest.ui.theme.darkOrange
+import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.transparent
 import com.example.fitquest.ui.verticalGradientBrush
@@ -229,41 +232,22 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-//            Row(
-//                modifier = Modifier
-//
-//                    .fillMaxWidth()
-//                    .padding(bottom = 16.dp),
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//                verticalAlignment = Alignment.Top
-//            ){}
 
 
 
-            // This displays the streak
-            // i think the future plan is to have a fire emoji or something around it
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "STREAK",
-                    color = Color.White,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 18.sp
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = profile.streak.streak.toString(),
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             val database = Firebase.database
             val myRef = database.getReference("Users")
+
+
+
+            val configuration = LocalConfiguration.current
+            val screenHeight = configuration.screenHeightDp.toFloat()
+
+            Spacer(
+                modifier = Modifier
+                    .height( (screenHeight/18) .dp)
+            )
 
             //LOG WORK OUT PAGE
             Row(
@@ -281,7 +265,7 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
 
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(23.dp))
 
             //STORE PAGE
             Row(
@@ -299,7 +283,7 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
 
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(23.dp))
 
             //STATS PAGE
             Row(
@@ -316,7 +300,7 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
 
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(26.dp))
 
             // FYP BUTTON
             Row(
@@ -333,16 +317,36 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
 
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(
+                modifier = Modifier
+                    .height( (screenHeight/32) .dp)
+            )
 
 
+            Row(
+                modifier = Modifier
+                    .height(60.dp)
+                    .fillMaxWidth()
+//                    .background(darker)
+                    ,
+                    Arrangement.Start
+            ){
+                TextButton(
 
-            TextButton(
-                onClick = { authViewModel.signout() }) {
-                Text(text = "Sign Out", color = Color.Red)
+                    onClick = { authViewModel.signout() }) {
+                    Text(
+                        text = "Sign Out",
+                        color = darkOrange,
+                        textAlign = TextAlign.Left
+                    )
+                }
             }
 
 
+            Spacer(
+                modifier = Modifier
+                    .height( (screenHeight/36) .dp)
+            )
 
 
         }
