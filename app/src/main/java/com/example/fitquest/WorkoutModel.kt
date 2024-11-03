@@ -11,6 +11,8 @@ class WorkoutViewModel : ViewModel() {
     // Observables for UI
     val todayWorkout = mutableStateOf<Workout?>(null)
     val userStats = mutableStateOf(UserStats())
+    val userProfile = mutableStateOf(UserProfile())
+
     private var workoutLoaded = false
 
     // Load a random workout
@@ -72,9 +74,25 @@ class WorkoutViewModel : ViewModel() {
         todayWorkout.value?.let { workout ->
             userStats.value = userStats.value.copy(
                 strength = userStats.value.strength + workout.strength,
-            )
+                agility = userStats.value.agility + workout.agility,
+                dexterity = userStats.value.dexterity + workout.dexterity,
+                consistency = userStats.value.consistency + workout.consistency,
+                stamina = userStats.value.stamina + workout.stamina,
+
+                )
+            userProfile.value = userProfile.value.copy(
+                flexcoins = userProfile.value.flexcoins + workout.flexcoins,
+
+                )
+
             // Update the user's stats in Firebase
             database.getReference("Users").child("$userID").child("userStats").setValue(userStats.value)
+                .addOnFailureListener { error ->
+                    // Handle error while updating user stats
+                    println("Error updating user stats: ${error.message}")
+                }
+
+            database.getReference("Users").child("$userID").child("flexcoins").setValue(userProfile.value.flexcoins)
                 .addOnFailureListener { error ->
                     // Handle error while updating user stats
                     println("Error updating user stats: ${error.message}")

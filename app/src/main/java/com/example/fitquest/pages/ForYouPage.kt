@@ -667,11 +667,9 @@ fun DailyCard() {
 }*/
 
 @Composable
-fun WorkoutScreen(viewModel: WorkoutViewModel = viewModel()) {
+fun WorkoutScreen(viewModel: WorkoutViewModel = WorkoutViewModel()) {
+    viewModel.loadRandomWorkout()
 
-    LaunchedEffect(Unit) {
-        viewModel.loadRandomWorkout()
-    }
 
     Card(
         modifier = Modifier
@@ -692,6 +690,12 @@ fun WorkoutScreen(viewModel: WorkoutViewModel = viewModel()) {
                 Text(text = "Workout Name: ${workout.name}")
                 Text(text = "Workout: ${workout.description}")
                 Text(text = "Strength: +${workout.strength}")
+                Text(text = "Agility: +${workout.agility}")
+                Text(text = "Stamina: +${workout.stamina}")
+                Text(text = "Consistency: +${workout.consistency}")
+                Text(text = "Dexterity: +${workout.dexterity}")
+
+
 
                 Spacer(modifier = Modifier.height(16.dp))
 
