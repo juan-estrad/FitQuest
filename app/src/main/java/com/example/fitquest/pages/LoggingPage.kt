@@ -32,6 +32,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -96,6 +97,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
     var count by remember {
         mutableStateOf(0)
     }
+
     var distance by remember {
         mutableStateOf("")
     }
@@ -362,7 +364,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                                 Button(
                                     onClick = {
                                         val userRef = database.getReference("Users").child("$userID").child("logging").child("Date").child("$year").child("$monthday").child("workout" + count)
-                                        userRef.child("Workout").setValue(workout)
+                                        userRef.child("Workout").setValue(selectedWorkoutType)
                                         userRef.child("Type").setValue(selectedText)
                                         userRef.child("sets").setValue(sets)
                                         userRef.child("reps").setValue(reps)
@@ -383,7 +385,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                                         userRef2.child("streak").child("streak").setValue(profile.streak.streak)
                                         userRef2.child("streak").child("longestStreak").setValue(profile.streak.longestStreak)
                                         userRef2.child("streak").child("lastUpdate").setValue(profile.streak.lastUpdate)
-                                        navController.navigate("logging")
+                                        //navController.navigate("logging")
                                     }
                                 ) {
                                     Text("Add value")
