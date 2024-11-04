@@ -15,7 +15,7 @@ data class Workout(
 
 data class UserProfile(
     val username: String = "",
-    val flexcoins: Int = 0,
+    var flexcoins: Int = 0,
     val userStats: UserStats = UserStats(),
     //val logging: Logging = Logging(),
     val streak: UserStreak = UserStreak() //Need to add to DB to work

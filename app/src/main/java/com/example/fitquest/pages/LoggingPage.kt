@@ -11,10 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -32,19 +29,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -53,6 +42,9 @@ import com.example.fitquest.AuthViewModel
 import com.example.fitquest.Log
 //import com.example.fitquest.Logging
 import com.example.fitquest.UserProfile
+import com.example.fitquest.UserStats
+import com.example.fitquest.Workout
+import com.example.fitquest.ui.TopAndBottomAppBar
 //import com.example.fitquest.isStreakExpired
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
@@ -65,7 +57,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
 
@@ -73,6 +64,21 @@ import java.util.Locale
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+
+
+    TopAndBottomAppBar(
+        contents = { LoggingPageContents(modifier,navController,authViewModel) },
+        modifier = modifier,
+        navController = navController,
+        authViewModel = authViewModel
+
+    )
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     var statname by remember {
         mutableStateOf("")
     }
@@ -169,59 +175,14 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
         }
     }
     userProfile?.let { profile ->
+//
         Column(
             modifier = modifier
                 .fillMaxSize()
                 .background(verticalGradientBrush)
                 .padding(16.dp)
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            )
-            {
-                Text(
-                    "FitQuest",
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color(0xFFFF6D00)
-                )
 
-
-                //Plan is to make the circle the pfp but for now i just put the username in there
-                Box(
-                    modifier = Modifier
-                        .size(100.dp)
-                        .clip(CircleShape)
-                        .background(Color.Gray),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
-                }
-            }
-
-            // This displays the streak
-            // i think the future plan is to have a fire emoji or something around it
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "STREAK",
-                    color = Color.White,
-                    fontWeight = FontWeight.Light,
-                    fontSize = 18.sp
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = profile.streak.streak.toString(),
-                    color = Color.White,
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                )
-            }
             Text(
                 text = "Log Your Workout",
                 fontSize = 32.sp
@@ -370,7 +331,7 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                                         userRef.child("reps").setValue(reps)
                                         userRef.child("weight").setValue(weight)
                                         userRef.child("time").setValue(workouttime)
-                                        userRef.child("time")
+                                        //completeWorkout()
                                         count ++
                                         workout = ""
                                         sets = ""
@@ -385,6 +346,10 @@ fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, aut
                                         userRef2.child("streak").child("streak").setValue(profile.streak.streak)
                                         userRef2.child("streak").child("longestStreak").setValue(profile.streak.longestStreak)
                                         userRef2.child("streak").child("lastUpdate").setValue(profile.streak.lastUpdate)
+                                        val userRef3 = database.getReference("Users").child("$userID")
+                                        userProfile!!.flexcoins = userProfile!!.flexcoins + 5
+                                        userRef3.child("flexcoins").setValue(userProfile!!.flexcoins)
+
                                         //navController.navigate("logging")
                                     }
                                 ) {
@@ -515,66 +480,22 @@ fun LoggingInputField(
     )
 }
 
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun Demo_ExposedDropdownMenuBox() {
-//    val context = LocalContext.current
-//    val database = Firebase.database.reference.child("workouts")
-//    var expanded by remember { mutableStateOf(false) }
-//    var selectedText by remember { mutableStateOf("Select a Workout") }
-//    var workoutCategories by remember { mutableStateOf(listOf<String>()) }
-//
-//
-//    LaunchedEffect(Unit) {
-//        database.get().addOnSuccessListener { dataSnapshot ->
-//            val categories = mutableListOf<String>()
-//            dataSnapshot.children.forEach {
-//                it.key?.let { key -> categories.add(key) }
-//            }
-//            workoutCategories = categories
-//        }.addOnFailureListener {
-//            Toast.makeText(context, "Failed to fetch workouts", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-//    Box(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(32.dp)
-//    ) {
-//        ExposedDropdownMenuBox(
-//            expanded = expanded,
-//            onExpandedChange = {
-//                expanded = !expanded
-//            }
-//        ) {
-//            TextField(
-//                value = selectedText,
-//                onValueChange = {},
-//                readOnly = true,
-//                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-//                modifier = Modifier.menuAnchor()
-//            )
-//
-//            ExposedDropdownMenu(
-//                expanded = expanded,
-//                onDismissRequest = { expanded = false }
-//            ) {
-//                workoutCategories.forEach { category ->
-//                    DropdownMenuItem(
-//                        text = { Text(text = category) },
-//                        onClick = {
-//                            selectedText = category
-//                            expanded = false
-//                            Toast.makeText(context, category, Toast.LENGTH_SHORT).show()
-//                            when (selectedText) {
-//                                "Cardio" -> {
-//
-//                                }
-//                            }
-//                        }
-//                    )
-//                }
-//            }
-//        }
-//    }
-//}
+fun completeWorkout() {
+    val todayWorkout = mutableStateOf<Workout?>(null)
+    val userProfile = mutableStateOf(UserProfile())
+
+    todayWorkout.value?.let { workout ->
+
+        userProfile.value = userProfile.value.copy(
+            flexcoins = userProfile.value.flexcoins + 5,
+
+            )
+
+        // Update the user's stats in Firebase
+        database.getReference("Users").child("$userID").child("flexcoins").setValue(userProfile.value.flexcoins)
+            .addOnFailureListener { error ->
+                // Handle error while updating user stats
+                println("Error updating user stats: ${error.message}")
+            }
+    }
+}
