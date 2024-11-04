@@ -45,7 +45,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
-import com.example.fitquest.Date
 import com.example.fitquest.UserProfile
 import com.example.fitquest.WorkoutViewModel
 import com.example.fitquest.ui.TopAndBottomAppBar

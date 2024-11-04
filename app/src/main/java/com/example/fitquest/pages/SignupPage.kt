@@ -40,16 +40,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
-import com.example.fitquest.Date
-import com.example.fitquest.Log
+
 
 import com.example.fitquest.UserProfile
 import com.example.fitquest.UserStats
-
-import com.example.fitquest.Logging
-import com.example.fitquest.Monthday
 import com.example.fitquest.UserStreak
-import com.example.fitquest.Year
 import com.example.fitquest.ui.OrangeFilledButton
 import com.example.fitquest.ui.UserInputField
 
@@ -99,26 +94,26 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                             stamina = 0,
                             strength = 0
                         ),
-                        logging = Logging(
-                            date = Date(
-                                year = Year(
-                                    monthday = Monthday(
-                                        log = Log (
-                                            workout = "",
-                                            type = "",
-                                            sets = 0,
-                                            reps = 0,
-                                            weight = "",
-                                            workouttime = ""
-                                        )
-                                    )
-                                )
-                            )
-                        ),
+//                        logging = Logging(
+//                            date = Date(
+//                                year = Year(
+//                                    monthday = Monthday(
+//                                        log = Log (
+//                                            workout = "",
+//                                            type = "",
+//                                            sets = 0,
+//                                            reps = 0,
+//                                            weight = "",
+//                                            workouttime = ""
+//                                        )
+//                                    )
+//                                )
+//                            )
+//                        ),
                         streak = UserStreak(
                             streak = 0,
-                            lastUpdate = null,
-                            streakExpiration = null
+                            longestStreak = 0,
+                            lastUpdate = ""
                         )
                     )
                     myRef.child(id).setValue(userProfile)
