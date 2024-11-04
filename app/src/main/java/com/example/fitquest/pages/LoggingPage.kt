@@ -50,6 +50,8 @@ import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.verticalGradientBrush
+import com.example.fitquest.updateFlexcoins
+import com.example.fitquest.updateLastWorkout
 import com.example.fitquest.updateStreak
 //import com.example.fitquest.updateStreak
 import com.google.firebase.Firebase
@@ -324,7 +326,8 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 
                                 Button(
                                     onClick = {
-                                        val userRef = database.getReference("Users").child("$userID").child("logging").child("Date").child("$year").child("$monthday").child("workout" + count)
+                                        updateLastWorkout(profile, monthday)
+                                        val userRef = database.getReference("Users").child("$userID").child("logging").child("Date").child("$year").child("$monthday").child("workout" + profile.workoutCount)
                                         userRef.child("Workout").setValue(selectedWorkoutType)
                                         userRef.child("Type").setValue(selectedText)
                                         userRef.child("sets").setValue(sets)
@@ -339,18 +342,17 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                         weight = ""
                                         workouttime = ""
 
-                                        //updateStreak(profile)
                                         updateStreak(profile, LocalDate.now().format(DateTimeFormatter.ISO_DATE), LocalDate.now().minusDays(1).format(
                                             DateTimeFormatter.ISO_DATE))
                                         val userRef2 = database.getReference("Users").child("$userID")
+                                        userRef2.child("lastWorkout").setValue(profile.lastWorkout)
+                                        userRef2.child("workoutCount").setValue(profile.workoutCount)
                                         userRef2.child("streak").child("streak").setValue(profile.streak.streak)
                                         userRef2.child("streak").child("longestStreak").setValue(profile.streak.longestStreak)
                                         userRef2.child("streak").child("lastUpdate").setValue(profile.streak.lastUpdate)
-                                        val userRef3 = database.getReference("Users").child("$userID")
-                                        userProfile!!.flexcoins = userProfile!!.flexcoins + 5
-                                        userRef3.child("flexcoins").setValue(userProfile!!.flexcoins)
-
-                                        //navController.navigate("logging")
+                                        updateFlexcoins(profile)
+                                        userRef2.child("flexcoins").setValue(profile.flexcoins)
+                                        navController.navigate("logging")
                                     }
                                 ) {
                                     Text("Add value")
@@ -381,7 +383,7 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 
                                 Button(
                                     onClick = {
-                                        val userRef = database.getReference("Users").child("$userID").child("logging").child("Date").child("$year").child("$monthday").child("workout" + count)
+                                        val userRef = database.getReference("Users").child("$userID").child("logging").child("Date").child("$year").child("$monthday").child("workout" + profile.workoutCount)
                                         userRef.child("Time Elapsed").setValue(timeelapsed)
                                         userRef.child("Type").setValue(selectedText)
                                         userRef.child("Distance").setValue(distance)

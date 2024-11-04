@@ -114,7 +114,9 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                             streak = 0,
                             longestStreak = 0,
                             lastUpdate = ""
-                        )
+                        ),
+                        lastWorkout = "",
+                        workoutCount = 0
                     )
                     myRef.child(id).setValue(userProfile)
                 }

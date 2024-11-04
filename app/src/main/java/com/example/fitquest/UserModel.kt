@@ -18,7 +18,9 @@ data class UserProfile(
     var flexcoins: Int = 0,
     val userStats: UserStats = UserStats(),
     //val logging: Logging = Logging(),
-    val streak: UserStreak = UserStreak() //Need to add to DB to work
+    val streak: UserStreak = UserStreak(),
+    var lastWorkout: String = "",
+    var workoutCount: Int = 0
 )
 
 data class UserStats(
@@ -71,4 +73,15 @@ fun updateStreak(user:UserProfile, today: String, yesterday: String){
     }
 }
 
+fun updateFlexcoins(user: UserProfile) {
+    user.flexcoins += 5
+}
+
+fun updateLastWorkout(user: UserProfile, today:String) {
+    if(user.lastWorkout != today){
+        user.lastWorkout = today
+        user.workoutCount = 0
+    }
+    user.workoutCount++
+}
 
