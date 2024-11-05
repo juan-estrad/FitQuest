@@ -1,7 +1,9 @@
 package com.example.fitquest.pages
 
+import android.os.CountDownTimer
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -38,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -45,6 +49,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.R
 import com.example.fitquest.UserProfile
 import com.example.fitquest.WeeklyWorkoutViewModel
 import com.example.fitquest.WorkoutViewModel
@@ -258,27 +263,34 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
 
                         title = "T-800 (muscles only!!)",
                         text = "This is some text in the box.",
-                        workouts = "Upperbody, Lowerbody",
-                        onClick = {
-
-                        }
+                        workouts1 = "Upperbody",
+                        workouts1prog = "Bench Press: 5x10 \n Bicep Curls: 5x10 \n Tricep curls: 5x10",
+                        workouts2 = "Lowerbody",
+                        workouts2prog = "Squats: 5x10 \n Lunges: 5x10 \n Calf Raises: 5x10",
+                        workouts3 = "",
+                        workouts3prog = "",
                     )
                     ReccomendedBox(
                         name = "Emily LoveCraft",
                         title = "Emily's gym Time!",
                         text = "Test Test Test",
-                        workouts = "Core workout, Cardio",
-                        onClick = {
-
-                        }
+                        workouts1 = "Core workout",
+                        workouts1prog = "Bicycle Crunches: 3x8 \nLeg Raises: 3x8 \nPlanks: 5 minutes",
+                        workouts2 = "Cardio",
+                        workouts2prog = "Jumping Jacks: 3x5 minutes \nMountain Climbers: 3x5 minutes \nRunning: 1.5 miles",
+                        workouts3 = "",
+                        workouts3prog = "",
                     )
                     ReccomendedBox(
                         name = "Dave Rubin",
                         title = "Training to Battle Psycho",
                         text = "Test",
-                        workouts = "Core workout, Calisthenics, Stretching",
-                        onClick = {
-                        }
+                        workouts1 = "Core workout",
+                        workouts1prog = "Crunches: 5x10 \nSit-Ups: 5x10 \nLeg Raises: 5x10",
+                        workouts2 = "Arms",
+                        workouts2prog = "Skull Crushers: 5x10 \nOverhead Tricep Extensions: 5x10 \nPreacher Curls: 5x10",
+                        workouts3 = "Chest",
+                        workouts3prog = "Bench Press: 5x10 \nDumbbell Flyers: 5x10 \nIncline Bench Press: 5x10",
                     )
                 }
                 //RandomChildDisplay()
@@ -289,8 +301,29 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
 
 
 @Composable
-fun ReccomendedBox(name: String, title: String, text: String, workouts: String, onClick:  () -> Unit) {
+fun ReccomendedBox(name: String, title: String, text: String, workouts1: String, workouts1prog: String, workouts2: String, workouts2prog: String,workouts3: String, workouts3prog: String) {
     var showDialog by remember { mutableStateOf(false) }
+    var isButtonVisible by remember { mutableStateOf(true) }
+    val database = Firebase.database //initialize an instance of the realtime database
+    val userID = FirebaseAuth.getInstance().uid
+    val agilityIncrease = database.getReference("Users").child("$userID").child("userStats").child("agility")
+    val consistencyIncrease = database.getReference("Users").child("$userID").child("userStats").child("consistency")
+    val dexterityIncrease = database.getReference("Users").child("$userID").child("userStats").child("dexterity")
+    val staminaIncrease = database.getReference("Users").child("$userID").child("userStats").child("stamina")
+    val strengthIncrease = database.getReference("Users").child("$userID").child("userStats").child("strength")
+
+
+    LaunchedEffect(Unit) {
+        val timer = object : CountDownTimer(24 * 60 * 60 * 1000, 1000) { // 24 hours in milliseconds
+            override fun onTick(millisUntilFinished: Long) {}
+
+            override fun onFinish() {
+                isButtonVisible = true
+            }
+        }
+        timer.start()
+    }
+
     Card(
         modifier = Modifier
             .clickable { showDialog = true  }
@@ -304,10 +337,16 @@ fun ReccomendedBox(name: String, title: String, text: String, workouts: String, 
         ) {
             Row {
                 Box(modifier = Modifier
-                        .size(30.dp)
-                        .clip(CircleShape)
-                        .background(color = brightOrange),
-                )
+                    .size(30.dp)
+                    .clip(CircleShape)
+                    .background(color = brightOrange),
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ellipse_2),
+                        contentDescription = null,
+                        modifier = Modifier.size(60.dp)
+                    )
+                }
                 Text(
                     text = "  $name",
                     fontSize = 17.sp,
@@ -326,20 +365,49 @@ fun ReccomendedBox(name: String, title: String, text: String, workouts: String, 
             Row {
                 Text(text = "Focus: ",
                     fontSize = 14.sp)
-                Text(text = workouts,
+                Text(text = "$workouts1, $workouts2, $workouts3",
                     fontSize = 14.sp,
                     style = MaterialTheme.typography.headlineSmall)
             }
         }
         if (showDialog) {
             AlertDialog(
-                modifier = Modifier.size(750.dp, 500.dp),
                 onDismissRequest = { showDialog = false },
                 title = { Text(text = title) },
-                text = { Text("This is a popup message.") },
+                text = {
+                    if (workouts3 != "") {
+                        Text(text = "Description: \n\n"
+                                + "$workouts1 \n"
+                                + "$workouts1prog \n\n"
+                                + "$workouts2 \n"
+                                + "$workouts2prog \n\n"
+                                + "$workouts3 \n"
+                                + "$workouts3prog"
+                        )
+                    }
+                    else {
+                        Text(text = "Description: \n\n"
+                                + "$workouts1 \n"
+                                + "$workouts1prog \n\n"
+                                + "$workouts2 \n"
+                                + "$workouts2prog"
+                        )
+                    }
+
+                },
                 confirmButton = {
-                    Button(onClick = { showDialog = false }) {
-                        Text("OK")
+                    if (isButtonVisible) {
+                        Button(onClick = {
+                            isButtonVisible = false
+                            showDialog = false
+                        }) {
+                            Text("Click me")
+                        }
+                    }
+                    Button(onClick = {
+                        showDialog = false
+                    }) {
+                        Text("Completed")
                     }
                 }
             )
@@ -356,7 +424,7 @@ fun WorkoutScreen(viewModel: WorkoutViewModel = WorkoutViewModel()) {
         modifier = Modifier
             .padding(7.dp)
             .width(350.dp)
-            .height(325.dp),
+            .height(350.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -431,22 +499,37 @@ fun WeeklyWorkoutScreen(viewModel: WeeklyWorkoutViewModel = WeeklyWorkoutViewMod
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-
-            Spacer(modifier = Modifier.height(16.dp))
-
             // Display workout details if available
             viewModel.weeklyWorkout.value?.let { weekly ->
                 Text(text = "${weekly.name}")
+                Spacer(modifier = Modifier.height(8.dp))
 
-                Text(text = "${weekly.workout1}",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontSize = 14.sp)
-                Text(text = "${weekly.workout2}",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontSize = 14.sp)
-                Text(text = "${weekly.workout3} Sets: ${weekly.Sets}",
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontSize = 14.sp)
+                Text(text = "Workouts:",
+                    fontSize = 16.sp,
+                    lineHeight = 20.sp)
+                Spacer(modifier = Modifier.height(4.dp))
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                )
+                {
+                    Text(text = "${weekly.workout1}\nSets: ${weekly.Sets}",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontSize = 15.sp,
+                        lineHeight = 18.sp
+                    )
+                    Text(text = "${weekly.workout2}\nSets: ${weekly.Sets}",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontSize = 15.sp,
+                        lineHeight = 18.sp
+                    )
+                    Text(text = "${weekly.workout2}\nSets: ${weekly.Sets}",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontSize = 15.sp,
+                        lineHeight = 18.sp
+                    )
+                }
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Row (
                     modifier = Modifier.fillMaxWidth(),
