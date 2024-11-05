@@ -355,7 +355,8 @@ fun WorkoutScreen(viewModel: WorkoutViewModel = WorkoutViewModel()) {
     Card(
         modifier = Modifier
             .padding(7.dp)
-            .width(350.dp),
+            .width(350.dp)
+            .height(325.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -364,31 +365,32 @@ fun WorkoutScreen(viewModel: WorkoutViewModel = WorkoutViewModel()) {
                 .padding(16.dp)
         ) {
 
-            Spacer(modifier = Modifier.height(16.dp))
-
             // Display workout details if available
             viewModel.todayWorkout.value?.let { workout ->
-                Text(text = "${workout.name}",
-                    fontSize = 14.sp)
+                Text(text = "${workout.name}")
+
+                Spacer(modifier = Modifier.height(8.dp))
 
                 Text(text = "Description:",
-                    fontSize = 14.sp)
+                    lineHeight = 12.sp)
                 Text(text = "${workout.description}",
                     style = MaterialTheme.typography.headlineSmall,
-                    fontSize = 14.sp
+                    fontSize = 15.sp,
+                    lineHeight = 18.sp
                 )
 
+                Spacer(modifier = Modifier.height(25.dp))
                 Row (
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 )
                 {
                     Text(text = "Strength: +${workout.strength}",
-                        fontSize = 14.sp)
+                        fontSize = 15.sp)
                     Text(text = "Agility: +${workout.agility}",
-                        fontSize = 14.sp)
+                        fontSize = 15.sp)
                     Text(text = "Stamina: +${workout.stamina}",
-                        fontSize = 14.sp)
+                        fontSize = 15.sp)
                 }
 
                 Row (modifier = Modifier.fillMaxWidth(),
@@ -396,14 +398,14 @@ fun WorkoutScreen(viewModel: WorkoutViewModel = WorkoutViewModel()) {
                 )
                 {
                     Text(text = "Consistency: +${workout.consistency}",
-                        fontSize = 14.sp)
+                        fontSize = 15.sp)
                     Text(text = "Dexterity: +${workout.dexterity}",
-                        fontSize = 14.sp)
+                        fontSize = 15.sp)
                 }
 
 
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(25.dp))
 
                 Button(onClick = { viewModel.completeWorkout() }) {
                     Text(text = "Complete Workout")
