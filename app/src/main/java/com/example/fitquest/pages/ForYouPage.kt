@@ -46,6 +46,7 @@ import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.UserProfile
+import com.example.fitquest.WeeklyWorkoutViewModel
 import com.example.fitquest.WorkoutViewModel
 import com.example.fitquest.ui.TopAndBottomAppBar
 import com.example.fitquest.ui.theme.brightOrange
@@ -228,34 +229,9 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                 Column {
                     LazyRow {
                         items(1) { index ->
-                            WeeklyBox(
-                                name = " ",
-                                title = "My Title",
-                                text = "This is some text in the box.",
-                                workouts = " ",
-                                onClick = {
-
-                                }
-                            )
-                            WeeklyBox(
-                                name = " ",
-
-                                title = "My Title",
-                                text = "This is some text in the box.",
-                                workouts = " ",
-                                onClick = {
-
-                                }
-                            )
-                            WeeklyBox(
-                                name = " ",
-                                title = "My Title",
-                                text = "This is some text in the box.",
-                                workouts = " ",
-                                onClick = {
-
-                                }
-                            )
+                            WeeklyWorkoutScreen()
+                            WeeklyWorkoutScreen()
+                            WeeklyWorkoutScreen()
                         }
                     }
                 }
@@ -372,300 +348,6 @@ fun ReccomendedBox(name: String, title: String, text: String, workouts: String, 
 }
 
 @Composable
-fun WeeklyBox(name: String, title: String, text: String, workouts: String, onClick:  () -> Unit) {
-    Card(
-        modifier = Modifier
-            .clickable { onClick() }
-            .padding(7.dp)
-            .width(325.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-        ) {
-            Text(text = title,)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Description:",
-                fontSize = 14.sp)
-            Text(text = text,
-                fontSize = 14.sp,
-                style = MaterialTheme.typography.headlineSmall,
-                lineHeight = 16.sp)
-            Spacer(modifier = Modifier.height(8.dp))
-            Row {
-                Text(text = "Focus: ",
-                    fontSize = 14.sp)
-                Text(text = workouts,
-                    fontSize = 14.sp,
-                    style = MaterialTheme.typography.headlineSmall)
-            }
-        }
-    }
-}
-
-@Composable
-fun DailyBox(name: String, title: String, text: String, workouts: String, onClick: () -> Unit) {
-    var showDialog by remember { mutableStateOf(false) }
-    val database = FirebaseDatabase.getInstance()
-    val userID = FirebaseAuth.getInstance().uid
-    val time :Long = System.currentTimeMillis()
-    val formatMonthDay : SimpleDateFormat = SimpleDateFormat("M-dd", Locale.getDefault())
-    val formatYear : SimpleDateFormat = SimpleDateFormat("YYYY", Locale.getDefault())
-    val monthday :String= formatMonthDay.format(time)
-    val year :String= formatYear.format(time)
-    val referenceWorkoutTitle = database.getReference("workouts")
-    var childValue1 by remember { mutableStateOf("") }
-    var childValue2 by remember { mutableStateOf("") }
-    var childValue3 by remember { mutableStateOf("") }
-
-    val ref1 = database.getReference("workouts/$childValue1")
-    val ref2 = database.getReference("workouts/$childValue1/$childValue2")
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            val snapshot1 = referenceWorkoutTitle.get().await()
-            val children1 = snapshot1.children.toList()
-            val randomIndex1 = (0 until children1.size).random()
-            childValue1 = children1[randomIndex1].key.toString()
-
-            val snapshot2 = referenceWorkoutTitle.child(childValue1).get().await()
-            val children2 = snapshot2.children.toList()
-            val randomIndex2 = (0 until children2.size).random()
-            childValue2 = children2[randomIndex2].key.toString()
-
-            val snapshot3 = referenceWorkoutTitle.child(childValue1).child(childValue2).get().await()
-            val children3 = snapshot3.children.toList()
-            val randomIndex3 = (0 until children3.size).random()
-            childValue3 = children3[randomIndex3].value.toString()
-
-            delay(24 * 60 * 60 * 1000) // 24 hours in milliseconds
-        }
-    }
-
-    Card(
-        modifier = Modifier
-            .clickable { showDialog = true }
-            .padding(7.dp)
-            .width(325.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-        ) {
-            Text(text =  childValue2,)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Description:",
-                fontSize = 14.sp)
-            Text(text = childValue3,
-                fontSize = 14.sp,
-                style = MaterialTheme.typography.headlineSmall,
-                lineHeight = 16.sp)
-            Spacer(modifier = Modifier.height(8.dp))
-            Row {
-                Text(text = "Focus: ",
-                    fontSize = 14.sp)
-                Text(text = childValue1,
-                    fontSize = 14.sp,
-                    style = MaterialTheme.typography.headlineSmall)
-                Button(onClick = { }) { }
-            }
-        }
-    }
-}
-
-@Composable
-fun ModalButtonExample() {
-    var showDialog by remember { mutableStateOf(false) }
-
-    Button(onClick = { showDialog = true }) {
-        Text("Show Modal Dialog")
-    }
-
-    if (showDialog) {
-        AlertDialog(
-            onDismissRequest = { showDialog = false },
-            title = { Text("Modal Dialog Title") },
-            text = { Text("This is a modal dialog.") },
-            confirmButton = {
-                Button(onClick = { showDialog = false }) {
-                    Text("OK")
-                }
-            }
-        )
-    }
-}
-
-
-
-fun getRandomChild(databaseReference: DatabaseReference) {
-    databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
-        override fun onDataChange(snapshot: DataSnapshot) {
-            val children = snapshot.children.toList()
-            if (children.isNotEmpty()) {
-                val randomIndex = Random.nextInt(children.size)
-                val randomChild = children[randomIndex]
-
-                // Do something with the random child
-                println(randomChild.key) // Key of the random child
-                println(randomChild.value) // Value of the random child
-            }
-        }
-
-        override fun onCancelled(error: DatabaseError) {
-            // Handle error
-            println("Error: ${error.message}")
-        }
-    })
-}
-
-@Composable
-fun RandomChildDisplay() {
-    val database = FirebaseDatabase.getInstance()
-    val userID = FirebaseAuth.getInstance().uid
-    val time :Long = System.currentTimeMillis()
-    val formatMonthDay : SimpleDateFormat = SimpleDateFormat("M-dd", Locale.getDefault())
-    val formatYear : SimpleDateFormat = SimpleDateFormat("YYYY", Locale.getDefault())
-    val monthday :String= formatMonthDay.format(time)
-    val year :String= formatYear.format(time)
-    val referenceWorkout = database.getReference("workouts").child("Arms")
-    var childValue by remember { mutableStateOf("") }
-    var childValue2 by remember { mutableStateOf("") }
-
-
-    LaunchedEffect(Unit) {
-        while (true) {
-            val snapshot = referenceWorkout.get().await()
-            val children = snapshot.children.toList()
-            val randomIndex = (0 until children.size).random()
-            childValue = children[randomIndex].key.toString()
-            delay(24 * 60 * 60 * 1000) // 24 hours in milliseconds
-        }
-    }
-
-    Text(text = childValue)
-}
-
-/*fun fetchRandomWorkout(onResult: (Workout?) -> Unit) {
-    val database = FirebaseDatabase.getInstance().getReference("workouts")
-
-    database.addListenerForSingleValueEvent(object : ValueEventListener {
-        override fun onDataChange(snapshot: DataSnapshot) {
-            val workoutList = mutableListOf<Workout?>() // Pair of (workout name, description)
-            for (category in snapshot.children) {
-                for (workout in category.children) {
-                    val workoutName = workout.key ?: continue
-                    val description = workout.child("description").getValue(String::class.java) ?: continue
-                    workoutList.add(Workout)
-                }
-            }
-
-            // Randomly select a workout
-            if (workoutList.isNotEmpty()) {
-                val randomWorkout = workoutList.random()
-                onResult(randomWorkout) // Pass the selected workout as a pair
-            } else {
-                onResult(null) // No workouts found
-            }
-        }
-
-        override fun onCancelled(error: DatabaseError) {
-            onResult(null) // Handle errors
-        }
-    })
-}
-
-@Composable
-fun RandomWorkoutCard() {
-    var workoutName by remember { mutableStateOf<String?>(null) }
-    var workoutDescription by remember { mutableStateOf<String?>(null) }
-
-    LaunchedEffect(Unit) {
-        fetchRandomWorkout { result ->
-            result?.let { (name, description) ->
-                workoutName = name
-                workoutDescription = description
-            } ?: run {
-                workoutName = "No Workout Available"
-                workoutDescription = ""
-            }
-        }
-    }
-
-    Card(
-        modifier = Modifier.padding(16.dp),
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            workoutName?.let {
-                Text(text = it, fontWeight = FontWeight.Bold)
-            } ?: Text("Loading...")
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            workoutDescription?.let {
-                Text(text = it)
-            } ?: Text("...")
-        }
-    }
-}
-
-fun fetchDailyCard(onResult: (Workouts?) -> Unit) {
-    val database = FirebaseDatabase.getInstance().getReference("workouts").child("Arms")
-
-    database.addListenerForSingleValueEvent(object : ValueEventListener {
-        override fun onDataChange(snapshot: DataSnapshot) {
-            val cardList = mutableListOf<Workouts>()
-            for (child in snapshot.children) {
-                val card = child.getValue(Workouts::class.java)
-                if (card != null) {
-                    cardList.add(card)
-                }
-            }
-
-            // Get the current day of the month and use it to select a card
-            val currentDay = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-            val index = (currentDay - 1) % cardList.size // Using modulo to wrap around
-            onResult(cardList.getOrNull(index))
-        }
-
-        override fun onCancelled(error: DatabaseError) {
-            onResult(null) // Handle errors
-        }
-    })
-}
-
-@Composable
-fun DailyCard() {
-    var cardContent by remember { mutableStateOf<Workouts?>(null) }
-    val referenceWorkoutTitle = database.getReference("workouts")
-    var childValue1 by remember { mutableStateOf("") }
-    var childValue2 by remember { mutableStateOf("") }
-    var childValue3 by remember { mutableStateOf("") }
-
-    LaunchedEffect(Unit) {
-        fetchDailyCard { content ->
-            cardContent = content
-        }
-        val snapshot1 = referenceWorkoutTitle.get().await()
-
-        childValue1 = snapshot1.key.toString()
-    }
-
-    Card(
-        modifier = Modifier.padding(16.dp)
-    ) {
-        cardContent?.let {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(text = it.workoutTypes, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = childValue1)
-            }
-        } ?: Text("Loading...")
-    }
-}*/
-
-@Composable
 fun WorkoutScreen(viewModel: WorkoutViewModel = WorkoutViewModel()) {
     viewModel.loadRandomWorkout()
 
@@ -673,7 +355,7 @@ fun WorkoutScreen(viewModel: WorkoutViewModel = WorkoutViewModel()) {
     Card(
         modifier = Modifier
             .padding(7.dp)
-            .width(325.dp),
+            .width(350.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -686,14 +368,106 @@ fun WorkoutScreen(viewModel: WorkoutViewModel = WorkoutViewModel()) {
 
             // Display workout details if available
             viewModel.todayWorkout.value?.let { workout ->
-                Text(text = "Workout Name: ${workout.name}")
-                Text(text = "Workout: ${workout.description}")
-                Text(text = "Strength: +${workout.strength}")
-                Text(text = "Agility: +${workout.agility}")
-                Text(text = "Stamina: +${workout.stamina}")
-                Text(text = "Consistency: +${workout.consistency}")
-                Text(text = "Dexterity: +${workout.dexterity}")
+                Text(text = "${workout.name}",
+                    fontSize = 14.sp)
 
+                Text(text = "Description:",
+                    fontSize = 14.sp)
+                Text(text = "${workout.description}",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 14.sp
+                )
+
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                )
+                {
+                    Text(text = "Strength: +${workout.strength}",
+                        fontSize = 14.sp)
+                    Text(text = "Agility: +${workout.agility}",
+                        fontSize = 14.sp)
+                    Text(text = "Stamina: +${workout.stamina}",
+                        fontSize = 14.sp)
+                }
+
+                Row (modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                )
+                {
+                    Text(text = "Consistency: +${workout.consistency}",
+                        fontSize = 14.sp)
+                    Text(text = "Dexterity: +${workout.dexterity}",
+                        fontSize = 14.sp)
+                }
+
+
+
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(onClick = { viewModel.completeWorkout() }) {
+                    Text(text = "Complete Workout")
+                }
+            } ?: Text(text = "No workout loaded.")
+        }
+    }
+}
+
+@Composable
+fun WeeklyWorkoutScreen(viewModel: WeeklyWorkoutViewModel = WeeklyWorkoutViewModel()) {
+    viewModel.loadRandomWorkout()
+
+
+    Card(
+        modifier = Modifier
+            .padding(7.dp)
+            .width(350.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Display workout details if available
+            viewModel.weeklyWorkout.value?.let { weekly ->
+                Text(text = "${weekly.name}")
+
+                Text(text = "${weekly.workout1}",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 14.sp)
+                Text(text = "${weekly.workout2}",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 14.sp)
+                Text(text = "${weekly.workout3} Sets: ${weekly.Sets}",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 14.sp)
+
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                )
+                {
+                    Text(text = "Strength: +${weekly.strength}",
+                        fontSize = 14.sp)
+                    Text(text = "Agility: +${weekly.agility}",
+                        fontSize = 14.sp)
+                    Text(text = "Stamina: +${weekly.stamina}",
+                        fontSize = 14.sp)
+                }
+
+                Row (modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                )
+                {
+                    Text(text = "Consistency: +${weekly.consistency}",
+                        fontSize = 14.sp)
+                    Text(text = "Dexterity: +${weekly.dexterity}",
+                        fontSize = 14.sp)
+                }
 
 
                 Spacer(modifier = Modifier.height(16.dp))

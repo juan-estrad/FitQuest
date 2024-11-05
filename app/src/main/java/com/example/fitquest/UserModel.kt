@@ -2,6 +2,20 @@ package com.example.fitquest
 
 import java.time.LocalDateTime
 
+data class Weekly(
+    val name: String = "",
+    val workout1: String = "",
+    val workout2: String = "",
+    val workout3: String = "",
+    val Sets: String = "",
+    var strength: Int = 0,
+    var agility: Int = 0,
+    var consistency: Int = 0,
+    var stamina: Int = 0,
+    var dexterity: Int = 0,
+    var flexcoins: Int = 0,
+)
+
 data class Workout(
     val name: String = "",
     val description: String = "",
