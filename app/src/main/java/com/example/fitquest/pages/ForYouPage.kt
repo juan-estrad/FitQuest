@@ -259,8 +259,8 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                 }
                 Column {
                     ReccomendedBox(
+                        img = R.drawable.profile_3,
                         name = "Arnold Beefcake",
-
                         title = "T-800 (muscles only!!)",
                         text = "This is some text in the box.",
                         workouts1 = "Upperbody",
@@ -271,6 +271,7 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                         workouts3prog = "",
                     )
                     ReccomendedBox(
+                        img = R.drawable.profile_2,
                         name = "Emily LoveCraft",
                         title = "Emily's gym Time!",
                         text = "Test Test Test",
@@ -282,6 +283,7 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                         workouts3prog = "",
                     )
                     ReccomendedBox(
+                        img = R.drawable.profile_3,
                         name = "Dave Rubin",
                         title = "Training to Battle Psycho",
                         text = "Test",
@@ -301,7 +303,7 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
 
 
 @Composable
-fun ReccomendedBox(name: String, title: String, text: String, workouts1: String, workouts1prog: String, workouts2: String, workouts2prog: String,workouts3: String, workouts3prog: String) {
+fun ReccomendedBox(img: Int, name: String, title: String, text: String, workouts1: String, workouts1prog: String, workouts2: String, workouts2prog: String,workouts3: String, workouts3prog: String) {
     var showDialog by remember { mutableStateOf(false) }
     var isButtonVisible by remember { mutableStateOf(true) }
     val database = Firebase.database //initialize an instance of the realtime database
@@ -342,7 +344,7 @@ fun ReccomendedBox(name: String, title: String, text: String, workouts1: String,
                     .background(color = brightOrange),
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.ellipse_2),
+                        painter = painterResource(id = img),
                         contentDescription = null,
                         modifier = Modifier.size(60.dp)
                     )
