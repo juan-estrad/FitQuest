@@ -510,9 +510,9 @@ fun TopAndBottomAppBar(
                             )
 
                             NavigationBarItem(
-                                { navController.navigate("stats") },
+                                { navController.navigate("settings") },
                                 Icons.Filled.Settings,
-                                "Store Page",
+                                "Settings Page",
                                 9.5f
                             )
 

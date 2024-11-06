@@ -12,6 +12,7 @@ import com.example.fitquest.pages.SignupPage
 import com.example.fitquest.pages.LoggingPage
 import com.example.fitquest.pages.StatsPage
 import com.example.fitquest.pages.ForYouPage
+import com.example.fitquest.pages.SettingsPage
 import com.example.fitquest.pages.SplashScreen
 import com.example.fitquest.pages.StorePage
 import com.example.fitquest.pages.WorkoutScreen
@@ -45,6 +46,9 @@ fun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel)
             }
             composable("store") {
                 StorePage(modifier, navController, authViewModel)
+            }
+            composable("settings"){
+                SettingsPage(modifier, navController, authViewModel)
             }
         }
     )
