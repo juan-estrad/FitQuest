@@ -561,7 +561,7 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                     onDismissRequest = { expandedWorkout = false }
                                 )
                                 {
-                                    workoutCategories.forEach { category ->
+                                    workoutTypes.forEach { category ->
 
                                         Box(
                                             modifier = Modifier
@@ -587,7 +587,7 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                                     )
                                                 },
                                                 onClick = {
-                                                    selectedText = category
+                                                    selectedWorkoutType = category
                                                     expandedWorkout = false
                                                     Toast.makeText(
                                                         context,
