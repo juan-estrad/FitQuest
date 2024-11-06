@@ -210,13 +210,14 @@ fun Title01_LEFT(
 @Composable
 fun Title01(
     label: String,
-    color: Color,
+    color: Color = grayWhite,
     fontSize: Float,
+    backgroundColor: Color = transparent
 ) {
     Box(
         modifier = Modifier
-            .fillMaxWidth(),
-
+            .fillMaxWidth()
+            .background(backgroundColor),
         contentAlignment = Alignment.Center
 
     ){

@@ -101,14 +101,26 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
 
 //            .padding(iconSize.dp)
         ,
-//        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
+
+
+
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(30.dp),
+        verticalArrangement = Arrangement.Bottom,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+//        Spacer(modifier = Modifier.height(configuration.screenHeightDp.dp))
 
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .offset(y = (iconOffset).dp)
+//                .offset(y = (iconOffset).dp)
 //                .background(dark)
                 .size(iconSize.dp)
             ,
@@ -128,11 +140,14 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             }
 
         }
+
+        Spacer(modifier = Modifier.height( (configuration.screenHeightDp /30) .dp) )
+
         // Title
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .offset(y = (iconOffset + 13f).dp)
+//                .offset(y = (iconOffset + 13f).dp)
 //                .background(dark)
 //                .size(iconSize.dp)
             ,
@@ -156,15 +171,10 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             )
         }
 
-    }
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(30.dp),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-//        Spacer(modifier = Modifier.height(configuration.screenHeightDp.dp))
+
+        Spacer(modifier = Modifier.height( (configuration.screenHeightDp /30 ) .dp) )
+
+
 
 
         // Email input
@@ -198,7 +208,7 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         // Signup navigation text
         HollowOrangeButton("REGISTER", {navController.navigate("signup")} ,  authState.value != AuthState.Loading)
 
-        Spacer(modifier = Modifier.height( (configuration.screenHeightDp /8 ) .dp) )
+        Spacer(modifier = Modifier.height( (configuration.screenHeightDp /12 ) .dp) )
 
 
 //        Button(

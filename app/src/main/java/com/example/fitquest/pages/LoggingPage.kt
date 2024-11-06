@@ -35,10 +35,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.Cyan
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -55,6 +61,7 @@ import com.example.fitquest.ui.Title01
 import com.example.fitquest.ui.TopAndBottomAppBar
 //import com.example.fitquest.isStreakExpired
 import com.example.fitquest.ui.theme.brightOrange
+import com.example.fitquest.ui.theme.dark
 import com.example.fitquest.ui.theme.darkOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
@@ -171,9 +178,13 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                             userProfile = dataSnapshot.getValue(UserProfile::class.java)
                             //converts the info into a user profile object
                         }.addOnFailureListener {
-                        Toast.makeText(context, "Failed to retrieve user data", Toast.LENGTH_SHORT)
-                            .show()
-                    }
+                            Toast.makeText(
+                                context,
+                                "Failed to retrieve user data",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                        }
                     database.get().addOnSuccessListener { dataSnapshot ->
                         val categories = mutableListOf<String>()
                         dataSnapshot.children.forEach {
@@ -210,296 +221,328 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 //                .background(grayWhite)
 //
 //        )
-//        Column(
-//            modifier= Modifier.fillMaxSize(),
-//            verticalArrangement = Arrangement.Center,
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ){
-
-//            Title01("Log Your Workout", brightOrange, 32f)
-
-
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-//                .background(grayWhite)
-                .padding(
-                    start = 20.dp,
-//                    top = screenHeightDp.dp / 7 - 15.dp,
-//                    top = paddingValues.calculateTopPadding(),
-                    top = 0.dp,
-                    end = 20.dp,
-                    bottom = 0.dp
-                )
-                .verticalScroll(rememberScrollState()),
+            modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
+//            Title01("Log Your Workout", brightOrange, 32f, dark)
 
-            // This is the dropdown menu to select focus
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(32.dp)
-            ) {
-                ExposedDropdownMenuBox(
-                    expanded = expanded,
-                    onExpandedChange = {
-                        expanded = !expanded
-
-                    }
-                ) {
-                    TextField(
-                        value = selectedText,
-                        onValueChange = {},
-                        readOnly = true,
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                        modifier = Modifier.menuAnchor()
-                    )
-
-                    ExposedDropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false }
-                    ) {
-                        workoutCategories.forEach { category ->
-                            DropdownMenuItem(
-                                text = { Text(text = category) },
-                                onClick = {
-                                    selectedText = category
-                                    expanded = false
-                                    Toast.makeText(context, category, Toast.LENGTH_SHORT).show()
-
-                                }
+            Box() {
+                Text(
+                    buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                color = brightOrange,
+                                fontSize = 40.sp
                             )
+                        )
+                        {
+                            append("\nWorkout Log\n")
                         }
+//                    append("ello ")
+
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                color = Color.Red
+                            )
+                        ) {
+                            append("W")
+                        }
+
                     }
-                    val time: Long = System.currentTimeMillis()
-                    val formatMonthDay: SimpleDateFormat =
-                        SimpleDateFormat("M-dd", Locale.getDefault())
-                    val formatYear: SimpleDateFormat = SimpleDateFormat("YYYY", Locale.getDefault())
-                    val monthday: String = formatMonthDay.format(time)
-                    val year: String = formatYear.format(time)
-                    if (selectedText != "Cardio") {
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+//                .background(grayWhite)
+                    .padding(
+                        start = 20.dp,
+//                    top = screenHeightDp.dp / 7 - 15.dp,
+//                    top = paddingValues.calculateTopPadding(),
+                        top = 0.dp,
+                        end = 20.dp,
+                        bottom = 0.dp
+                    )
+                    .verticalScroll(rememberScrollState()),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
 
-                        Column {
-                            Spacer(modifier = Modifier.height(70.dp))
 
-                            // This is the dropdown menu to select workout type
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(32.dp)
-                            ) {
-                                ExposedDropdownMenuBox(
-                                    expanded = expandedWorkout,
-                                    onExpandedChange = { expandedWorkout = !expandedWorkout }
+                // This is the dropdown menu to select focus
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(32.dp)
+                ) {
+                    ExposedDropdownMenuBox(
+                        expanded = expanded,
+                        onExpandedChange = {
+                            expanded = !expanded
+
+                        }
+                    ) {
+                        TextField(
+                            value = selectedText,
+                            onValueChange = {},
+                            readOnly = true,
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                            modifier = Modifier.menuAnchor()
+                        )
+
+                        ExposedDropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            workoutCategories.forEach { category ->
+                                DropdownMenuItem(
+                                    text = { Text(text = category) },
+                                    onClick = {
+                                        selectedText = category
+                                        expanded = false
+                                        Toast.makeText(context, category, Toast.LENGTH_SHORT).show()
+
+                                    }
+                                )
+                            }
+                        }
+                        val time: Long = System.currentTimeMillis()
+                        val formatMonthDay: SimpleDateFormat =
+                            SimpleDateFormat("M-dd", Locale.getDefault())
+                        val formatYear: SimpleDateFormat =
+                            SimpleDateFormat("YYYY", Locale.getDefault())
+                        val monthday: String = formatMonthDay.format(time)
+                        val year: String = formatYear.format(time)
+                        if (selectedText != "Cardio") {
+
+                            Column {
+                                Spacer(modifier = Modifier.height(70.dp))
+
+                                // This is the dropdown menu to select workout type
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(32.dp)
                                 ) {
-                                    TextField(
-                                        value = selectedWorkoutType,
-                                        onValueChange = {},
-                                        readOnly = true,
-                                        trailingIcon = {
-                                            ExposedDropdownMenuDefaults.TrailingIcon(
-                                                expanded = expandedWorkout
-                                            )
-                                        },
-                                        modifier = Modifier.menuAnchor()
-                                    )
-
-                                    ExposedDropdownMenu(
+                                    ExposedDropdownMenuBox(
                                         expanded = expandedWorkout,
-                                        onDismissRequest = { expandedWorkout = false }
+                                        onExpandedChange = { expandedWorkout = !expandedWorkout }
                                     ) {
-                                        workoutTypes.forEach { workout ->
-                                            DropdownMenuItem(
-                                                text = { Text(text = workout) },
-                                                onClick = {
-                                                    selectedWorkoutType = workout
-                                                    expandedWorkout = false
-                                                    Toast.makeText(
-                                                        context,
-                                                        workout,
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
+                                        TextField(
+                                            value = selectedWorkoutType,
+                                            onValueChange = {},
+                                            readOnly = true,
+                                            trailingIcon = {
+                                                ExposedDropdownMenuDefaults.TrailingIcon(
+                                                    expanded = expandedWorkout
+                                                )
+                                            },
+                                            modifier = Modifier.menuAnchor()
+                                        )
 
-                                                }
-                                            )
+                                        ExposedDropdownMenu(
+                                            expanded = expandedWorkout,
+                                            onDismissRequest = { expandedWorkout = false }
+                                        ) {
+                                            workoutTypes.forEach { workout ->
+                                                DropdownMenuItem(
+                                                    text = { Text(text = workout) },
+                                                    onClick = {
+                                                        selectedWorkoutType = workout
+                                                        expandedWorkout = false
+                                                        Toast.makeText(
+                                                            context,
+                                                            workout,
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+
+                                                    }
+                                                )
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            Spacer(modifier = Modifier.height(70.dp))
+                                Spacer(modifier = Modifier.height(70.dp))
 //                                LoggingInputField(
 //                                label = "Workout",
 //                                value = workout) { workout = it
 //                                }
 
-                            Spacer(modifier = Modifier.height(15.dp))
+                                Spacer(modifier = Modifier.height(15.dp))
 
-                            LoggingInputField(
-                                label = "Number of Sets",
-                                value = sets
-                            ) {
-                                sets = it
-                            }
+                                LoggingInputField(
+                                    label = "Number of Sets",
+                                    value = sets
+                                ) {
+                                    sets = it
+                                }
 
-                            Spacer(modifier = Modifier.height(15.dp))
+                                Spacer(modifier = Modifier.height(15.dp))
 
-                            LoggingInputField(
-                                label = "Number of Reps per Set",
-                                value = reps
-                            )
-                            { reps = it }
+                                LoggingInputField(
+                                    label = "Number of Reps per Set",
+                                    value = reps
+                                )
+                                { reps = it }
 
-                            Spacer(modifier = Modifier.height(15.dp))
+                                Spacer(modifier = Modifier.height(15.dp))
 
-                            // Weight
-                            LoggingInputField(
-                                label = "Weight",
-                                value = weight
-                            )
-                            { weight = it }
+                                // Weight
+                                LoggingInputField(
+                                    label = "Weight",
+                                    value = weight
+                                )
+                                { weight = it }
 
-                            Spacer(modifier = Modifier.height(15.dp))
+                                Spacer(modifier = Modifier.height(15.dp))
 
-                            // Time Elapsed
-                            LoggingInputField(
-                                label = "Workout Time",
-                                value = workouttime
-                            )
-                            { workouttime = it }
+                                // Time Elapsed
+                                LoggingInputField(
+                                    label = "Workout Time",
+                                    value = workouttime
+                                )
+                                { workouttime = it }
 
-                            Spacer(modifier = Modifier.height(20.dp))
+                                Spacer(modifier = Modifier.height(20.dp))
 
-                            Button(
-                                onClick = {
-                                    updateLastWorkout(profile, monthday)
-                                    val userRef = database.getReference("Users").child("$userID")
-                                        .child("logging").child("Date").child("$year")
-                                        .child("$monthday").child("workout" + profile.workoutCount)
-                                    userRef.child("Workout").setValue(selectedWorkoutType)
-                                    userRef.child("Type").setValue(selectedText)
-                                    userRef.child("sets").setValue(sets)
-                                    userRef.child("reps").setValue(reps)
-                                    userRef.child("weight").setValue(weight)
-                                    userRef.child("time").setValue(workouttime)
-                                    //completeWorkout()
-                                    count++
-                                    workout = ""
-                                    sets = ""
-                                    reps = ""
-                                    weight = ""
-                                    workouttime = ""
+                                Button(
+                                    onClick = {
+                                        updateLastWorkout(profile, monthday)
+                                        val userRef =
+                                            database.getReference("Users").child("$userID")
+                                                .child("logging").child("Date").child("$year")
+                                                .child("$monthday")
+                                                .child("workout" + profile.workoutCount)
+                                        userRef.child("Workout").setValue(selectedWorkoutType)
+                                        userRef.child("Type").setValue(selectedText)
+                                        userRef.child("sets").setValue(sets)
+                                        userRef.child("reps").setValue(reps)
+                                        userRef.child("weight").setValue(weight)
+                                        userRef.child("time").setValue(workouttime)
+                                        //completeWorkout()
+                                        count++
+                                        workout = ""
+                                        sets = ""
+                                        reps = ""
+                                        weight = ""
+                                        workouttime = ""
 
-                                    updateStreak(
-                                        profile,
-                                        LocalDate.now().format(DateTimeFormatter.ISO_DATE),
-                                        LocalDate.now().minusDays(1).format(
-                                            DateTimeFormatter.ISO_DATE
+                                        updateStreak(
+                                            profile,
+                                            LocalDate.now().format(DateTimeFormatter.ISO_DATE),
+                                            LocalDate.now().minusDays(1).format(
+                                                DateTimeFormatter.ISO_DATE
+                                            )
                                         )
-                                    )
-                                    val userRef2 = database.getReference("Users").child("$userID")
-                                    userRef2.child("lastWorkout").setValue(profile.lastWorkout)
-                                    userRef2.child("workoutCount").setValue(profile.workoutCount)
-                                    userRef2.child("streak").child("streak")
-                                        .setValue(profile.streak.streak)
-                                    userRef2.child("streak").child("longestStreak")
-                                        .setValue(profile.streak.longestStreak)
-                                    userRef2.child("streak").child("lastUpdate")
-                                        .setValue(profile.streak.lastUpdate)
-                                    updateFlexcoins(profile)
-                                    userRef2.child("flexcoins").setValue(profile.flexcoins)
-                                    navController.navigate("logging")
+                                        val userRef2 =
+                                            database.getReference("Users").child("$userID")
+                                        userRef2.child("lastWorkout").setValue(profile.lastWorkout)
+                                        userRef2.child("workoutCount")
+                                            .setValue(profile.workoutCount)
+                                        userRef2.child("streak").child("streak")
+                                            .setValue(profile.streak.streak)
+                                        userRef2.child("streak").child("longestStreak")
+                                            .setValue(profile.streak.longestStreak)
+                                        userRef2.child("streak").child("lastUpdate")
+                                            .setValue(profile.streak.lastUpdate)
+                                        updateFlexcoins(profile)
+                                        userRef2.child("flexcoins").setValue(profile.flexcoins)
+                                        navController.navigate("logging")
+                                    }
+                                ) {
+                                    Text("Add value")
                                 }
-                            ) {
-                                Text("Add value")
                             }
-                        }
-                    } else
-                        Column {
-                            Spacer(modifier = Modifier.height(65.dp))
+                        } else
+                            Column {
+                                Spacer(modifier = Modifier.height(65.dp))
 
-                            LoggingInputField(
-                                label = "Distance",
+                                LoggingInputField(
+                                    label = "Distance",
 
-                                value = distance
-                            ) {
-                                distance = it
-
-                            }
-
-                            Spacer(modifier = Modifier.height(15.dp))
-
-                            LoggingInputField(
-                                label = "Time Elapsed",
-                                value = timeelapsed
-                            ) {
-                                timeelapsed = it
-                            }
-
-                            Spacer(modifier = Modifier.height(20.dp))
-
-                            Button(
-                                onClick = {
-                                    val userRef = database.getReference("Users").child("$userID")
-                                        .child("logging").child("Date").child("$year")
-                                        .child("$monthday").child("workout" + profile.workoutCount)
-                                    userRef.child("Time Elapsed").setValue(timeelapsed)
-                                    userRef.child("Type").setValue(selectedText)
-                                    userRef.child("Distance").setValue(distance)
-                                    count++
-                                    type = ""
-                                    distance = ""
-                                    timeelapsed = ""
+                                    value = distance
+                                ) {
+                                    distance = it
 
                                 }
-                            ) {
-                                Text("Add value")
+
+                                Spacer(modifier = Modifier.height(15.dp))
+
+                                LoggingInputField(
+                                    label = "Time Elapsed",
+                                    value = timeelapsed
+                                ) {
+                                    timeelapsed = it
+                                }
+
+                                Spacer(modifier = Modifier.height(20.dp))
+
+                                Button(
+                                    onClick = {
+                                        val userRef =
+                                            database.getReference("Users").child("$userID")
+                                                .child("logging").child("Date").child("$year")
+                                                .child("$monthday")
+                                                .child("workout" + profile.workoutCount)
+                                        userRef.child("Time Elapsed").setValue(timeelapsed)
+                                        userRef.child("Type").setValue(selectedText)
+                                        userRef.child("Distance").setValue(distance)
+                                        count++
+                                        type = ""
+                                        distance = ""
+                                        timeelapsed = ""
+
+                                    }
+                                ) {
+                                    Text("Add value")
+                                }
                             }
-                        }
+                    }
                 }
-            }
 
 
-            Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
 
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(
-
-
-                    onClick = { navController.navigate("logging") },
-
-                    ) {
-                    Text(text = "Move to logging page")
-                }
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Button(
-                    onClick = { navController.navigate("home") }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = "home")
-                }
-            }
+                    Button(
 
+
+                        onClick = { navController.navigate("logging") },
+
+                        ) {
+                        Text(text = "Move to logging page")
+                    }
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Button(
+                        onClick = { navController.navigate("home") }
+                    ) {
+                        Text(text = "home")
+                    }
+                }
+
+            }
         }
     }
 }
-
 
 
 
