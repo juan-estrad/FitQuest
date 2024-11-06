@@ -148,6 +148,8 @@ fun UserInputField(
     onValueChange: (String) -> Unit,
     isPassword: Boolean = false
 ) {
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.toFloat()
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment= Alignment.CenterVertically
@@ -177,12 +179,11 @@ fun UserInputField(
             focusedBorderColor = brightOrange,
             containerColor = darker,
             unfocusedBorderColor = Color.Transparent,
-
         ),
         shape = RoundedCornerShape(size = 10.dp),
         modifier = Modifier
             .fillMaxWidth()
-            .height(65.dp)
+            .height( (screenHeight/14) .dp)
     )
 
     Spacer(modifier = Modifier.height(15.dp))
