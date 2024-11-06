@@ -148,9 +148,9 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
                 Title01_LEFT("Avatars", grayWhite, 40f);
                 LazyRow {
                     items(1) { index ->
-                        AvatarStoreItemBox(R.drawable.profile_1, userFlexCoins, navController, authViewModel)
-                        AvatarStoreItemBox(R.drawable.profile_2, userFlexCoins, navController, authViewModel)
-                        AvatarStoreItemBox(R.drawable.profile_3, userFlexCoins, navController, authViewModel)
+                        BordersStoreItemBox(R.drawable.profile_1, userFlexCoins, navController, authViewModel)
+                        BordersStoreItemBox(R.drawable.profile_2, userFlexCoins, navController, authViewModel)
+                        BordersStoreItemBox(R.drawable.profile_3, userFlexCoins, navController, authViewModel)
                     }
                 }
             }
@@ -162,6 +162,7 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
 
 @Composable
 fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel) {
+    println("new")
     val showConfirmationDialog = remember { mutableStateOf(false) }
     val showInsufficientFundsDialog = remember { mutableStateOf(false) }
     val itemCost = 100
@@ -170,6 +171,22 @@ fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavCon
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp
     val screenWidthDp = configuration.screenWidthDp
+
+    val checkBack = database.getReference("Users").child("$userID").child("inventory").child("background")
+    checkBack.get().addOnSuccessListener { snapshot ->
+        if (snapshot.exists()) {
+            val background = snapshot.children.toList()
+            for (i in background) {
+                println(i.key.toString())
+                println(image.toString())
+                println(i.key.toString() == image.toString())
+                if (i.key.toString() == image.toString()) {
+                    hasPurchased = true
+                }
+            }
+
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -224,18 +241,6 @@ fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavCon
                         hasPurchased = true  // Set purchased state to true
                         val image2 = database.getReference("Users").child("$userID").child("inventory").child("background")
                         image2.child("$image").child("name").setValue("test")
-                        val checkBack = database.getReference("Users").child("$userID").child("inventory").child("background")
-                        checkBack.get().addOnSuccessListener { snapshot ->
-                            if (snapshot.exists()) {
-                                val background = snapshot.children.toList()
-                                for (i in background) {
-                                    if (i.key == "$image") {
-                                        hasPurchased = true
-                                    }
-                                    else hasPurchased = true
-                                }
-                            }
-                        }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB58900))
                 ) {
@@ -382,11 +387,28 @@ fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavContro
     val showConfirmationDialog = remember { mutableStateOf(false) }
     val showInsufficientFundsDialog = remember { mutableStateOf(false) }
     val itemCost = 100
+    var hasPurchased by remember { mutableStateOf(false) }
 
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp
     val screenWidthDp = configuration.screenWidthDp
 
+    val checkBack = database.getReference("Users").child("$userID").child("inventory").child("pfp")
+    checkBack.get().addOnSuccessListener { snapshot ->
+        if (snapshot.exists()) {
+            val pfp = snapshot.children.toList()
+            for (i in pfp) {
+                println(i.key.toString())
+                println(image.toString())
+                println(i.key.toString() == image.toString())
+                if (i.key.toString() == image.toString()) {
+                    hasPurchased = true
+                }
+                else hasPurchased = true
+            }
+
+        }
+    }
     Box(
         modifier = Modifier
             .size((screenHeightDp / 8).dp)
@@ -418,7 +440,10 @@ fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavContro
                         showInsufficientFundsDialog.value = true
                     }
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
+                enabled = !hasPurchased,  // Disable if purchased
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (hasPurchased) Color.Gray else brightOrange  // Grey out when purchased
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp)
