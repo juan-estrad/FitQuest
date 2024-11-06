@@ -30,11 +30,33 @@ data class Workout(
 data class UserProfile(
     val username: String = "",
     var flexcoins: Int = 0,
+    val inventory:Inventory = Inventory(),
     val userStats: UserStats = UserStats(),
     //val logging: Logging = Logging(),
     val streak: UserStreak = UserStreak(),
     var lastWorkout: String = "",
     var workoutCount: Int = 0
+)
+
+data class Inventory(
+    var avatar:Avatar = Avatar(),
+    val background:Background = Background(),
+    val borders:Borders = Borders()
+)
+
+data class Avatar(
+    var default:Int = 0
+)
+data class Background(
+    val default:String = ""
+)
+data class Borders(
+    val default:String = ""
+)
+
+data class ID(
+    val name:String = "",
+    val desc:String = ""
 )
 
 data class UserStats(

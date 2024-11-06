@@ -75,6 +75,7 @@ import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.UserProfile
+import com.example.fitquest.pages.myRef
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.dark
 import com.example.fitquest.ui.theme.darker
@@ -382,6 +383,7 @@ fun TopAndBottomAppBar(
     val database = Firebase.database //initialize an instance of the realtime database
     val userID = FirebaseAuth.getInstance().uid
 
+    println("In TOP AND BOTTOM ")
     LaunchedEffect(authState.value) {
         when(authState.value) {
             is AuthState.Unauthenticated -> navController.navigate("login")
@@ -443,7 +445,12 @@ fun TopAndBottomAppBar(
                             contentAlignment = Alignment.Center
 
                         ) {
-                            Text(profile.username, fontSize = 35.sp, color = Color.White) //profile username
+                            //Text(profile.username, fontSize = 35.sp, color = Color.White) //profile username
+                            Image(
+                                painter = painterResource(id = userProfile!!.inventory.avatar.default),
+                                contentDescription = null
+                                //modifier = Modifier.size(300.dp)
+                            )
                         }
 
                         Text(

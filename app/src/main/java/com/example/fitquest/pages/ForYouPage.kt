@@ -307,7 +307,7 @@ fun ReccomendedBox(img: Int, name: String, title: String, text: String, workouts
                     .background(color = brightOrange),
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.ellipse_2),
+                        painter = painterResource(R.drawable.profile_2),
                         contentDescription = null,
                         modifier = Modifier.size(60.dp)
                     )

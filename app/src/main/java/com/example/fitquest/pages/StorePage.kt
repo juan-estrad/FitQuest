@@ -127,7 +127,7 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
                 LazyRow {
                     items(1) { index ->
                         BackgroundStoreItemBox(R.drawable.img_2, userFlexCoins, navController, authViewModel)
-//                        BackgroundStoreItemBox(R.drawable.profile_2, userFlexCoins, navController, authViewModel)
+                        BackgroundStoreItemBox(R.drawable.profile_2, userFlexCoins, navController, authViewModel)
 //                        BackgroundStoreItemBox(R.drawable.profile_3, userFlexCoins, navController, authViewModel)
                     }
                 }
@@ -137,8 +137,8 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
                 Title01_LEFT("Borders", grayWhite, 40f);
                 LazyRow {
                     items(1) { index ->
-//                        BordersStoreItemBox(R.drawable.img_2, userFlexCoins, navController, authViewModel)
-//                        BordersStoreItemBox("Border 2", userFlexCoins, navController, authViewModel)
+                        BordersStoreItemBox(R.drawable.img_2, userFlexCoins, navController, authViewModel)
+                        BordersStoreItemBox(R.drawable.profile_2, userFlexCoins, navController, authViewModel)
 //                        BordersStoreItemBox("Border 3", userFlexCoins, navController, authViewModel)
                 }
                 }
@@ -148,9 +148,9 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
                 Title01_LEFT("Avatars", grayWhite, 40f);
                 LazyRow {
                     items(1) { index ->
-                        BordersStoreItemBox(R.drawable.profile_1, userFlexCoins, navController, authViewModel)
-                        BordersStoreItemBox(R.drawable.profile_2, userFlexCoins, navController, authViewModel)
-                        BordersStoreItemBox(R.drawable.profile_3, userFlexCoins, navController, authViewModel)
+                        AvatarStoreItemBox(R.drawable.profile_1, userFlexCoins, navController, authViewModel, profile)
+                        AvatarStoreItemBox(R.drawable.profile_2, userFlexCoins, navController, authViewModel, profile)
+                        AvatarStoreItemBox(R.drawable.profile_3, userFlexCoins, navController, authViewModel, profile)
                     }
                 }
             }
@@ -162,7 +162,7 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
 
 @Composable
 fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel) {
-    println("new")
+    println("New box: " + image)
     val showConfirmationDialog = remember { mutableStateOf(false) }
     val showInsufficientFundsDialog = remember { mutableStateOf(false) }
     val itemCost = 100
@@ -177,7 +177,7 @@ fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavCon
         if (snapshot.exists()) {
             val background = snapshot.children.toList()
             for (i in background) {
-                println(i.key.toString())
+                println("User db: " + i.key.toString())
                 println(image.toString())
                 println(i.key.toString() == image.toString())
                 if (i.key.toString() == image.toString()) {
@@ -380,10 +380,7 @@ fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavCon
 
 @Composable
 fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel) {
-    var count by remember {
-        mutableStateOf(0)
-    }
-
+    println("New box: " + image)
     val showConfirmationDialog = remember { mutableStateOf(false) }
     val showInsufficientFundsDialog = remember { mutableStateOf(false) }
     val itemCost = 100
@@ -393,44 +390,40 @@ fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavContro
     val screenHeightDp = configuration.screenHeightDp
     val screenWidthDp = configuration.screenWidthDp
 
-    val checkBack = database.getReference("Users").child("$userID").child("inventory").child("pfp")
+    val checkBack = database.getReference("Users").child("$userID").child("inventory").child("borders")
     checkBack.get().addOnSuccessListener { snapshot ->
         if (snapshot.exists()) {
-            val pfp = snapshot.children.toList()
-            for (i in pfp) {
-                println(i.key.toString())
+            val borders = snapshot.children.toList()
+            for (i in borders) {
+                println("User db: " + i.key.toString())
                 println(image.toString())
                 println(i.key.toString() == image.toString())
                 if (i.key.toString() == image.toString()) {
                     hasPurchased = true
                 }
-                else hasPurchased = true
             }
 
         }
     }
+
     Box(
         modifier = Modifier
             .size((screenHeightDp / 8).dp)
-//            .height( (screenHeightDp / 51).dp )
             .background(darker, shape = RoundedCornerShape(12.dp))
-            .border(3.dp, dark,  RoundedCornerShape(12.dp))
-            .padding(
-                start = 20.dp,
-                end = 20.dp,
-            )
+            .border(3.dp, dark, RoundedCornerShape(12.dp))
+            .padding(start = 20.dp, end = 20.dp)
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             // Display image
             Image(
                 painter = painterResource(id = image),
                 contentDescription = null,
                 modifier = Modifier.size(60.dp)
             )
-            // Display other UI elements like userFlexCoins if needed
+
             Spacer(modifier = Modifier.height(4.dp))
+
+            // "100 FlexCoins" button
 
             Button(
                 onClick = {
@@ -453,6 +446,7 @@ fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavContro
         }
     }
 
+    // Confirmation Dialog
     if (showConfirmationDialog.value) {
         AlertDialog(
             onDismissRequest = { showConfirmationDialog.value = false },
@@ -462,7 +456,8 @@ fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavContro
                 Button(
                     onClick = {
                         showConfirmationDialog.value = false
-                        val image2 = database.getReference("Users").child("$userID").child("inventory").child("border")
+                        hasPurchased = true  // Set purchased state to true
+                        val image2 = database.getReference("Users").child("$userID").child("inventory").child("borders")
                         image2.child("$image").child("name").setValue("test")
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB58900))
@@ -481,6 +476,7 @@ fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavContro
         )
     }
 
+    // Insufficient Funds Dialog
     if (showInsufficientFundsDialog.value) {
         AlertDialog(
             onDismissRequest = { showInsufficientFundsDialog.value = false },
@@ -494,47 +490,56 @@ fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavContro
                     Text("OK", color = Color.White)
                 }
             }
-
         )
     }
 }
 
 @Composable
-fun AvatarStoreItemBox(image: Int, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel) {
-    var count by remember {
-        mutableStateOf(0)
-    }
-
+fun AvatarStoreItemBox(image: Int, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel, profile: UserProfile) {
+    println("New box: " + image)
     val showConfirmationDialog = remember { mutableStateOf(false) }
     val showInsufficientFundsDialog = remember { mutableStateOf(false) }
     val itemCost = 100
+    var hasPurchased by remember { mutableStateOf(false) }
 
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp
     val screenWidthDp = configuration.screenWidthDp
 
+    val checkBack = database.getReference("Users").child("$userID").child("inventory").child("avatar")
+    checkBack.get().addOnSuccessListener { snapshot ->
+        if (snapshot.exists()) {
+            val avatar = snapshot.children.toList()
+            for (i in avatar) {
+                println("User db: " + i.key.toString())
+                println(image.toString())
+                println(i.key.toString() == image.toString())
+                if (i.key.toString() == image.toString()) {
+                    hasPurchased = true
+                }
+            }
+
+        }
+    }
+
     Box(
         modifier = Modifier
             .size((screenHeightDp / 8).dp)
-//            .height( (screenHeightDp / 51).dp )
             .background(darker, shape = RoundedCornerShape(12.dp))
-            .border(3.dp, dark,  RoundedCornerShape(12.dp))
-            .padding(
-                start = 20.dp,
-                end = 20.dp,
-            )
+            .border(3.dp, dark, RoundedCornerShape(12.dp))
+            .padding(start = 20.dp, end = 20.dp)
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
             // Display image
             Image(
                 painter = painterResource(id = image),
                 contentDescription = null,
                 modifier = Modifier.size(60.dp)
             )
-            // Display other UI elements like userFlexCoins if needed
+
             Spacer(modifier = Modifier.height(4.dp))
+
+            // "100 FlexCoins" button
 
             Button(
                 onClick = {
@@ -544,7 +549,10 @@ fun AvatarStoreItemBox(image: Int, userFlexCoins: Int, navController: NavControl
                         showInsufficientFundsDialog.value = true
                     }
                 },
-                colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
+                enabled = !hasPurchased,  // Disable if purchased
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (hasPurchased) Color.Gray else brightOrange  // Grey out when purchased
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp)
@@ -554,6 +562,7 @@ fun AvatarStoreItemBox(image: Int, userFlexCoins: Int, navController: NavControl
         }
     }
 
+    // Confirmation Dialog
     if (showConfirmationDialog.value) {
         AlertDialog(
             onDismissRequest = { showConfirmationDialog.value = false },
@@ -563,8 +572,17 @@ fun AvatarStoreItemBox(image: Int, userFlexCoins: Int, navController: NavControl
                 Button(
                     onClick = {
                         showConfirmationDialog.value = false
-                        val image2 = database.getReference("Users").child("$userID").child("inventory").child("pfp")
+                        hasPurchased = true  // Set purchased state to true
+                        val image2 = database.getReference("Users").child("$userID").child("inventory").child("avatar")
                         image2.child("$image").child("name").setValue("test")
+                        println(profile.inventory.avatar.default)
+                        profile.inventory.avatar.default = image
+                        image2.child("default").setValue(image)
+                        println(profile.inventory.avatar.default)
+
+                        val ref3 = database.getReference("Users").child("$userID")
+                        profile.flexcoins -= itemCost
+                        ref3.child("flexcoins").setValue(profile.flexcoins)
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB58900))
                 ) {
@@ -582,6 +600,7 @@ fun AvatarStoreItemBox(image: Int, userFlexCoins: Int, navController: NavControl
         )
     }
 
+    // Insufficient Funds Dialog
     if (showInsufficientFundsDialog.value) {
         AlertDialog(
             onDismissRequest = { showInsufficientFundsDialog.value = false },
@@ -595,7 +614,6 @@ fun AvatarStoreItemBox(image: Int, userFlexCoins: Int, navController: NavControl
                     Text("OK", color = Color.White)
                 }
             }
-
         )
     }
 }
