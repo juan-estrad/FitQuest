@@ -79,6 +79,7 @@ import androidx.compose.material3.Text as Text
 fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
 
     TopAndBottomAppBar(
+        true,
         contents = { ForYouPageContents(modifier,navController,authViewModel) },
         modifier = modifier,
         navController = navController,
@@ -138,42 +139,6 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                 )
                 .verticalScroll(rememberScrollState())
         ) {
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 16.dp),
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//                verticalAlignment = Alignment.CenterVertically
-//            )
-//            {
-//                Text("FitQuest", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
-//
-//
-//                //Plan is to make the circle the pfp but for now i just put the username in there
-//                Box(
-//                    modifier = Modifier
-//                        .size(100.dp)
-//                        .clip(CircleShape)
-//                        .background(Color.Gray),
-//                    contentAlignment = Alignment.Center
-//                ) {
-//                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
-//                }
-//            }
-
-//            // Display XP Progress Bar probably dont need this
-//            Text("XP", color = Color.White, fontSize = 14.sp)
-//            LinearProgressIndicator(
-//                progress = 0.7f,
-//                color = Color(0xFFFF6D00),
-//                trackColor = Color.LightGray,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(8.dp)
-//                    .padding(vertical = 8.dp)
-//            )
-
-
             // This displays the streak
             // i think the future plan is to have a fire emoji or something around it
             Row(
@@ -197,8 +162,7 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
             val myRef = database.getReference("Users")
 
 
-            Column(
-            ) {
+
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
@@ -218,7 +182,6 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                             WorkoutScreen()
                         }
                     }
-
                 }
                 Row (
                     modifier = Modifier
@@ -294,7 +257,7 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                     )
                 }
                 //RandomChildDisplay()
-            }
+
         }
     }
 }

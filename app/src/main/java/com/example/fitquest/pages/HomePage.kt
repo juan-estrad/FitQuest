@@ -218,7 +218,7 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(verticalGradientBrush(transparent, dark))
+//                .background(verticalGradientBrush(transparent, dark))
                 .padding(
                     start = 20.dp,
 //                    top = screenHeightDp.dp / 7 - 15.dp,
@@ -246,7 +246,7 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
 
             Spacer(
                 modifier = Modifier
-                    .height( (screenHeight/18) .dp)
+                    .height( (screenHeight/36) .dp)
             )
 
             //LOG WORK OUT PAGE

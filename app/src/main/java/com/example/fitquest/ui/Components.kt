@@ -55,7 +55,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -78,7 +77,6 @@ import com.example.fitquest.AuthViewModel
 import com.example.fitquest.UserProfile
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.dark
-import com.example.fitquest.ui.theme.darkOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.transparent
@@ -215,14 +213,17 @@ fun Title01(
     color: Color,
     fontSize: Float,
 ) {
-    Box(modifier = Modifier
-//        .fillMaxWidth()
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(),
+
+        contentAlignment = Alignment.Center
 
     ){
         Text(
             text = label,
             color = color,
-//            textAlign = TextAlign.Center,
+            textAlign = TextAlign.Center,
             fontSize = fontSize.sp
         )
     }
@@ -364,6 +365,7 @@ fun ClickableImageWithText(
 @ExperimentalMaterial3Api
 @Composable
 fun TopAndBottomAppBar(
+    topBar: Boolean = true,
     contents: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     navController: NavController,
@@ -403,7 +405,7 @@ fun TopAndBottomAppBar(
     val screenHeightDp = configuration.screenHeightDp
     val screenWidthDp = configuration.screenWidthDp
 
-    val paddingValues = WindowInsets.systemBars.asPaddingValues()
+    val systembarPadding = WindowInsets.systemBars.asPaddingValues()
 
 
     Scaffold(
@@ -412,51 +414,53 @@ fun TopAndBottomAppBar(
             userProfile?.let { profile ->
                 Box(
                     modifier = Modifier
-                        .height(paddingValues.calculateTopPadding())
+                        .height(systembarPadding.calculateTopPadding())
                         .fillMaxWidth()
                         .background(horizontalGradientBrush(dark, brightOrange))
                 )
-
-                Box(
-                    modifier = modifier
-                        .height((screenHeightDp / 7).dp)
-                        .fillMaxWidth()
-
-                        .background(horizontalGradientBrush(dark, brightOrange)),
-                    contentAlignment = Alignment.Center
-
-                )
-                {
-
-
-
-                    //Plan is to make the circle the pfp but for now i just put the username in there
+                if(topBar){
                     Box(
-                        modifier = Modifier
-                            .size(120.dp)
-                            .clip(CircleShape)
-                            .background(verticalGradientBrush(darker, dark)),
+                        modifier = modifier
+//                        .border(3.dp, dark,  RoundedCornerShape(12.dp))
+                            .height((screenHeightDp / 7).dp)
+                            .fillMaxWidth()
+                            .background(horizontalGradientBrush(dark, brightOrange)),
                         contentAlignment = Alignment.Center
 
-                    ) {
-                        Text(profile.username, fontSize = 35.sp, color = Color.White) //profile username
-                    }
-
-                    Text(
-                        text = "\uD83E\uDEB5" + profile.streak.streak.toString() + " days",
-                        modifier = Modifier
-                            .offset(x =(-150).dp, y = (40).dp)
-//                            .border(8.dp, verticalGradientBrush(darker, darkOrange), shape = RoundedCornerShape(4.dp))
-                            .padding(8.dp)
-                        ,
-                        color = brightOrange,
-                        fontSize = 35.sp,
-                        textAlign = TextAlign.Left
                     )
+                    {
 
 
 
+                        //Plan is to make the circle the pfp but for now i just put the username in there
+                        Box(
+                            modifier = Modifier
+                                .size(120.dp)
+                                .clip(CircleShape)
+                                .background(verticalGradientBrush(darker, dark)),
+                            contentAlignment = Alignment.Center
+
+                        ) {
+                            Text(profile.username, fontSize = 35.sp, color = Color.White) //profile username
+                        }
+
+                        Text(
+                            text = "\uD83E\uDEB5" + profile.streak.streak.toString() + " days",
+                            modifier = Modifier
+                                .offset(x =(-150).dp, y = (40).dp)
+//                            .border(8.dp, verticalGradientBrush(darker, darkOrange), shape = RoundedCornerShape(4.dp))
+                                .padding(8.dp)
+                            ,
+                            color = brightOrange,
+                            fontSize = 35.sp,
+                            textAlign = TextAlign.Left
+                        )
+
+
+
+                    }
                 }
+
 
 
 
@@ -466,7 +470,11 @@ fun TopAndBottomAppBar(
         bottomBar = {
             BottomAppBar(
 
-                modifier = Modifier.height(screenHeightDp.dp / 10f),
+                modifier = Modifier
+                    .height(screenHeightDp.dp / 9f)
+//                    .border(3.dp, dark,  RoundedCornerShape(12.dp))
+                ,
+
                 containerColor = darker,
                 actions = {
                     Column(
@@ -525,17 +533,33 @@ fun TopAndBottomAppBar(
         }
 
     ){paddingValues ->
+        val topPadding =
+            if (topBar) {
+                paddingValues.calculateTopPadding() - systembarPadding.calculateTopPadding()
+            }
+            else {
+//                0.dp
+                paddingValues.calculateTopPadding()
+            }
+
+        val bottomPadding =
+            if (topBar) {
+                screenHeightDp.dp / 9f
+            }
+            else {
+                screenHeightDp.dp / 9f
+//                0.dp
+            }
+
         Box(
             modifier = Modifier
                 .padding(
-                        start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
-                        top = screenHeightDp.dp / 7 ,
-//                        top = paddingValues.calculateTopPadding(),
-//                        top = 0.dp,
-
-                        end = paddingValues.calculateEndPadding(LayoutDirection.Rtl),
-                        bottom = screenHeightDp.dp / 13f,
-                    )
+                    start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
+                    top = topPadding,
+//                    top = paddingValues.calculateTopPadding() - systembarPadding.calculateTopPadding(),
+                    end = paddingValues.calculateEndPadding(LayoutDirection.Rtl),
+                    bottom = bottomPadding,
+                )
                 .fillMaxSize()
                 .background(verticalGradientBrush(transparent, dark))
         ){
