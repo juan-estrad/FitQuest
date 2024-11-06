@@ -77,8 +77,8 @@ fun SettingsPageContent(modifier: Modifier = Modifier, navController: NavControl
         SettingsItem(icon = Icons.Default.Notifications, title = "Notifications") {
 
         }
-        SettingsItem(icon = Icons.Default.AccountCircle, title = "Appearance") {
-            navController.navigate("AppearancePage")
+        SettingsItem(icon = Icons.Default.AccountCircle, title = "Customize Profile") {
+            navController.navigate("customize")
         }
         SettingsItem(icon = Icons.Default.Lock, title = "Privacy & Security") {
 
