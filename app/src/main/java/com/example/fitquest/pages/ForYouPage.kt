@@ -79,7 +79,6 @@ import androidx.compose.material3.Text as Text
 fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
 
     TopAndBottomAppBar(
-        true,
         contents = { ForYouPageContents(modifier,navController,authViewModel) },
         modifier = modifier,
         navController = navController,
@@ -139,8 +138,7 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                 )
                 .verticalScroll(rememberScrollState())
         ) {
-            // This displays the streak
-            // i think the future plan is to have a fire emoji or something around it
+
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -162,7 +160,8 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
             val myRef = database.getReference("Users")
 
 
-
+            Column(
+            ) {
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
@@ -222,6 +221,7 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                 }
                 Column {
                     ReccomendedBox(
+                        img = R.drawable.profile_3,
                         name = "Arnold Beefcake",
 
                         title = "T-800 (muscles only!!)",
@@ -234,6 +234,7 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                         workouts3prog = "",
                     )
                     ReccomendedBox(
+                        img = R.drawable.profile_2,
                         name = "Emily LoveCraft",
                         title = "Emily's gym Time!",
                         text = "Test Test Test",
@@ -245,6 +246,7 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                         workouts3prog = "",
                     )
                     ReccomendedBox(
+                        img = R.drawable.profile_3,
                         name = "Dave Rubin",
                         title = "Training to Battle Psycho",
                         text = "Test",
@@ -257,14 +259,14 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                     )
                 }
                 //RandomChildDisplay()
-
+            }
         }
     }
 }
 
 
 @Composable
-fun ReccomendedBox(name: String, title: String, text: String, workouts1: String, workouts1prog: String, workouts2: String, workouts2prog: String,workouts3: String, workouts3prog: String) {
+fun ReccomendedBox(img: Int, name: String, title: String, text: String, workouts1: String, workouts1prog: String, workouts2: String, workouts2prog: String,workouts3: String, workouts3prog: String) {
     var showDialog by remember { mutableStateOf(false) }
     var isButtonVisible by remember { mutableStateOf(true) }
     val database = Firebase.database //initialize an instance of the realtime database

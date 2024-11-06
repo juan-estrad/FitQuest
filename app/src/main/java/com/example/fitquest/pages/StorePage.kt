@@ -1,8 +1,10 @@
 package com.example.fitquest.pages
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +22,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,12 +36,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.R
 import com.example.fitquest.UserProfile
 import com.example.fitquest.ui.Title01_LEFT
 import com.example.fitquest.ui.TopAndBottomAppBar
@@ -47,6 +52,7 @@ import com.example.fitquest.ui.theme.dark
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.google.firebase.Firebase
+import com.google.firebase.annotations.concurrent.Background
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 
@@ -120,9 +126,9 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
                 Title01_LEFT("Backgrounds", grayWhite, 40f);
                 LazyRow {
                     items(1) { index ->
-                        StoreItemBox("Background 1", userFlexCoins, navController, authViewModel)
-                        StoreItemBox("Background 2", userFlexCoins, navController, authViewModel)
-                        StoreItemBox("Background 3", userFlexCoins, navController, authViewModel)
+                        BackgroundStoreItemBox(R.drawable.img_2, userFlexCoins, navController, authViewModel)
+//                        BackgroundStoreItemBox(R.drawable.profile_2, userFlexCoins, navController, authViewModel)
+//                        BackgroundStoreItemBox(R.drawable.profile_3, userFlexCoins, navController, authViewModel)
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
@@ -131,9 +137,9 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
                 Title01_LEFT("Borders", grayWhite, 40f);
                 LazyRow {
                     items(1) { index ->
-                        StoreItemBox("Border 1", userFlexCoins, navController, authViewModel)
-                        StoreItemBox("Border 2", userFlexCoins, navController, authViewModel)
-                        StoreItemBox("Border 3", userFlexCoins, navController, authViewModel)
+//                        BordersStoreItemBox(R.drawable.img_2, userFlexCoins, navController, authViewModel)
+//                        BordersStoreItemBox("Border 2", userFlexCoins, navController, authViewModel)
+//                        BordersStoreItemBox("Border 3", userFlexCoins, navController, authViewModel)
                 }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
@@ -142,9 +148,9 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
                 Title01_LEFT("Avatars", grayWhite, 40f);
                 LazyRow {
                     items(1) { index ->
-                        StoreItemBox("Avatar 1", userFlexCoins, navController, authViewModel)
-                        StoreItemBox("Avatar 2", userFlexCoins, navController, authViewModel)
-                        StoreItemBox("Avatar 3", userFlexCoins, navController, authViewModel)
+                        BordersStoreItemBox(R.drawable.profile_1, userFlexCoins, navController, authViewModel)
+                        BordersStoreItemBox(R.drawable.profile_2, userFlexCoins, navController, authViewModel)
+                        BordersStoreItemBox(R.drawable.profile_3, userFlexCoins, navController, authViewModel)
                     }
                 }
             }
@@ -155,7 +161,350 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
 }
 
 @Composable
-fun StoreItemBox(title: String, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel) {
+fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel) {
+    println("new")
+    val showConfirmationDialog = remember { mutableStateOf(false) }
+    val showInsufficientFundsDialog = remember { mutableStateOf(false) }
+    val itemCost = 100
+    var hasPurchased by remember { mutableStateOf(false) }
+
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp
+    val screenWidthDp = configuration.screenWidthDp
+
+    val checkBack = database.getReference("Users").child("$userID").child("inventory").child("background")
+    checkBack.get().addOnSuccessListener { snapshot ->
+        if (snapshot.exists()) {
+            val background = snapshot.children.toList()
+            for (i in background) {
+                println(i.key.toString())
+                println(image.toString())
+                println(i.key.toString() == image.toString())
+                if (i.key.toString() == image.toString()) {
+                    hasPurchased = true
+                }
+            }
+
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .size((screenHeightDp / 8).dp)
+            .background(darker, shape = RoundedCornerShape(12.dp))
+            .border(3.dp, dark, RoundedCornerShape(12.dp))
+            .padding(start = 20.dp, end = 20.dp)
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            // Display image
+            Image(
+                painter = painterResource(id = image),
+                contentDescription = null,
+                modifier = Modifier.size(60.dp)
+            )
+
+            Spacer(modifier = Modifier.height(4.dp))
+
+            // "100 FlexCoins" button
+
+            Button(
+                onClick = {
+                    if (userFlexCoins >= itemCost) {
+                        showConfirmationDialog.value = true
+                    } else {
+                        showInsufficientFundsDialog.value = true
+                    }
+                },
+                enabled = !hasPurchased,  // Disable if purchased
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (hasPurchased) Color.Gray else brightOrange  // Grey out when purchased
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+            ) {
+                Text("100 FlexCoins", color = Color.Black, fontSize = 12.sp)
+            }
+        }
+    }
+
+    // Confirmation Dialog
+    if (showConfirmationDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showConfirmationDialog.value = false },
+            title = { Text("Confirm Purchase") },
+            text = { Text("Are you sure you want to purchase for 100 FlexCoins?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showConfirmationDialog.value = false
+                        hasPurchased = true  // Set purchased state to true
+                        val image2 = database.getReference("Users").child("$userID").child("inventory").child("background")
+                        image2.child("$image").child("name").setValue("test")
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB58900))
+                ) {
+                    Text("Confirm", color = Color.White)
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showConfirmationDialog.value = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                ) {
+                    Text("Cancel", color = Color.White)
+                }
+            }
+        )
+    }
+
+    // Insufficient Funds Dialog
+    if (showInsufficientFundsDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showInsufficientFundsDialog.value = false },
+            title = { Text("Insufficient FlexCoins") },
+            text = { Text("You do not have enough FlexCoins to purchase.") },
+            confirmButton = {
+                Button(
+                    onClick = { showInsufficientFundsDialog.value = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                ) {
+                    Text("OK", color = Color.White)
+                }
+            }
+        )
+    }
+}
+
+
+//@Composable
+//fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel) {
+//    var count by remember {
+//        mutableStateOf(0)
+//    }
+//
+//    val showConfirmationDialog = remember { mutableStateOf(false) }
+//    val showInsufficientFundsDialog = remember { mutableStateOf(false) }
+//    val itemCost = 100
+//
+//    val configuration = LocalConfiguration.current
+//    val screenHeightDp = configuration.screenHeightDp
+//    val screenWidthDp = configuration.screenWidthDp
+//
+//    Box(
+//        modifier = Modifier
+//            .size((screenHeightDp / 8).dp)
+////            .height( (screenHeightDp / 51).dp )
+//            .background(darker, shape = RoundedCornerShape(12.dp))
+//            .border(3.dp, dark,  RoundedCornerShape(12.dp))
+//            .padding(
+//                start = 20.dp,
+//                end = 20.dp,
+//            )
+//    ) {
+//        Column(
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ) {
+//                // Display image
+//                Image(
+//                    painter = painterResource(id = image),
+//                    contentDescription = null,
+//                    modifier = Modifier.size(60.dp)
+//                )
+//                // Display other UI elements like userFlexCoins if needed
+//            Spacer(modifier = Modifier.height(4.dp))
+//
+//            Button(
+//                onClick = {
+//                    if (userFlexCoins >= itemCost) {
+//                        showConfirmationDialog.value = true
+//                    } else {
+//                        showInsufficientFundsDialog.value = true
+//                    }
+//                },
+//                colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height(40.dp)
+//            ) {
+//                Text("100 FlexCoins", color = Color.Black, fontSize = 12.sp)
+//            }
+//        }
+//    }
+//
+//    if (showConfirmationDialog.value) {
+//        AlertDialog(
+//            onDismissRequest = { showConfirmationDialog.value = false },
+//            title = { Text("Confirm Purchase") },
+//            text = { Text("Are you sure you want to purchase for 100 FlexCoins?") },
+//            confirmButton = {
+//                Button(
+//                    onClick = {
+//                        showConfirmationDialog.value = false
+//                        val image2 = database.getReference("Users").child("$userID").child("inventory").child("background")
+//                        image2.child("$image").child("name").setValue("test")
+//                    },
+//                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB58900))
+//                ) {
+//                    Text("Confirm", color = Color.White)
+//                }
+//            },
+//            dismissButton = {
+//                Button(
+//                    onClick = { showConfirmationDialog.value = false },
+//                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+//                ) {
+//                    Text("Cancel", color = Color.White)
+//                }
+//            }
+//        )
+//    }
+//
+//    if (showInsufficientFundsDialog.value) {
+//        AlertDialog(
+//            onDismissRequest = { showInsufficientFundsDialog.value = false },
+//            title = { Text("Insufficient FlexCoins") },
+//            text = { Text("You do not have enough FlexCoins to purchase.") },
+//            confirmButton = {
+//                Button(
+//                    onClick = { showInsufficientFundsDialog.value = false },
+//                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+//                ) {
+//                    Text("OK", color = Color.White)
+//                }
+//            }
+//
+//        )
+//    }
+//}
+
+@Composable
+fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel) {
+    var count by remember {
+        mutableStateOf(0)
+    }
+
+    val showConfirmationDialog = remember { mutableStateOf(false) }
+    val showInsufficientFundsDialog = remember { mutableStateOf(false) }
+    val itemCost = 100
+    var hasPurchased by remember { mutableStateOf(false) }
+
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp
+    val screenWidthDp = configuration.screenWidthDp
+
+    val checkBack = database.getReference("Users").child("$userID").child("inventory").child("pfp")
+    checkBack.get().addOnSuccessListener { snapshot ->
+        if (snapshot.exists()) {
+            val pfp = snapshot.children.toList()
+            for (i in pfp) {
+                println(i.key.toString())
+                println(image.toString())
+                println(i.key.toString() == image.toString())
+                if (i.key.toString() == image.toString()) {
+                    hasPurchased = true
+                }
+                else hasPurchased = true
+            }
+
+        }
+    }
+    Box(
+        modifier = Modifier
+            .size((screenHeightDp / 8).dp)
+//            .height( (screenHeightDp / 51).dp )
+            .background(darker, shape = RoundedCornerShape(12.dp))
+            .border(3.dp, dark,  RoundedCornerShape(12.dp))
+            .padding(
+                start = 20.dp,
+                end = 20.dp,
+            )
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // Display image
+            Image(
+                painter = painterResource(id = image),
+                contentDescription = null,
+                modifier = Modifier.size(60.dp)
+            )
+            // Display other UI elements like userFlexCoins if needed
+            Spacer(modifier = Modifier.height(4.dp))
+
+            Button(
+                onClick = {
+                    if (userFlexCoins >= itemCost) {
+                        showConfirmationDialog.value = true
+                    } else {
+                        showInsufficientFundsDialog.value = true
+                    }
+                },
+                enabled = !hasPurchased,  // Disable if purchased
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = if (hasPurchased) Color.Gray else brightOrange  // Grey out when purchased
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+            ) {
+                Text("100 FlexCoins", color = Color.Black, fontSize = 12.sp)
+            }
+        }
+    }
+
+    if (showConfirmationDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showConfirmationDialog.value = false },
+            title = { Text("Confirm Purchase") },
+            text = { Text("Are you sure you want to purchase for 100 FlexCoins?") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showConfirmationDialog.value = false
+                        val image2 = database.getReference("Users").child("$userID").child("inventory").child("border")
+                        image2.child("$image").child("name").setValue("test")
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB58900))
+                ) {
+                    Text("Confirm", color = Color.White)
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showConfirmationDialog.value = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                ) {
+                    Text("Cancel", color = Color.White)
+                }
+            }
+        )
+    }
+
+    if (showInsufficientFundsDialog.value) {
+        AlertDialog(
+            onDismissRequest = { showInsufficientFundsDialog.value = false },
+            title = { Text("Insufficient FlexCoins") },
+            text = { Text("You do not have enough FlexCoins to purchase.") },
+            confirmButton = {
+                Button(
+                    onClick = { showInsufficientFundsDialog.value = false },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.Gray)
+                ) {
+                    Text("OK", color = Color.White)
+                }
+            }
+
+        )
+    }
+}
+
+@Composable
+fun AvatarStoreItemBox(image: Int, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel) {
+    var count by remember {
+        mutableStateOf(0)
+    }
+
     val showConfirmationDialog = remember { mutableStateOf(false) }
     val showInsufficientFundsDialog = remember { mutableStateOf(false) }
     val itemCost = 100
@@ -178,13 +527,13 @@ fun StoreItemBox(title: String, userFlexCoins: Int, navController: NavController
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = title,
-                color = grayWhite,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(bottom = 4.dp)
+            // Display image
+            Image(
+                painter = painterResource(id = image),
+                contentDescription = null,
+                modifier = Modifier.size(60.dp)
             )
+            // Display other UI elements like userFlexCoins if needed
             Spacer(modifier = Modifier.height(4.dp))
 
             Button(
@@ -209,11 +558,13 @@ fun StoreItemBox(title: String, userFlexCoins: Int, navController: NavController
         AlertDialog(
             onDismissRequest = { showConfirmationDialog.value = false },
             title = { Text("Confirm Purchase") },
-            text = { Text("Are you sure you want to purchase $title for 100 FlexCoins?") },
+            text = { Text("Are you sure you want to purchase for 100 FlexCoins?") },
             confirmButton = {
                 Button(
                     onClick = {
                         showConfirmationDialog.value = false
+                        val image2 = database.getReference("Users").child("$userID").child("inventory").child("pfp")
+                        image2.child("$image").child("name").setValue("test")
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB58900))
                 ) {
@@ -235,7 +586,7 @@ fun StoreItemBox(title: String, userFlexCoins: Int, navController: NavController
         AlertDialog(
             onDismissRequest = { showInsufficientFundsDialog.value = false },
             title = { Text("Insufficient FlexCoins") },
-            text = { Text("You do not have enough FlexCoins to purchase $title.") },
+            text = { Text("You do not have enough FlexCoins to purchase.") },
             confirmButton = {
                 Button(
                     onClick = { showInsufficientFundsDialog.value = false },

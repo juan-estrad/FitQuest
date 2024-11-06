@@ -58,7 +58,6 @@ import com.example.fitquest.AuthViewModel
 //import com.example.fitquest.Date
 //import com.example.fitquest.Logging
 import com.example.fitquest.R
-import com.example.fitquest.R.drawable.ellipse_2
 import com.example.fitquest.R.drawable.img
 import com.example.fitquest.UserProfile
 import com.example.fitquest.ui.TopAndBottomAppBar
@@ -130,40 +129,7 @@ fun StatsPageContents(modifier: Modifier = Modifier, navController: NavControlle
                 .padding(16.dp)
         ) {
 
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(bottom = 16.dp),
-//                horizontalArrangement = Arrangement.SpaceBetween,
-//                verticalAlignment = Alignment.CenterVertically
-//            )
-//            {
-//                Text("FitQuest", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
-//
-//
-//                //Plan is to make the circle the pfp but for now i just put the username in there
-//                Box(
-//                    modifier = Modifier
-//                        .size(100.dp)
-//                        .clip(CircleShape)
-//                        .background(Color.Gray),
-//                    contentAlignment = Alignment.Center
-//                ) {
-//                    Text(profile.username, fontSize = 20.sp, color = Color.White) //profile username
-//                }
-//            }
 
-//            // Display XP Progress Bar probably dont need this
-//            Text("XP", color = Color.White, fontSize = 14.sp)
-//            LinearProgressIndicator(
-//                progress = 0.7f,
-//                color = Color(0xFFFF6D00),
-//                trackColor = Color.LightGray,
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .height(8.dp)
-//                    .padding(vertical = 8.dp)
-//            )
 
 
             // This displays the streak
@@ -488,33 +454,33 @@ fun DisplayChildrenButton(modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
-fun BoxWithPngBorder() {
-    Box(
-        modifier = Modifier
-            .size(120.dp) // Total size including border (outer Box)
-            .background(Color.Transparent), // Make outer box transparent
-        contentAlignment = Alignment.Center
-    ) {
-        // Inner circular content Box
-        Image(
-            painter = painterResource(id = ellipse_2), // Replace with your inner image
-            contentDescription = "Profile Image",
-            modifier = Modifier
-                .size(100.dp) // Size of the inner image, slightly smaller than the outer border
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop // Crop the image to fit in the circular shape
-        )
-
-        // Border overlay using a PNG image
-        Image(
-            painter = painterResource(id = img), // Replace with your circular PNG border
-            contentDescription = "Circular Border Image",
-            modifier = Modifier.size(120.dp), // Size of the border image (slightly larger than content)
-            contentScale = ContentScale.Crop
-        )
-    }
-}
+//@Composable
+//fun BoxWithPngBorder() {
+//    Box(
+//        modifier = Modifier
+//            .size(120.dp) // Total size including border (outer Box)
+//            .background(Color.Transparent), // Make outer box transparent
+//        contentAlignment = Alignment.Center
+//    ) {
+//        // Inner circular content Box
+//        Image(
+//            painter = painterResource(id = pro), // Replace with your inner image
+//            contentDescription = "Profile Image",
+//            modifier = Modifier
+//                .size(100.dp) // Size of the inner image, slightly smaller than the outer border
+//                .clip(CircleShape),
+//            contentScale = ContentScale.Crop // Crop the image to fit in the circular shape
+//        )
+//
+//        // Border overlay using a PNG image
+//        Image(
+//            painter = painterResource(id = img), // Replace with your circular PNG border
+//            contentDescription = "Circular Border Image",
+//            modifier = Modifier.size(120.dp), // Size of the border image (slightly larger than content)
+//            contentScale = ContentScale.Crop
+//        )
+//    }
+//}
 
 /*@Composable
 fun UserLoggingButton() {
