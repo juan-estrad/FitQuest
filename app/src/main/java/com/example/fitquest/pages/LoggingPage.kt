@@ -76,6 +76,9 @@ import com.example.fitquest.ui.ClickableImageWithText
 import com.example.fitquest.ui.Title01
 import com.example.fitquest.ui.Title01_LEFT
 import com.example.fitquest.ui.TopAndBottomAppBar
+import com.example.fitquest.ui.UserInputField
+import com.example.fitquest.ui.UserInputField2
+import com.example.fitquest.ui.horizontalGradientBrush
 //import com.example.fitquest.isStreakExpired
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.dark
@@ -334,18 +337,17 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 
                     val shape = if (expanded) RoundedCornerShape(8.dp).copy(bottomEnd = CornerSize(0.dp), bottomStart = CornerSize(0.dp))
                     else RoundedCornerShape(8.dp)
-                    // This is the dropdown menu to select focus ///
+
+
+                    //////// This is the dropdown menu to select focus ///////
                     Box(
                         modifier = Modifier
-//                            .border(2.dp, dark, RoundedCornerShape(12.dp))
+
                             .fillMaxWidth()
                         ,
                         contentAlignment = Alignment.Center
 
-//                            .clip(RoundedCornerShape(size = 16.dp)),
 
-//                        shape = RoundedCornerShape(size = 6.dp)
-//                            .padding(32.dp)
                     ) {
                         ExposedDropdownMenuBox(
                             expanded = expanded,
@@ -400,7 +402,10 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                             )
                             ExposedDropdownMenu(
                                 modifier = Modifier
-                                    .border(1.dp, dark, RoundedCornerShape(size = 20.dp))
+                                    .border(
+                                        (2.3f).dp,
+                                        brush = horizontalGradientBrush(grayWhite, brightOrange),
+                                        RoundedCornerShape(size = 20.dp))
                                     .background(
                                         color = darker,
                                         shape = RoundedCornerShape(size = 10.dp)
@@ -531,12 +536,21 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 
                                     modifier = Modifier
                                         .menuAnchor()
+
                                         .fillMaxWidth()
                                         .height((screenHeightDp / 12).dp)
+//                                        .border(
+//                                            width = 5.dp ,
+//                                            brush = horizontalGradientBrush(brightOrange, grayWhite),
+//                                            shape = RoundedCornerShape(size = 20.dp),
+//                                            )
                                 )
                                 ExposedDropdownMenu(
                                     modifier = Modifier
-                                        .border(1.dp, dark, RoundedCornerShape(size = 20.dp))
+                                        .border(
+                                            (2.3f).dp,
+                                            brush = horizontalGradientBrush(grayWhite, brightOrange),
+                                            RoundedCornerShape(size = 20.dp))
                                         .background(
                                             color = darker,
                                             shape = RoundedCornerShape(size = 10.dp)
@@ -647,12 +661,26 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 
 
                             Spacer(modifier = Modifier.height(25.dp))
-                            LoggingInputField(
-                                label = "Workout",
-                                value = workout
-                            ) {
-                                workout = it
+
+
+                            Row (
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+
+                                horizontalArrangement = Arrangement.Center, // Centers horizontally
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+                                UserInputField2(
+                                    label = "Workout",
+                                    value = workout,
+
+                                    width = (screenWidthDp / 3f).dp,
+
+                                    ) {
+                                    workout = it
+                                }
                             }
+
 
                             Spacer(modifier = Modifier.height(15.dp))
 

@@ -2,6 +2,7 @@
 
 package com.example.fitquest.ui
 
+import android.icu.text.ListFormatter.Width
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -24,12 +25,15 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.BottomAppBar
@@ -38,6 +42,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -62,11 +67,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -188,6 +195,67 @@ fun UserInputField(
 
     Spacer(modifier = Modifier.height(15.dp))
 }
+
+
+
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserInputField2(
+    label: String,
+    value: String,
+    width: Dp,
+
+//    fillMaxWith: Boolean = true,
+//    width: Float = 40f,
+//
+
+    onValueChange: (String) -> Unit,
+) {
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp.toFloat()
+    val screenWidthDp = configuration.screenWidthDp
+
+
+    OutlinedTextField(
+
+        value = value,
+        onValueChange = { },
+        singleLine = true,
+//        readOnly = true,
+
+
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+
+            focusedBorderColor = brightOrange,
+            containerColor = darker,
+            unfocusedBorderColor = dark,
+
+            )
+        ,
+
+        shape = RoundedCornerShape(size = 20.dp),
+
+        textStyle = LocalTextStyle.current.copy(
+            fontSize = (screenHeightDp / 30).sp, // Change this to your desired text size
+            fontStyle = FontStyle.Italic,
+            color = dark
+
+        ),
+
+        modifier = Modifier
+            .height(screenHeightDp.dp/12)
+            .width(width)
+
+//        if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+//            .fillMaxWidth()
+//            .height((screenHeightDp / 12).dp)
+//        ,
+
+    )
+}
+
 
 
 @Composable

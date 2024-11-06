@@ -55,6 +55,7 @@ import com.example.fitquest.WeeklyWorkoutViewModel
 import com.example.fitquest.WorkoutViewModel
 import com.example.fitquest.ui.TopAndBottomAppBar
 import com.example.fitquest.ui.theme.brightOrange
+import com.example.fitquest.ui.theme.grayWhite
 //import com.google.ai.client.generativeai.type.content
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -77,13 +78,22 @@ import androidx.compose.material3.Text as Text
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+//    ForYouPageContents(modifier,navController,authViewModel)
 
     TopAndBottomAppBar(
+        true,
         contents = { ForYouPageContents(modifier,navController,authViewModel) },
         modifier = modifier,
         navController = navController,
         authViewModel = authViewModel
     )
+
+
+
+
+
+
+
 
 
 }
@@ -123,21 +133,13 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
     }
 
     userProfile?.let { profile ->
-
-        Column(
-            modifier = modifier
+        Column (
+            modifier = Modifier
                 .fillMaxSize()
-//                .background(Color.DarkGray)
-                .padding(
-                    start = 16.dp,
-//                    top = screenHeightDp.dp / 7 - 15.dp,
-//                    top = paddingValues.calculateTopPadding(),
-                    top = 0.dp,
-                    end = 16.dp,
-                    bottom = 0.dp
-                )
+//                .background(grayWhite)
                 .verticalScroll(rememberScrollState())
-        ) {
+        ){
+
 
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -164,8 +166,8 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
             ) {
                 Row (
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp),
+                        .fillMaxWidth(),
+//
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ){
@@ -185,7 +187,8 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                 Row (
                     modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 16.dp),
+//                    .padding(bottom = 16.dp)
+                    ,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically)
                 {
@@ -206,7 +209,8 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 16.dp),
+//                        .padding(bottom = 16.dp)
+                    ,
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -216,7 +220,8 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 16.dp)
+//                        .padding(bottom = 16.dp)
+                    ,
                 ) {
                 }
                 Column {
@@ -307,7 +312,7 @@ fun ReccomendedBox(img: Int, name: String, title: String, text: String, workouts
                     .background(color = brightOrange),
                 ) {
                     Image(
-                        painter = painterResource(R.drawable.ellipse_2),
+                        painter = painterResource(R.drawable.profile_3),
                         contentDescription = null,
                         modifier = Modifier.size(60.dp)
                     )
