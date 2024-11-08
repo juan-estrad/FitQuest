@@ -382,6 +382,8 @@ fun ReccomendedBox(img: Int, name: String, title: String, text: String, workouts
 
 @Composable
 fun WorkoutScreen(viewModel: WorkoutViewModel = WorkoutViewModel()) {
+    var enabled by remember { mutableStateOf(true) }
+
     viewModel.loadRandomWorkout()
 
 
@@ -440,7 +442,10 @@ fun WorkoutScreen(viewModel: WorkoutViewModel = WorkoutViewModel()) {
 
                 Spacer(modifier = Modifier.height(25.dp))
 
-                Button(onClick = { viewModel.completeWorkout() }) {
+                Button(onClick = {
+                    viewModel.completeWorkout()
+                    enabled = false
+                }) {
                     Text(text = "Complete Workout")
                 }
             } ?: Text(text = "No workout loaded.")

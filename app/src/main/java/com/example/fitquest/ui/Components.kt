@@ -81,6 +81,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.R
 import com.example.fitquest.UserProfile
 import com.example.fitquest.pages.myRef
 import com.example.fitquest.ui.theme.brightOrange
@@ -488,19 +489,28 @@ fun TopAndBottomAppBar(
                     modifier = Modifier
                         .height(systembarPadding.calculateTopPadding())
                         .fillMaxWidth()
-                        .background(horizontalGradientBrush(dark, brightOrange))
+                        .background(horizontalGradientBrush(dark, dark))
                 )
                 if(topBar){
                     Box(
                         modifier = modifier
 //                        .border(3.dp, dark,  RoundedCornerShape(12.dp))
                             .height((screenHeightDp / 7).dp)
-                            .fillMaxWidth()
-                            .background(horizontalGradientBrush(dark, brightOrange)),
+                            .fillMaxSize(),
                         contentAlignment = Alignment.Center
 
                     )
+
                     {
+                        Image(
+                            painter = painterResource(id = userProfile!!.inventory.background.default),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size((screenHeightDp / 2.1).dp)
+                                .fillMaxWidth()// Adjust this to control the image size within the Box
+                                .align(Alignment.Center), // Center the image within the Box
+                            contentScale = ContentScale.Crop // Or use Fit, Inside, etc., depending on the effect you want
+                        )
 
 
 
@@ -516,6 +526,12 @@ fun TopAndBottomAppBar(
                             //Text(profile.username, fontSize = 35.sp, color = Color.White) //profile username
                             Image(
                                 painter = painterResource(id = userProfile!!.inventory.avatar.default),
+                                contentDescription = null
+                                //modifier = Modifier.size(300.dp)
+                            )
+
+                            Image(
+                                painter = painterResource(id = userProfile!!.inventory.borders.default),
                                 contentDescription = null
                                 //modifier = Modifier.size(300.dp)
                             )

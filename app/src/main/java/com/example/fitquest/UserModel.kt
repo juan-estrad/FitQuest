@@ -40,18 +40,18 @@ data class UserProfile(
 
 data class Inventory(
     var avatar:Avatar = Avatar(),
-    val background:Background = Background(),
-    val borders:Borders = Borders()
+    var background:Background = Background(),
+    var borders:Borders = Borders()
 )
 
 data class Avatar(
     var default:Int = 0
 )
 data class Background(
-    val default:String = ""
+    var default:Int = 0
 )
 data class Borders(
-    val default:String = ""
+    var default:Int = 0
 )
 
 data class ID(

@@ -98,10 +98,10 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                                 default = R.drawable.avatar
                             ),
                             background = Background(
-                                default = "Default Avatar"
+                                default = R.drawable.background_1
                             ),
                             borders = Borders(
-                                default = "Default Avatar"
+                                default = R.drawable.border
                             )
                         ),
                         userStats = UserStats(
