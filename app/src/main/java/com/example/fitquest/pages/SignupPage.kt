@@ -40,11 +40,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
-import com.example.fitquest.Avatar
-import com.example.fitquest.Background
-import com.example.fitquest.Borders
+//import com.example.fitquest.Avatar
+//import com.example.fitquest.Background
+//import com.example.fitquest.Borders
 import com.example.fitquest.ID
-import com.example.fitquest.Inventory
+//import com.example.fitquest.Inventory
 import com.example.fitquest.R
 
 
@@ -93,17 +93,17 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                     val userProfile = UserProfile(
                         username = username,
                         flexcoins = 0,
-                        inventory = Inventory(
-                            avatar = Avatar(
-                                default = R.drawable.avatar
-                            ),
-                            background = Background(
-                                default = R.drawable.background_1
-                            ),
-                            borders = Borders(
-                                default = R.drawable.border
-                            )
-                        ),
+                        currentAvatar = R.drawable.avatar,
+                        currentBackground = R.drawable.background_1,
+                        currentBorder = R.drawable.border,
+//                        inventory = Inventory(
+//                            avatar = Avatar(
+//                            ),
+//                            background = Background(
+//                            ),
+//                            borders = Borders(
+//                            )
+//                        ),
                         userStats = UserStats(
                             agility = 0,
                             consistency = 0,
@@ -136,7 +136,9 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                         workoutCount = 0
                     )
                     myRef.child(id).setValue(userProfile)
-                    myRef.child(id).child("inventory").child("avatar").child(R.drawable.avatar.toString()).child("name").setValue("default")
+                    myRef.child(id).child("inventory").child("avatar").child(R.drawable.avatar.toString()).setValue("Default Avatar")
+                    myRef.child(id).child("inventory").child("borders").child(R.drawable.border.toString()).setValue("Default Avatar")
+                    myRef.child(id).child("inventory").child("background").child(R.drawable.background_1.toString()).setValue("Default Avatar")
                 }
 
                 navController.navigate("home")

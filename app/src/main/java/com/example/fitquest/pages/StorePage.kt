@@ -159,7 +159,7 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
 
 @Composable
 fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel, profile: UserProfile) {
-    println("New box: " + image)
+    println("New background: " + image)
     val showConfirmationDialog = remember { mutableStateOf(false) }
     val showInsufficientFundsDialog = remember { mutableStateOf(false) }
     val itemCost = 100
@@ -174,8 +174,8 @@ fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavCon
         if (snapshot.exists()) {
             val background = snapshot.children.toList()
             for (i in background) {
-                println("User db: " + i.key.toString())
-                println(image.toString())
+                println("User db background: " + i.key.toString())
+                println("Current background: " + image.toString())
                 println(i.key.toString() == image.toString())
                 if (i.key.toString() == image.toString()) {
                     hasPurchased = true
@@ -239,12 +239,22 @@ fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavCon
                         val image2 = database.getReference("Users").child("$userID").child("inventory").child("background")
                         image2.child("$image").child("name").setValue("test")
 
-                        println(profile.inventory.background.default)
-                        profile.inventory.background.default = image
-                        image2.child("default").setValue(image)
-                        println(profile.inventory.background.default)
+                        if(image == R.drawable.background_1){
+                            image2.child("$image").setValue("Sunset Background")
+                        }
+                        else if(image == R.drawable.background_2){
+                            image2.child("$image").setValue("Blue Background")
+                        }
+                        else if(image == R.drawable.background_3){
+                            image2.child("$image").setValue("Collesium")
+                        }
+
+                        //println(profile.inventory.background.default)
+                        profile.currentBackground = image
+                        //println(profile.inventory.background.default)
 
                         val ref3 = database.getReference("Users").child("$userID")
+                        ref3.child("currentBackground").setValue(image)
                         profile.flexcoins -= itemCost
                         ref3.child("flexcoins").setValue(profile.flexcoins)
                     },
@@ -284,7 +294,7 @@ fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavCon
 
 @Composable
 fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel, profile: UserProfile) {
-    println("New box: " + image)
+    println("New Border: " + image)
     val showConfirmationDialog = remember { mutableStateOf(false) }
     val showInsufficientFundsDialog = remember { mutableStateOf(false) }
     val itemCost = 100
@@ -299,8 +309,8 @@ fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavContro
         if (snapshot.exists()) {
             val borders = snapshot.children.toList()
             for (i in borders) {
-                println("User db: " + i.key.toString())
-                println(image.toString())
+                println("User db border: " + i.key.toString())
+                println("current border:" + image.toString())
                 println(i.key.toString() == image.toString())
                 if (i.key.toString() == image.toString()) {
                     hasPurchased = true
@@ -362,14 +372,23 @@ fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavContro
                         showConfirmationDialog.value = false
                         hasPurchased = true  // Set purchased state to true
                         val image2 = database.getReference("Users").child("$userID").child("inventory").child("borders")
-                        image2.child("$image").child("name").setValue("test")
 
-                        println(profile.inventory.borders.default)
-                        profile.inventory.borders.default = image
-                        image2.child("default").setValue(image)
-                        println(profile.inventory.borders.default)
+                        if(image == R.drawable.border_1){
+                            image2.child("$image").setValue("Green Border")
+                        }
+                        else if(image == R.drawable.border_2){
+                            image2.child("$image").setValue("Gold Border")
+                        }
+                        else if(image == R.drawable.border_3){
+                            image2.child("$image").setValue("Green/Blue Border")
+                        }
+
+                        //println(profile.inventory.borders.default)
+                        profile.currentBorder = image
+                        //println(profile.inventory.borders.default)
 
                         val ref3 = database.getReference("Users").child("$userID")
+                        ref3.child("currentBorder").setValue(image)
                         profile.flexcoins -= itemCost
                         ref3.child("flexcoins").setValue(profile.flexcoins)
                     },
@@ -409,7 +428,7 @@ fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavContro
 
 @Composable
 fun AvatarStoreItemBox(image: Int, userFlexCoins: Int, navController: NavController, authViewModel: AuthViewModel, profile: UserProfile) {
-    println("New box: " + image)
+    println("New Avatar: " + image)
     val showConfirmationDialog = remember { mutableStateOf(false) }
     val showInsufficientFundsDialog = remember { mutableStateOf(false) }
     val itemCost = 100
@@ -424,8 +443,8 @@ fun AvatarStoreItemBox(image: Int, userFlexCoins: Int, navController: NavControl
         if (snapshot.exists()) {
             val avatar = snapshot.children.toList()
             for (i in avatar) {
-                println("User db: " + i.key.toString())
-                println(image.toString())
+                println("User db avatar : " + i.key.toString())
+                println("Current avatar: " + image.toString())
                 println(i.key.toString() == image.toString())
                 if (i.key.toString() == image.toString()) {
                     hasPurchased = true
@@ -487,14 +506,21 @@ fun AvatarStoreItemBox(image: Int, userFlexCoins: Int, navController: NavControl
                         showConfirmationDialog.value = false
                         hasPurchased = true  // Set purchased state to true
                         val image2 = database.getReference("Users").child("$userID").child("inventory").child("avatar")
-                        image2.child("$image").child("name").setValue("test")
-
-                        println(profile.inventory.avatar.default)
-                        profile.inventory.avatar.default = image
-                        image2.child("default").setValue(image)
-                        println(profile.inventory.avatar.default)
+                        if(image == R.drawable.profile_1){
+                            image2.child("$image").setValue("Arnold")
+                        }
+                        else if(image == R.drawable.profile_2){
+                            image2.child("$image").setValue("Ronnie")
+                        }
+                        else if(image == R.drawable.profile_3){
+                            image2.child("$image").setValue("David")
+                        }
+                        //println(profile.inventory.avatar.default)
+                        profile.currentAvatar = image
+                        //println(profile.inventory.avatar.default)
 
                         val ref3 = database.getReference("Users").child("$userID")
+                        ref3.child("currentAvatar").setValue(image)
                         profile.flexcoins -= itemCost
                         ref3.child("flexcoins").setValue(profile.flexcoins)
                     },

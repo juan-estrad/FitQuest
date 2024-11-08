@@ -503,7 +503,7 @@ fun TopAndBottomAppBar(
 
                     {
                         Image(
-                            painter = painterResource(id = userProfile!!.inventory.background.default),
+                            painter = painterResource(id = userProfile!!.currentBackground),
                             contentDescription = null,
                             modifier = Modifier
                                 .size((screenHeightDp / 2.1).dp)
@@ -525,13 +525,13 @@ fun TopAndBottomAppBar(
                         ) {
                             //Text(profile.username, fontSize = 35.sp, color = Color.White) //profile username
                             Image(
-                                painter = painterResource(id = userProfile!!.inventory.avatar.default),
+                                painter = painterResource(id = userProfile!!.currentAvatar),
                                 contentDescription = null
                                 //modifier = Modifier.size(300.dp)
                             )
 
                             Image(
-                                painter = painterResource(id = userProfile!!.inventory.borders.default),
+                                painter = painterResource(id = userProfile!!.currentBorder),
                                 contentDescription = null
                                 //modifier = Modifier.size(300.dp)
                             )
