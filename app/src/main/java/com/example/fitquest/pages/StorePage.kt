@@ -250,13 +250,14 @@ fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavCon
                         }
 
                         //println(profile.inventory.background.default)
-                        profile.currentBackground = image
+                        //profile.currentBackground = image
                         //println(profile.inventory.background.default)
 
                         val ref3 = database.getReference("Users").child("$userID")
-                        ref3.child("currentBackground").setValue(image)
+//                        ref3.child("currentBackground").setValue(image)
                         profile.flexcoins -= itemCost
                         ref3.child("flexcoins").setValue(profile.flexcoins)
+                        navController.navigate("store")
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB58900))
                 ) {
@@ -384,13 +385,14 @@ fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavContro
                         }
 
                         //println(profile.inventory.borders.default)
-                        profile.currentBorder = image
+                        //profile.currentBorder = image
                         //println(profile.inventory.borders.default)
 
                         val ref3 = database.getReference("Users").child("$userID")
-                        ref3.child("currentBorder").setValue(image)
+                        //ref3.child("currentBorder").setValue(image)
                         profile.flexcoins -= itemCost
                         ref3.child("flexcoins").setValue(profile.flexcoins)
+                        navController.navigate("store")
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB58900))
                 ) {
@@ -516,13 +518,14 @@ fun AvatarStoreItemBox(image: Int, userFlexCoins: Int, navController: NavControl
                             image2.child("$image").setValue("David")
                         }
                         //println(profile.inventory.avatar.default)
-                        profile.currentAvatar = image
+                        //profile.currentAvatar = image
                         //println(profile.inventory.avatar.default)
 
                         val ref3 = database.getReference("Users").child("$userID")
-                        ref3.child("currentAvatar").setValue(image)
+                        //ref3.child("currentAvatar").setValue(image)
                         profile.flexcoins -= itemCost
                         ref3.child("flexcoins").setValue(profile.flexcoins)
+                        navController.navigate("store")
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB58900))
                 ) {

@@ -137,8 +137,8 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                     )
                     myRef.child(id).setValue(userProfile)
                     myRef.child(id).child("inventory").child("avatar").child(R.drawable.avatar.toString()).setValue("Default Avatar")
-                    myRef.child(id).child("inventory").child("borders").child(R.drawable.border.toString()).setValue("Default Avatar")
-                    myRef.child(id).child("inventory").child("background").child(R.drawable.background_1.toString()).setValue("Default Avatar")
+                    myRef.child(id).child("inventory").child("borders").child(R.drawable.border.toString()).setValue("Default Border")
+                    myRef.child(id).child("inventory").child("background").child(R.drawable.background_1.toString()).setValue("Default Background")
                 }
 
                 navController.navigate("home")

@@ -67,6 +67,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -134,7 +135,7 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                     background.get().addOnSuccessListener { dataSnapshot ->
                         val categories = mutableListOf<String>()
                         dataSnapshot.children.forEach {
-                            it.key?.let { key -> categories.add(key) }
+                            it.value?.let { value -> categories.add(value.toString()) }
                         }
                         backgroundCategories = categories
                     }.addOnFailureListener {
@@ -145,7 +146,7 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                     borders.get().addOnSuccessListener { dataSnapshot ->
                         val categories = mutableListOf<String>()
                         dataSnapshot.children.forEach {
-                            it.key?.let { key -> categories.add(key) }
+                            it.value?.let { value -> categories.add(value.toString()) }
                         }
                         bordersCategories = categories
                     }.addOnFailureListener {
@@ -158,6 +159,7 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
             else -> Unit
         }
     }
+
 
     userProfile?.let { profile ->
         Column(
@@ -529,12 +531,60 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                 }
             }
 
+            Button(
+                onClick = {
+                    val userRef = database.getReference("Users").child("$userID")
 
+                    val checkBack1 = database.getReference("Users").child("$userID").child("inventory").child("borders")
+                    checkBack1.get().addOnSuccessListener { snapshot ->
+                        if (snapshot.exists()) {
+                            val borders = snapshot.children.toList()
+                            for (i in borders) {
+                                if (i.value.toString() == selectedTextBorder) {
+                                    userRef.child("currentBorder").setValue(i.key!!.toInt())
+                                    profile.currentBorder = i.key!!.toInt()
+                                }
+                            }
 
+                        }
+                    }
 
+                    val checkBack2 = database.getReference("Users").child("$userID").child("inventory").child("avatar")
+                    checkBack2.get().addOnSuccessListener { snapshot ->
+                        if (snapshot.exists()) {
+                            val avatar = snapshot.children.toList()
+                            for (i in avatar) {
+                                if (i.value.toString() == selectedText) {
+                                    userRef.child("currentAvatar").setValue(i.key!!.toInt())
+                                    profile.currentAvatar = i.key!!.toInt()
+                                }
+                            }
 
+                        }
+                    }
+
+                    val checkBack3 = database.getReference("Users").child("$userID").child("inventory").child("background")
+                    checkBack3.get().addOnSuccessListener { snapshot ->
+                        if (snapshot.exists()) {
+                            val background = snapshot.children.toList()
+                            for (i in background) {
+                                if (i.value.toString() == selectedTextBG) {
+                                    userRef.child("currentBackground").setValue(i.key!!.toInt())
+                                    profile.currentBackground = i.key!!.toInt()
+                                }
+                            }
+
+                        }
+                    }
+
+                    navController.navigate("stats")
+                }
+            ) {
+                Text("Apply")
             }
 
         }
+
     }
+}
 
