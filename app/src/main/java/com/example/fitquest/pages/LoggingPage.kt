@@ -176,6 +176,8 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
     var selectedText by remember { mutableStateOf("Enter Focus") }
 
     var selectedWorkoutType by remember { mutableStateOf("Select Workout") } // Selected workout type
+
+
     var workoutTypes by remember { mutableStateOf(listOf<String>()) } // Lis t of workout types for selected category
 
 
@@ -339,10 +341,17 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                     else RoundedCornerShape(8.dp)
 
 
+
+
+
+
                     //////// This is the dropdown menu to select focus ///////
+
+
+
+                    var dropdownTextColor1 by remember { mutableStateOf(dark) }
                     Box(
                         modifier = Modifier
-
                             .fillMaxWidth()
                         ,
                         contentAlignment = Alignment.Center
@@ -359,7 +368,7 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 
                             OutlinedTextField(
 
-                                value = selectedText,
+                                value = "   $selectedText",
                                 onValueChange = { },
                                 singleLine = true,
                                 readOnly = true,
@@ -391,8 +400,7 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                 textStyle = LocalTextStyle.current.copy(
                                     fontSize = (screenHeightDp / 30).sp, // Change this to your desired text size
                                     fontStyle = FontStyle.Italic,
-                                    color = dark
-
+                                    color = dropdownTextColor1
                                 ),
 
                                 modifier = Modifier
@@ -424,7 +432,6 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                             .border(1.dp, dark, RoundedCornerShape(size = 5.dp))
 //                                            .background(transparent, RoundedCornerShape(size = 26.dp))
 //                                                    .padding(30.dp)
-
                                         ,
                                         contentAlignment = Alignment.CenterStart
 
@@ -444,12 +451,14 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                             onClick = {
                                                 selectedText = category
                                                 expanded = false
+
                                                 Toast.makeText(
                                                     context,
                                                     category,
                                                     Toast.LENGTH_SHORT
-                                                )
-                                                    .show()
+                                                ).show();
+
+                                                dropdownTextColor1 = grayWhite;
 
                                             },
                                         )
@@ -498,7 +507,7 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 
                                 OutlinedTextField(
 
-                                    value = selectedWorkoutType,
+                                    value = "   $selectedWorkoutType",
                                     onValueChange = { },
                                     singleLine = true,
                                     readOnly = true,
@@ -617,14 +626,41 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                 horizontalArrangement = Arrangement.Center, // Centers horizontally
                                 verticalAlignment = Alignment.CenterVertically
                             ){
-                                UserInputField2(
-                                    label = "Workout",
-                                    value = workout,
 
-                                    width = (screenWidthDp / 3f).dp,
 
-                                    ) {
-                                    workout = it
+                                Column() {
+                                    UserInputField2(
+                                        label = "Workout",
+                                        value = workout,
+
+                                        width = ((screenWidthDp / 3).dp - 20.dp),
+
+                                        ) {
+                                        workout = it
+                                    }
+                                }
+                                Column() {
+                                    UserInputField2(
+                                        label = "Workout",
+                                        value = workout,
+
+                                        width = ((screenWidthDp / 3).dp),
+                                        textAlign = TextAlign.Center,
+
+                                        ) {
+                                        workout = it
+                                    }
+                                }
+                                Column() {
+                                    UserInputField2(
+                                        label = "Workout",
+                                        value = workout,
+
+                                        width = ((screenWidthDp / 3).dp - 20.dp),
+
+                                        ) {
+                                        workout = it
+                                    }
                                 }
                             }
 
@@ -865,4 +901,5 @@ fun completeWorkout() {
                 println("Error updating user stats: ${error.message}")
             }
     }
+
 }

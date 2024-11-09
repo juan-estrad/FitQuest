@@ -208,8 +208,9 @@ fun UserInputField2(
     label: String,
     value: String,
     width: Dp,
+    textAlign: TextAlign = TextAlign.Left,
 
-//    fillMaxWith: Boolean = true,
+//    fillMaxWith: Boolean = false,
 //    width: Float = 40f,
 //
 
@@ -228,6 +229,7 @@ fun UserInputField2(
 //        readOnly = true,
 
 
+
         colors = TextFieldDefaults.outlinedTextFieldColors(
 
             focusedBorderColor = brightOrange,
@@ -242,7 +244,8 @@ fun UserInputField2(
         textStyle = LocalTextStyle.current.copy(
             fontSize = (screenHeightDp / 30).sp, // Change this to your desired text size
             fontStyle = FontStyle.Italic,
-            color = dark
+            color = dark,
+            textAlign = textAlign
 
         ),
 

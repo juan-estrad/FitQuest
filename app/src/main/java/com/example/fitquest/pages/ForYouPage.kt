@@ -85,7 +85,6 @@ fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, auth
         authViewModel = authViewModel
     )
 
-
 }
 
 
