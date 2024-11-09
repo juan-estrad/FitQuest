@@ -607,59 +607,6 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 
 
 
-
-
-
-
-
-
-
-//                            Box(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-////                                        .padding(32.dp)
-//                            ) {
-//
-//                                ExposedDropdownMenuBox(
-//                                    expanded = expandedWorkout,
-//                                    onExpandedChange = { expandedWorkout = !expandedWorkout }
-//                                ) {
-//                                    TextField(
-//                                        value = selectedWorkoutType,
-//                                        onValueChange = {},
-//                                        readOnly = true,
-//                                        trailingIcon = {
-//                                            ExposedDropdownMenuDefaults.TrailingIcon(
-//                                                expanded = expandedWorkout
-//                                            )
-//                                        },
-//                                        modifier = Modifier.menuAnchor()
-//                                    )
-//
-//                                    ExposedDropdownMenu(
-//                                        expanded = expandedWorkout,
-//                                        onDismissRequest = { expandedWorkout = false }
-//                                    ) {
-//                                        workoutTypes.forEach { workout ->
-//                                            DropdownMenuItem(
-//                                                text = { Text(text = workout) },
-//                                                onClick = {
-//                                                    selectedWorkoutType = workout
-//                                                    expandedWorkout = false
-//                                                    Toast.makeText(
-//                                                        context,
-//                                                        workout,
-//                                                        Toast.LENGTH_SHORT
-//                                                    ).show()
-//
-//                                                }
-//                                            )
-//                                        }
-//                                    }
-//                                }
-//                            }
-
-
                             Spacer(modifier = Modifier.height(25.dp))
 
 

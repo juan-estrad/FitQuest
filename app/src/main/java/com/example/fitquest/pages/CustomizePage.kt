@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.content.MediaType.Companion.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -83,7 +84,7 @@ fun CustomizePage(modifier: Modifier = Modifier, navController: NavController, a
 @Composable
 fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     var expanded by remember { mutableStateOf(false) }
-    var selectedText by remember { mutableStateOf("Enter Focus") }
+    var selectedText by remember { mutableStateOf("Avatar") }
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp
     val screenWidthDp = configuration.screenWidthDp
@@ -172,14 +173,16 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                 color = Color.White
             )
 
-            Box(
-                modifier = Modifier
+//            Box(
+//                modifier = Modifier
+//
+//                    .fillMaxWidth(),
+//                contentAlignment = Alignment.Center
+//
+//
+//            )
+            Row {
 
-                    .fillMaxWidth(),
-                contentAlignment = Alignment.Center
-
-
-            ) {
                 ExposedDropdownMenuBox(
                     expanded = expanded,
 
@@ -288,10 +291,250 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
 
                     }
                 }
+            }
+
+
+                Spacer(modifier = Modifier.height(25.dp))
+
+
+                var expandedBorder by remember { mutableStateOf(false) }
+                var selectedTextBorder by remember { mutableStateOf("Borders") }
+                ///// BORDER DROPDOWN////
+
+                Row {
+                    ExposedDropdownMenuBox(
+                        expanded = expandedBorder,
+
+                        onExpandedChange = {
+                            expandedBorder = !expandedBorder
+                        }
+                    ) {
+
+                        OutlinedTextField(
+
+                            value = selectedTextBorder,
+                            onValueChange = { },
+                            singleLine = true,
+                            readOnly = true,
+                            trailingIcon =
+                            {
+                                Icon(
+                                    imageVector =
+                                    if (expandedBorder) {
+                                        Icons.Filled.KeyboardArrowDown
+                                    } else {
+                                        Icons.Filled.KeyboardArrowLeft
+                                    },
+                                    contentDescription = null,
+                                    //                                        tint = LocalContentColor.current.copy(alpha = if (expanded) ContentAlpha.high else ContentAlpha.medium),
+                                    modifier = Modifier.size(50.dp)
+                                )// Adjust the size as needed
+                            },
+
+                            colors = TextFieldDefaults.outlinedTextFieldColors(
+
+                                focusedBorderColor = brightOrange,
+                                containerColor = darker,
+                                unfocusedBorderColor = dark,
+
+                                ),
+                            shape = RoundedCornerShape(size = 20.dp),
+                            textStyle = LocalTextStyle.current.copy(
+                                fontSize = (screenHeightDp / 30).sp, // Change this to your desired text size
+                                fontStyle = FontStyle.Italic,
+                                color = dark
+
+                            ),
+
+                            modifier = Modifier
+                                .menuAnchor()
+                                .fillMaxWidth()
+                                .height((screenHeightDp / 12).dp)
+                        )
+                        ExposedDropdownMenu(
+                            modifier = Modifier
+                                .border(
+                                    (2.3f).dp,
+                                    brush = horizontalGradientBrush(grayWhite, brightOrange),
+                                    RoundedCornerShape(size = 20.dp)
+                                )
+                                .background(
+                                    color = darker,
+                                    shape = RoundedCornerShape(size = 10.dp)
+                                )
+                            //                                    .clip(RoundedCornerShape(size = 26.dp))
+                            ,
+                            expanded = expandedBorder,
+                            onDismissRequest = { expandedBorder = false }
+                        )
+                        {
+                            bordersCategories.forEach { category ->
+
+                                Box(
+                                    modifier = Modifier
+                                        .height((screenHeightDp / 15f).dp)
+                                        .border(1.dp, dark, RoundedCornerShape(size = 5.dp))
+                                    //                                            .background(transparent, RoundedCornerShape(size = 26.dp))
+                                    //                                                    .padding(30.dp)
+
+                                    ,
+                                    contentAlignment = Alignment.CenterStart
+
+                                ) {
+                                    //                                        Spacer(modifier = Modifier.height(10.dp))
+                                    DropdownMenuItem(
+                                        //                                        modifier = Modifier.padding(30.dp),
+                                        text = {
+                                            //                                            Text(text = category)
+
+                                            Title01_LEFT(
+                                                "    $category",
+                                                grayWhite,
+                                                (screenHeightDp / 28f)
+                                            )
+                                        },
+                                        onClick = {
+                                            selectedTextBorder = category
+                                            expandedBorder = false
+                                            Toast.makeText(
+                                                context,
+                                                category,
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
+
+                                        },
+                                    )
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+            Spacer(modifier = Modifier.height(25.dp))
+
+            var expandedBG by remember { mutableStateOf(false) }
+            var selectedTextBG by remember { mutableStateOf("Background") }
+            ///// BORDER DROPDOWN////
+
+            Row {
+                ExposedDropdownMenuBox(
+                    expanded = expandedBG,
+
+                    onExpandedChange = {
+                        expandedBG = !expandedBG
+                    }
+                ) {
+
+                    OutlinedTextField(
+
+                        value = selectedTextBG,
+                        onValueChange = { },
+                        singleLine = true,
+                        readOnly = true,
+                        trailingIcon =
+                        {
+                            Icon(
+                                imageVector =
+                                if (expandedBG) {
+                                    Icons.Filled.KeyboardArrowDown
+                                } else {
+                                    Icons.Filled.KeyboardArrowLeft
+                                },
+                                contentDescription = null,
+                                //                                        tint = LocalContentColor.current.copy(alpha = if (expanded) ContentAlpha.high else ContentAlpha.medium),
+                                modifier = Modifier.size(50.dp)
+                            )// Adjust the size as needed
+                        },
+
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+
+                            focusedBorderColor = brightOrange,
+                            containerColor = darker,
+                            unfocusedBorderColor = dark,
+
+                            ),
+                        shape = RoundedCornerShape(size = 20.dp),
+                        textStyle = LocalTextStyle.current.copy(
+                            fontSize = (screenHeightDp / 30).sp, // Change this to your desired text size
+                            fontStyle = FontStyle.Italic,
+                            color = dark
+
+                        ),
+
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
+                            .height((screenHeightDp / 12).dp)
+                    )
+                    ExposedDropdownMenu(
+                        modifier = Modifier
+                            .border(
+                                (2.3f).dp,
+                                brush = horizontalGradientBrush(grayWhite, brightOrange),
+                                RoundedCornerShape(size = 20.dp)
+                            )
+                            .background(
+                                color = darker,
+                                shape = RoundedCornerShape(size = 10.dp)
+                            )
+                        //                                    .clip(RoundedCornerShape(size = 26.dp))
+                        ,
+                        expanded = expandedBG,
+                        onDismissRequest = { expandedBG = false }
+                    )
+                    {
+                        backgroundCategories.forEach { category ->
+
+                            Box(
+                                modifier = Modifier
+                                    .height((screenHeightDp / 15f).dp)
+                                    .border(1.dp, dark, RoundedCornerShape(size = 5.dp))
+                                //                                            .background(transparent, RoundedCornerShape(size = 26.dp))
+                                //                                                    .padding(30.dp)
+
+                                ,
+                                contentAlignment = Alignment.CenterStart
+
+                            ) {
+                                //                                        Spacer(modifier = Modifier.height(10.dp))
+                                DropdownMenuItem(
+                                    //                                        modifier = Modifier.padding(30.dp),
+                                    text = {
+                                        //                                            Text(text = category)
+
+                                        Title01_LEFT(
+                                            "    $category",
+                                            grayWhite,
+                                            (screenHeightDp / 28f)
+                                        )
+                                    },
+                                    onClick = {
+                                        selectedTextBG = category
+                                        expandedBG = false
+                                        Toast.makeText(
+                                            context,
+                                            category,
+                                            Toast.LENGTH_SHORT
+                                        )
+                                            .show()
+
+                                    },
+                                )
+                            }
+                        }
+
+                    }
+                }
+            }
+
+
+
 
 
             }
 
         }
     }
-}
+

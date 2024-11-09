@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -91,6 +92,9 @@ fun SettingsPageContent(modifier: Modifier = Modifier, navController: NavControl
         }
         SettingsItem(icon = Icons.Default.Info, title = "About") {
 
+        }
+        SettingsItem(icon = Icons.Default.Warning, title = "Log Out") {
+            authViewModel.signout()
         }
 
 
