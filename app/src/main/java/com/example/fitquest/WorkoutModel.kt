@@ -3,7 +3,10 @@ package com.example.fitquest
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.fitquest.pages.userID
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.database
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.temporal.WeekFields
@@ -11,6 +14,8 @@ import java.util.Locale
 
 class WorkoutViewModel : ViewModel() {
     private val database = FirebaseDatabase.getInstance()
+    //val database2 = Firebase.database
+    val userID = FirebaseAuth.getInstance().uid
 
     // Observables for UI
     var todayWorkout = mutableStateOf<Workout?>(null)

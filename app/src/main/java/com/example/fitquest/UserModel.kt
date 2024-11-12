@@ -15,6 +15,7 @@ data class Weekly(
 )
 
 data class Workout(
+    var name: String = "",
     val description: String = "",
     var strength: Int = 0,
     var agility: Int = 0,
