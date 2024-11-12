@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AddCircle
@@ -69,6 +70,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
@@ -86,6 +88,7 @@ import com.example.fitquest.UserProfile
 import com.example.fitquest.pages.myRef
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.dark
+import com.example.fitquest.ui.theme.darkOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.transparent
@@ -95,14 +98,20 @@ import com.google.firebase.database.database
 
 
     @Composable
-fun verticalGradientBrush(colorTOP: Color, colorBOTTOM: Color): Brush {
+fun verticalGradientBrush(
+        colorTOP: Color,
+        colorBOTTOM: Color,
+        startY: Float = 250f,
+        endY: Float = Float.POSITIVE_INFINITY,
+
+): Brush {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.toFloat()
 
     return Brush.verticalGradient(
         colors = listOf(colorTOP, colorBOTTOM),
         startY = 250f,
-        endY = Float.POSITIVE_INFINITY,
+        endY = endY,
     )
 }
 
@@ -199,7 +208,54 @@ fun UserInputField(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun requiredTitle01(
+    label: String,
+    fontSize: Float = 21f,
+//    onValueChange: (String) -> Unit,
+//    isPassword: Boolean = false
+) {
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.toFloat()
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment= Alignment.CenterVertically
+    ) {
+        Text(
+            text = label,
+            color = grayWhite,
+            textAlign = TextAlign.Left,
+            fontSize = fontSize.sp
+        )
 
+        Text(
+            text = "*",
+            color = Color.Red,
+            fontSize = fontSize.sp
+        )
+    }
+    Spacer(modifier = Modifier.height(5.dp))
+//
+//    OutlinedTextField(
+//
+//        value = value,
+//        onValueChange = onValueChange,
+//        singleLine = true,
+//        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+//        colors = TextFieldDefaults.outlinedTextFieldColors(
+//            focusedBorderColor = brightOrange,
+//            containerColor = darker,
+//            unfocusedBorderColor = Color.Transparent,
+//        ),
+//        shape = RoundedCornerShape(size = 10.dp),
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height( (screenHeight/14) .dp)
+//    )
+
+//    Spacer(modifier = Modifier.height(15.dp))
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -209,6 +265,7 @@ fun UserInputField2(
     value: String,
     width: Dp,
     textAlign: TextAlign = TextAlign.Left,
+
 
 //    fillMaxWith: Boolean = false,
 //    width: Float = 40f,
@@ -227,7 +284,7 @@ fun UserInputField2(
         onValueChange = { },
         singleLine = true,
 //        readOnly = true,
-
+//        label = {Text(label)} ,
 
 
         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -261,6 +318,135 @@ fun UserInputField2(
     )
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserInputField3(
+    isNumber: Boolean = true,
+    placeholder: String,
+    value: String,
+    width: Dp,
+
+    textAlign: TextAlign = TextAlign.Center,
+
+    fontSize: Float,
+    fontColor: Color = grayWhite,
+
+
+    placeHolderFontSize : Float = fontSize,
+    placeHolderFontStyle: FontStyle = FontStyle.Normal,
+
+
+
+
+//    fillMaxWith: Boolean = false,
+//    width: Float = 40f,
+//
+
+
+    onValueChange: (String) -> Unit,
+
+
+) {
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp.toFloat()
+    val screenWidthDp = configuration.screenWidthDp
+    var text by remember { mutableStateOf(value)}
+
+
+    OutlinedTextField(
+
+        value =value
+//        if (value == "") {
+//            "0"
+//        } else {
+//            value
+//        }
+        ,
+        onValueChange = {
+
+            if (isNumber) {
+                if (it.all { char -> char.isDigit() })  {
+
+                    val strippedText = it.trimStart { char -> char == '0' }
+                    text = strippedText
+                    onValueChange(strippedText)
+
+
+                }
+            }
+
+            else{
+                onValueChange(it)
+            }
+
+
+        }
+
+        ,
+        singleLine = true,
+        keyboardOptions =
+        if (isNumber) {
+            KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+        }
+        else {
+            KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
+        }
+
+        ,
+//        readOnly = true,
+//        label = {Text(label)} ,
+
+
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+
+            focusedBorderColor = brightOrange,
+            containerColor = darker,
+            unfocusedBorderColor = dark,
+
+            )
+        ,
+
+        shape = RoundedCornerShape(size = 20.dp),
+
+        textStyle = LocalTextStyle.current.copy(
+            fontSize = fontSize.sp, // Change this to your desired text size
+            color = grayWhite,
+            textAlign = textAlign
+
+        ),
+        placeholder = {
+            if (value.isEmpty()) {
+
+                Text(
+                    text = placeholder,
+                    color = fontColor,
+                    textAlign = textAlign,
+                    fontSize = placeHolderFontSize.sp,
+
+                    style = LocalTextStyle.current.copy(
+                        textAlign = TextAlign.Center,
+                        fontStyle = placeHolderFontStyle
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+
+                )
+            }
+        }
+        ,
+
+
+        modifier = Modifier
+            .height(screenHeightDp.dp/12)
+            .width(width)
+
+//        if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+//            .fillMaxWidth()
+//            .height((screenHeightDp / 12).dp)
+//        ,
+
+    )
+}
 
 
 @Composable
@@ -314,13 +500,14 @@ fun Title01(
 fun OrangeFilledButton(
     label: String,
     onClickFunction: () -> Unit,
-    enabled: Boolean
+    enabled: Boolean,
+    modifier: Modifier = Modifier.fillMaxWidth().height(65.dp)
 ) {
     Button(
         onClick = onClickFunction,
         colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
         enabled = enabled,
-        modifier = Modifier.fillMaxWidth().height(65.dp),
+        modifier = modifier,
         shape = RoundedCornerShape(size = 18.dp)
     ) {
         Text(
@@ -332,6 +519,94 @@ fun OrangeFilledButton(
     }
     Spacer(modifier = Modifier.height(16.dp))
 }
+
+@Composable
+fun OrangeFilledButton2(
+    label: String,
+    onClickFunction: () -> Unit,
+    enabled: Boolean,
+    fontSize: Float,
+    modifier: Modifier = Modifier.fillMaxWidth().height(65.dp),
+    buttomShapeRoundess: Float = 18f
+) {
+
+
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp.toFloat()
+    val screenWidthDp = configuration.screenWidthDp
+
+
+
+    Button(
+        onClick = onClickFunction,
+        colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
+        enabled = enabled,
+        modifier = modifier,
+        shape = RoundedCornerShape(size = buttomShapeRoundess.dp)
+    ) {
+        Text(
+            text = label,
+            color = grayWhite,
+            fontSize = fontSize.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+//    Spacer(modifier = Modifier.height(16.dp))
+}
+
+@Composable
+fun LOGBUTTON(
+    label: String,
+    onClickFunction: () -> Unit,
+    enabled: Boolean,
+    fontSize: Float,
+    screenHeightDp: Float = 40f,
+    modifier: Modifier = Modifier
+        .background( horizontalGradientBrush(dark, brightOrange), RoundedCornerShape(size = 40.dp))
+        .fillMaxWidth()
+        .height((screenHeightDp.dp / 9f))
+        .border(
+            (5.3f).dp,
+            brush = horizontalGradientBrush(darkOrange, dark),
+            RoundedCornerShape(size = 40.dp)
+        )
+    ,
+    buttomShapeRoundess: Float = 18f
+) {
+
+
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp.toFloat()
+    val screenWidthDp = configuration.screenWidthDp
+
+
+
+    Button(
+        onClick = onClickFunction,
+        colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
+        enabled = enabled,
+        modifier = modifier,
+        shape = RoundedCornerShape(size = buttomShapeRoundess.dp)
+    ) {
+        Text(
+            text = label,
+            color = grayWhite,
+            fontSize = fontSize.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+//    Spacer(modifier = Modifier.height(16.dp))
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -424,11 +699,11 @@ fun ClickableImageWithText(
         Text(
             text = label,
             color = grayWhite,
-            fontSize = 24.sp,
+            fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(15.dp)
+                .padding(23.dp)
         )
     }
 }
