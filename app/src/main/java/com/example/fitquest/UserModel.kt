@@ -1,7 +1,5 @@
 package com.example.fitquest
 
-import java.time.LocalDateTime
-
 data class Weekly(
     val name: String = "",
     val workout1: String = "",
@@ -17,7 +15,6 @@ data class Weekly(
 )
 
 data class Workout(
-    val name: String = "",
     val description: String = "",
     var strength: Int = 0,
     var agility: Int = 0,
@@ -68,6 +65,11 @@ data class UserStats(
     var dexterity: Int = 0,
     var stamina: Int = 0,
     var strength: Int = 0
+)
+data class PieData(
+    val label: String,
+    val value: Float,
+    val color: androidx.compose.ui.graphics.Color
 )
 
 data class UserStreak(

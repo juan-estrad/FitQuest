@@ -4,6 +4,8 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,7 +35,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.nativeCanvas
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -41,9 +49,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.PieData
 //import com.example.fitquest.Date
 //import com.example.fitquest.Logging
 import com.example.fitquest.UserProfile
+import com.example.fitquest.UserStats
 import com.example.fitquest.ui.TopAndBottomAppBar
 //import com.example.fitquest.Year
 import com.example.fitquest.ui.theme.brightOrange
@@ -52,8 +62,11 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import kotlin.math.PI
+import kotlin.math.atan2
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -431,76 +444,3 @@ fun DisplayChildrenButton(modifier: Modifier = Modifier) {
         }
     }
 }
-
-//@Composable
-//fun BoxWithPngBorder() {
-//    Box(
-//        modifier = Modifier
-//            .size(120.dp) // Total size including border (outer Box)
-//            .background(Color.Transparent), // Make outer box transparent
-//        contentAlignment = Alignment.Center
-//    ) {
-//        // Inner circular content Box
-//        Image(
-//            painter = painterResource(id = pro), // Replace with your inner image
-//            contentDescription = "Profile Image",
-//            modifier = Modifier
-//                .size(100.dp) // Size of the inner image, slightly smaller than the outer border
-//                .clip(CircleShape),
-//            contentScale = ContentScale.Crop // Crop the image to fit in the circular shape
-//        )
-//
-//        // Border overlay using a PNG image
-//        Image(
-//            painter = painterResource(id = img), // Replace with your circular PNG border
-//            contentDescription = "Circular Border Image",
-//            modifier = Modifier.size(120.dp), // Size of the border image (slightly larger than content)
-//            contentScale = ContentScale.Crop
-//        )
-//    }
-//}
-
-/*@Composable
-fun UserLoggingButton() {
-    val myRef = database.getReference("Users")
-    val userID = FirebaseAuth.getInstance().uid
-    val currentDate = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(Date())
-    val currentYear = Calendar.getInstance().get(Calendar.YEAR).toString()
-    val monthDayState = remember { mutableStateOf<List<String>?>(null) }
-    val loggingDataState = remember { mutableStateOf<List<String>?>(null) }
-
-    Column {
-        // Button to load data for the current date
-        Button(onClick = {
-            // Fetch monthday entries for the current date under the current year
-            myRef.child("$userID").child("logging").child("Date").child(currentYear).get()
-                .addOnSuccessListener { snapshot ->
-                    // Collect monthday children (e.g., each logged day for that month)
-                    val monthDayList = snapshot.children.map { it.key ?: "Unnamed Day" }
-                    monthDayState.value = monthDayList
-                }
-        }) {
-            Text(text = "Load $currentDate - $currentYear")
-        }
-
-        // Display buttons for each monthday under the current year and date
-        monthDayState.value?.forEach { day ->
-            Button(onClick = {
-                // Fetch content for the specific monthday
-                myRef.child("Users").child("$userID").child("logging").child(currentDate)
-                    .child(currentYear).child(day).get()
-                    .addOnSuccessListener { snapshot ->
-                        val loggingData = snapshot.children.map { it.value.toString() }
-                        loggingDataState.value = loggingData
-                    }
-            }) {
-                Text(text = day)
-            }
-        }
-
-        // Display the content for the selected monthday
-        loggingDataState.value?.forEach { logData ->
-            Text(text = logData)
-        }
-    }
-}*/

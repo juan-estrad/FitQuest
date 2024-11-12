@@ -2,23 +2,16 @@ package com.example.fitquest.pages
 
 
 import android.widget.Toast
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,13 +21,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
-
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -43,7 +31,6 @@ import com.example.fitquest.AuthViewModel
 //import com.example.fitquest.Avatar
 //import com.example.fitquest.Background
 //import com.example.fitquest.Borders
-import com.example.fitquest.ID
 //import com.example.fitquest.Inventory
 import com.example.fitquest.R
 
@@ -54,16 +41,11 @@ import com.example.fitquest.UserStreak
 import com.example.fitquest.ui.OrangeFilledButton
 import com.example.fitquest.ui.UserInputField
 
-import com.example.fitquest.ui.theme.brightOrange
-import com.example.fitquest.ui.theme.darker
-import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.verticalGradientBrush
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
-import java.time.LocalDateTime
-import kotlin.system.exitProcess
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -94,7 +76,7 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                         username = username,
                         flexcoins = 0,
                         currentAvatar = R.drawable.avatar,
-                        currentBackground = R.drawable.background_1,
+                        currentBackground = R.drawable.background,
                         currentBorder = R.drawable.border,
 //                        inventory = Inventory(
 //                            avatar = Avatar(
@@ -138,7 +120,7 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                     myRef.child(id).setValue(userProfile)
                     myRef.child(id).child("inventory").child("avatar").child(R.drawable.avatar.toString()).setValue("Default Avatar")
                     myRef.child(id).child("inventory").child("borders").child(R.drawable.border.toString()).setValue("Default Border")
-                    myRef.child(id).child("inventory").child("background").child(R.drawable.background_1.toString()).setValue("Default Background")
+                    myRef.child(id).child("inventory").child("background").child(R.drawable.background.toString()).setValue("Default Background")
                 }
 
                 navController.navigate("home")

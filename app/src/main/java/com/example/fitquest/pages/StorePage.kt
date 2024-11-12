@@ -123,9 +123,9 @@ fun StorePageContents(modifier: Modifier = Modifier, navController: NavControlle
                 Title01_LEFT("Backgrounds", grayWhite, 40f);
                 LazyRow {
                     items(1) { index ->
+                        BackgroundStoreItemBox(R.drawable.background_1, userFlexCoins, navController, authViewModel, profile)
                         BackgroundStoreItemBox(R.drawable.background_2, userFlexCoins, navController, authViewModel, profile)
                         BackgroundStoreItemBox(R.drawable.background_3, userFlexCoins, navController, authViewModel, profile)
-//                        BackgroundStoreItemBox(R.drawable.profile_3, userFlexCoins, navController, authViewModel)
                     }
                 }
                 Spacer(modifier = Modifier.height(8.dp))
@@ -237,9 +237,9 @@ fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavCon
                         showConfirmationDialog.value = false
                         hasPurchased = true  // Set purchased state to true
                         val image2 = database.getReference("Users").child("$userID").child("inventory").child("background")
-                        image2.child("$image").child("name").setValue("test")
+//                        image2.child("$image").child("name").setValue("test")
 
-                        if(image == R.drawable.background_1){
+                        if (image == R.drawable.background_1){
                             image2.child("$image").setValue("Sunset Background")
                         }
                         else if(image == R.drawable.background_2){
@@ -375,7 +375,7 @@ fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavContro
                         val image2 = database.getReference("Users").child("$userID").child("inventory").child("borders")
 
                         if(image == R.drawable.border_1){
-                            image2.child("$image").setValue("Green Border")
+                            image2.child("$image").setValue("Purple Border")
                         }
                         else if(image == R.drawable.border_2){
                             image2.child("$image").setValue("Gold Border")
