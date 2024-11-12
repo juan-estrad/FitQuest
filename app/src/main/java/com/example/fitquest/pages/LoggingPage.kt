@@ -9,33 +9,27 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -46,10 +40,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.Cyan
 import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
@@ -57,8 +48,6 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -67,18 +56,16 @@ import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.Log
-import com.example.fitquest.R
 //import com.example.fitquest.Logging
 import com.example.fitquest.UserProfile
-import com.example.fitquest.UserStats
 import com.example.fitquest.Workout
-import com.example.fitquest.ui.ClickableImageWithText
-import com.example.fitquest.ui.Title01
+import com.example.fitquest.ui.LOGBUTTON
+import com.example.fitquest.ui.OrangeFilledButton2
 import com.example.fitquest.ui.Title01_LEFT
 import com.example.fitquest.ui.TopAndBottomAppBar
-import com.example.fitquest.ui.UserInputField
-import com.example.fitquest.ui.UserInputField2
+import com.example.fitquest.ui.UserInputField3
 import com.example.fitquest.ui.horizontalGradientBrush
+import com.example.fitquest.ui.requiredTitle01
 //import com.example.fitquest.isStreakExpired
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.dark
@@ -86,7 +73,7 @@ import com.example.fitquest.ui.theme.darkOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.transparent
-import com.example.fitquest.ui.theme.verticalGradientBrush
+import com.example.fitquest.ui.verticalGradientBrush
 import com.example.fitquest.updateFlexcoins
 import com.example.fitquest.updateLastWorkout
 import com.example.fitquest.updateStreak
@@ -140,25 +127,80 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
     var type by remember {
         mutableStateOf("")
     }
+
     var sets by remember {
         mutableStateOf("")
     }
     var reps by remember {
         mutableStateOf("")
     }
+
+
+
+    var weightNumber by remember {
+        mutableStateOf("")
+    }
+    var weightUnit by remember {
+        mutableStateOf("")
+    }
+
+
+
     var weight by remember {
         mutableStateOf("")
     }
+
+
+
+
+
+
+
+    var workouttimeNumber by remember {
+        mutableStateOf("")
+    }
+    var workouttimeUnit by remember {
+        mutableStateOf("")
+    }
+
     var workouttime by remember {
         mutableStateOf("")
     }
+
+
+
+
+
+
     var count by remember {
         mutableStateOf(0)
     }
 
+
+
     var distance by remember {
         mutableStateOf("")
     }
+
+    var distanceUnit by remember {
+        mutableStateOf("")
+    }
+
+
+
+
+    var timeelapsedHours by remember {
+        mutableStateOf("")
+    }
+
+    var timeelapsedMinutes by remember {
+        mutableStateOf("")
+    }
+
+    var timeelapsedSeconds by remember {
+        mutableStateOf("")
+    }
+
     var timeelapsed by remember {
         mutableStateOf("")
     }
@@ -173,7 +215,7 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
     var expanded by remember { mutableStateOf(false) }
     var expandedWorkout by remember { mutableStateOf(false) }
 
-    var selectedText by remember { mutableStateOf("Enter Focus") }
+    var selectedWorkout by remember { mutableStateOf("Enter Focus") }
 
     var selectedWorkoutType by remember { mutableStateOf("Select Workout") } // Selected workout type
 
@@ -227,9 +269,9 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
             else -> Unit
         }
     }
-    LaunchedEffect(selectedText) {
-        if (selectedText.isNotEmpty()) {
-            val ref = Firebase.database.reference.child("workouts").child(selectedText)
+    LaunchedEffect(selectedWorkout) {
+        if (selectedWorkout.isNotEmpty()) {
+            val ref = Firebase.database.reference.child("workouts").child(selectedWorkout)
             ref.get().addOnSuccessListener { snapshot ->
                 val types = snapshot.children.mapNotNull { it.key }
                 workoutTypes = types
@@ -253,9 +295,20 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 //                .background(grayWhite)
 //
 //        )
+
+
+
+
+
+
+
+
+
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
+//                .background(transparent)
                 .padding(
                     start = 20.dp,
 //                    top = screenHeightDp.dp / 7 - 15.dp,
@@ -263,63 +316,14 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                     top = 0.dp,
                     end = 20.dp,
                     bottom = 0.dp
-                ),
+                )
+
+
+            ,
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            val sdf = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
-            val currentDateAndTime = sdf.format(Date())
-//            Title01("Log Your Workout", brightOrange, 32f, dark)
 
-
-
-            Box(
-
-                modifier = Modifier
-//                    .background(dark)
-                    .fillMaxWidth()
-                ,
-                contentAlignment = Alignment.CenterStart
-
-            ) {
-                Text(
-                    buildAnnotatedString {
-                        withStyle(
-                            style = SpanStyle(
-                                color = brightOrange,
-                                fontSize = (screenHeightDp / 20).sp,
-                                shadow = Shadow(Color.Black)
-                            )
-                        )
-                        {
-                            append("\nWorkout Log")
-                        }
-//                        withStyle(
-//                            style = SpanStyle(
-//                                fontWeight = FontWeight.Bold,
-//                                color = grayWhite,
-//                                fontSize = (screenHeightDp / 5).sp,
-//                                shadow = Shadow(Color.Black)
-//                            )
-//                        ) {
-//                            append("\n_\n" )
-//                        }
-
-                        append("\n\n" )
-                        withStyle(
-                            style = SpanStyle(
-                                fontWeight = FontWeight.Bold,
-                                color = grayWhite,
-                                fontSize = (screenHeightDp / 20).sp,
-                                shadow = Shadow(Color.Black)
-                            )
-                        ) {
-                            append( currentDateAndTime + "\n" )
-                        }
-
-                    },
-                )
-            }
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -331,7 +335,7 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
             ) {
 
 
-                Spacer(modifier = Modifier.height( (screenHeightDp / 25).dp ) )
+                Spacer(modifier = Modifier.height( (screenHeightDp / 4.5).dp ) )
 
 
 
@@ -350,6 +354,11 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 
 
                     var dropdownTextColor1 by remember { mutableStateOf(dark) }
+                    var dropdownTextTextStyle1 by remember { mutableStateOf(FontStyle.Italic) }
+
+
+
+
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -368,8 +377,8 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 
                             OutlinedTextField(
 
-                                value = "   $selectedText",
-                                onValueChange = { },
+                                value = "   $selectedWorkout",
+                                onValueChange = { selectedWorkout },
                                 singleLine = true,
                                 readOnly = true,
                                 trailingIcon =
@@ -399,7 +408,7 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                 shape = RoundedCornerShape(size = 20.dp),
                                 textStyle = LocalTextStyle.current.copy(
                                     fontSize = (screenHeightDp / 30).sp, // Change this to your desired text size
-                                    fontStyle = FontStyle.Italic,
+                                    fontStyle = dropdownTextTextStyle1,
                                     color = dropdownTextColor1
                                 ),
 
@@ -413,7 +422,8 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                     .border(
                                         (2.3f).dp,
                                         brush = horizontalGradientBrush(grayWhite, brightOrange),
-                                        RoundedCornerShape(size = 20.dp))
+                                        RoundedCornerShape(size = 20.dp)
+                                    )
                                     .background(
                                         color = darker,
                                         shape = RoundedCornerShape(size = 10.dp)
@@ -449,7 +459,8 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                                 )
                                             },
                                             onClick = {
-                                                selectedText = category
+                                                selectedWorkout = category
+                                                workout = category
                                                 expanded = false
 
                                                 Toast.makeText(
@@ -459,6 +470,7 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                                 ).show();
 
                                                 dropdownTextColor1 = grayWhite;
+                                                dropdownTextTextStyle1 = FontStyle.Normal;
 
                                             },
                                         )
@@ -491,12 +503,12 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 
                 Row {
 
-                    if (selectedText != "Cardio") {
+                    var dropdownTextColor2 by remember { mutableStateOf(dark) }
+                    var dropdownTextTextStyle2 by remember { mutableStateOf(FontStyle.Italic) }
+
+                    if (selectedWorkout != "Cardio" && workout.isNotEmpty()) {
                         Column {
 //                                Spacer(modifier = Modifier.height(70.dp))
-
-
-
 
 
                             // This is the dropdown menu to select workout
@@ -538,8 +550,8 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                     shape = RoundedCornerShape(size = 20.dp),
                                     textStyle = LocalTextStyle.current.copy(
                                         fontSize = (screenHeightDp / 30).sp, // Change this to your desired text size
-                                        fontStyle = FontStyle.Italic,
-                                        color = dark
+                                        fontStyle = dropdownTextTextStyle2,
+                                        color = dropdownTextColor2
 
                                     ),
 
@@ -558,8 +570,13 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                     modifier = Modifier
                                         .border(
                                             (2.3f).dp,
-                                            brush = horizontalGradientBrush(grayWhite, brightOrange),
-                                            RoundedCornerShape(size = 20.dp))
+                                            brush = horizontalGradientBrush(
+                                                grayWhite,
+                                                brightOrange
+                                            ),
+                                            RoundedCornerShape(size = 20.dp)
+                                        )
+                                        .wrapContentHeight()
                                         .background(
                                             color = darker,
                                             shape = RoundedCornerShape(size = 10.dp)
@@ -574,6 +591,7 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 
                                         Box(
                                             modifier = Modifier
+                                                .wrapContentHeight()
                                                 .height((screenHeightDp / 15f).dp)
                                                 .border(1.dp, dark, RoundedCornerShape(size = 5.dp))
 //                                            .background(transparent, RoundedCornerShape(size = 26.dp))
@@ -585,6 +603,10 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                         ) {
 //                                        Spacer(modifier = Modifier.height(10.dp))
                                             DropdownMenuItem(
+                                                modifier = Modifier
+                                                    .wrapContentHeight()
+                                                ,
+
 //                                        modifier = Modifier.padding(30.dp),
                                                 text = {
 //                                            Text(text = category)
@@ -596,7 +618,12 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                                     )
                                                 },
                                                 onClick = {
+                                                    dropdownTextColor2 = grayWhite;
+                                                    dropdownTextTextStyle2 = FontStyle.Normal;
+
                                                     selectedWorkoutType = category
+                                                    type = category
+
                                                     expandedWorkout = false
                                                     Toast.makeText(
                                                         context,
@@ -619,6 +646,11 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                             Spacer(modifier = Modifier.height(25.dp))
 
 
+
+                            //////// [ - ]  [  SETS value  ]  [ + ]   ///////////////////
+
+                            requiredTitle01("Number of Sets", 35f);
+
                             Row (
                                 modifier = Modifier
                                     .fillMaxWidth(),
@@ -629,94 +661,342 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
 
 
                                 Column() {
-                                    UserInputField2(
-                                        label = "Workout",
-                                        value = workout,
+                                    OrangeFilledButton2(
+                                        label = "-",
+//                                        enabled = inputText != "0",
 
-                                        width = ((screenWidthDp / 3).dp - 20.dp),
+                                        {
+                                            if (sets == "") {
+                                                sets = "0"
+                                            }
+                                            else{
+                                                val updateSets = sets.toInt() - 1;
+                                                sets = updateSets.toString()
+                                            }
+                                        },
 
-                                        ) {
-                                        workout = it
-                                    }
+                                        (sets != "" && sets != "0"),
+                                        fontSize = screenHeightDp / 23f,
+                                        modifier = Modifier
+                                            .width((screenWidthDp / 3).dp - 20.dp)
+                                            .height(screenHeightDp.dp / 12),
+                                        )
                                 }
                                 Column() {
-                                    UserInputField2(
-                                        label = "Workout",
-                                        value = workout,
-
+                                    UserInputField3(
+                                        placeholder = "0",
+                                        value = sets,
                                         width = ((screenWidthDp / 3).dp),
                                         textAlign = TextAlign.Center,
+                                        fontSize = (screenHeightDp / 23f)
 
                                         ) {
-                                        workout = it
+
+                                        sets = it
                                     }
                                 }
                                 Column() {
-                                    UserInputField2(
-                                        label = "Workout",
-                                        value = workout,
 
-                                        width = ((screenWidthDp / 3).dp - 20.dp),
+                                    OrangeFilledButton2(
+                                        label = "+",
+
+                                        {
+                                            if(sets == ""){
+                                                sets ="1"
+                                            }
+                                            else{
+                                                val updateSets = sets.toInt() + 1;
+                                                sets = updateSets.toString()
+                                            }
+                                        },
+
+                                        true,
+                                        fontSize = screenHeightDp / 23f,
+                                        modifier = Modifier
+                                            .width((screenWidthDp / 3).dp - 20.dp)
+                                            .height(screenHeightDp.dp / 12),
+
+
+                                    )
+
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(25.dp))
+//
+//                            LoggingInputField(
+//                                label = "Number of Sets",
+//                                value = sets
+//                            ) {
+//                                sets = it
+//                            }
+
+                            //////// [ - ]  [  REPS value  ]  [ + ]   ///////////////////
+
+                            requiredTitle01("Number of Reps per Set", 35f);
+
+                            Row (
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+
+                                horizontalArrangement = Arrangement.Center, // Centers horizontally
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+
+
+                                Column() {
+                                    OrangeFilledButton2(
+                                        label = "-",
+//                                        enabled = inputText != "0",
+
+                                        {
+                                            if (reps == "") {
+                                                reps = "0"
+                                            }
+                                            else{
+                                                val updateSets = reps.toInt() - 1;
+                                                reps = updateSets.toString()
+                                            }
+                                        },
+
+                                        (reps != "" && reps != "0"),
+                                        fontSize = screenHeightDp / 23f,
+                                        modifier = Modifier
+                                            .width((screenWidthDp / 3).dp - 20.dp)
+                                            .height(screenHeightDp.dp / 12),
+                                    )
+                                }
+                                Column() {
+                                    UserInputField3(
+                                        placeholder = "0",
+                                        value = reps,
+                                        width = ((screenWidthDp / 3).dp),
+                                        textAlign = TextAlign.Center,
+                                        fontSize = (screenHeightDp / 23f)
 
                                         ) {
-                                        workout = it
+
+                                        reps = it
+                                    }
+                                }
+                                Column() {
+
+                                    OrangeFilledButton2(
+                                        label = "+",
+
+                                        {
+                                            if(reps == ""){
+                                                reps ="1"
+                                            }
+                                            else{
+                                                val updateSets = reps.toInt() + 1;
+                                                reps = updateSets.toString()
+                                            }
+                                        },
+
+                                        true,
+                                        fontSize = screenHeightDp / 23f,
+                                        modifier = Modifier
+                                            .width((screenWidthDp / 3).dp - 20.dp)
+                                            .height(screenHeightDp.dp / 12),
+
+
+                                        )
+
+                                }
+                            }
+
+                            Spacer(modifier = Modifier.height(25.dp))
+
+
+//                            Spacer(modifier = Modifier.height(15.dp))
+//
+//                            LoggingInputField(
+//                                label = "Number of Reps per Set",
+//                                value = reps
+//                            )
+//                            { reps = it }
+
+
+                            //////// [ - ]  [  WEIGHT value  ]  [ + ]   ///////////////////
+
+                            requiredTitle01("Weight", 35f);
+
+                            Row (
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+
+                                horizontalArrangement = Arrangement.Center, // Centers horizontally
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                ///// [  Workout value  ]
+                                Column() {
+                                    UserInputField3(
+                                        placeholder = "WEIGHT",
+                                        value = weightNumber,
+
+                                        width = ((screenWidthDp * (3 / 5f)).dp - 20.dp),
+                                        textAlign = TextAlign.Center,
+                                        fontSize = (screenHeightDp / 30f),
+                                        placeHolderFontStyle = FontStyle.Italic,
+                                        fontColor = dark,
+
+                                        ) {
+
+                                        weightNumber = it
+                                    }
+                                }
+
+                                ///// [  Workout value  ]
+                                Column() {
+                                    UserInputField3(
+                                        isNumber = false,
+                                        placeholder = "UNIT",
+                                        value = weightUnit,
+
+
+                                        width = ((screenWidthDp * (2 / 5f)).dp - 20.dp),
+                                        textAlign = TextAlign.Center,
+                                        fontSize = (screenHeightDp / 30f),
+                                        placeHolderFontStyle = FontStyle.Italic,
+                                        fontColor = dark,
+
+                                        ) {
+
+                                        weightUnit = it
                                     }
                                 }
                             }
 
 
-                            Spacer(modifier = Modifier.height(15.dp))
 
-                            LoggingInputField(
-                                label = "Number of Sets",
-                                value = sets
-                            ) {
-                                sets = it
+                            Spacer(modifier = Modifier.height(25.dp))
+
+
+//                            Spacer(modifier = Modifier.height(15.dp))
+
+//                            // Weight
+//                            LoggingInputField(
+//                                label = "Weight",
+//                                value = weight
+//                            )
+//                            { weight = it }
+
+
+
+
+
+
+                            //////// [ Mins ]  [ Seconds ]   ///////////////////
+
+                            requiredTitle01("Time Elapsed", 35f);
+
+                            Row (
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+
+                                horizontalArrangement = Arrangement.Center, // Centers horizontally
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+
+
+                                ///// [  Workout value  ]
+                                Column() {
+                                    UserInputField3(
+                                        placeholder = "TIME",
+                                        value = workouttimeNumber,
+
+                                        width = ((screenWidthDp * (3/5f)).dp - 20.dp),
+                                        textAlign = TextAlign.Center,
+                                        fontSize = (screenHeightDp / 30f),
+                                        placeHolderFontStyle = FontStyle.Italic,
+                                        fontColor = dark,
+
+                                        ) {
+
+                                        workouttimeNumber = it
+                                    }
+                                }
+
+                                ///// [  Workout value  ]
+                                Column() {
+                                    UserInputField3(
+                                        isNumber = false,
+                                        placeholder = "UNIT",
+                                        value = workouttimeUnit,
+
+
+                                        width = ((screenWidthDp * (2/5f)).dp - 20.dp),
+                                        textAlign = TextAlign.Center,
+                                        fontSize = (screenHeightDp / 30f),
+                                        placeHolderFontStyle = FontStyle.Italic,
+                                        fontColor = dark,
+
+                                        ) {
+
+                                        workouttimeUnit = it
+                                    }
+                                }
+
+
                             }
 
-                            Spacer(modifier = Modifier.height(15.dp))
+                            Spacer(modifier = Modifier.height(25.dp))
 
-                            LoggingInputField(
-                                label = "Number of Reps per Set",
-                                value = reps
-                            )
-                            { reps = it }
 
-                            Spacer(modifier = Modifier.height(15.dp))
 
-                            // Weight
-                            LoggingInputField(
-                                label = "Weight",
-                                value = weight
-                            )
-                            { weight = it }
 
-                            Spacer(modifier = Modifier.height(15.dp))
 
-                            // Time Elapsed
-                            LoggingInputField(
-                                label = "Workout Time",
-                                value = workouttime
-                            )
-                            { workouttime = it }
+
+//
+//
+//
+//
+//                            // Time Elapsed
+//                            LoggingInputField(
+//                                label = "Workout Time",
+//                                value = workouttime
+//                            )
+//                            { workouttime = it }
+
 
                             Spacer(modifier = Modifier.height(20.dp))
 
-                            Button(
-                                onClick = {
+
+
+
+
+                            LOGBUTTON(
+                                label = "LOG WORKOUT",
+                                onClickFunction = {
+                                    workouttime = workouttimeNumber + " " + workouttimeUnit
+
+                                    weight = weightNumber + " " + weightUnit
+
                                     updateLastWorkout(profile, monthday)
                                     val userRef =
                                         database.getReference("Users").child("$userID")
                                             .child("logging").child("Date").child("$year")
                                             .child("$monthday")
                                             .child("workout" + profile.workoutCount)
-                                    userRef.child("Workout").setValue(selectedWorkoutType)
-                                    userRef.child("Type").setValue(selectedText)
+                                    userRef.child("Workout").setValue(workout)
+                                    userRef.child("Type").setValue(type)
                                     userRef.child("sets").setValue(sets)
                                     userRef.child("reps").setValue(reps)
                                     userRef.child("weight").setValue(weight)
                                     userRef.child("time").setValue(workouttime)
+
+
                                     //completeWorkout()
+
+                                    weightNumber = ""
+                                    weightUnit = ""
+
+
+
+                                    workouttimeNumber = ""
+                                    workouttimeUnit = ""
+
                                     count++
                                     workout = ""
                                     sets = ""
@@ -731,109 +1011,349 @@ fun LoggingPageContents(modifier: Modifier = Modifier, navController: NavControl
                                             DateTimeFormatter.ISO_DATE
                                         )
                                     )
+
                                     val userRef2 =
-                                        database.getReference("Users").child("$userID")
-                                    userRef2.child("lastWorkout").setValue(profile.lastWorkout)
+                                        database.getReference("Users")
+                                            .child("$userID")
+
+                                    userRef2.child("lastWorkout")
+                                        .setValue(profile.lastWorkout)
                                     userRef2.child("workoutCount")
                                         .setValue(profile.workoutCount)
+
                                     userRef2.child("streak").child("streak")
                                         .setValue(profile.streak.streak)
                                     userRef2.child("streak").child("longestStreak")
                                         .setValue(profile.streak.longestStreak)
                                     userRef2.child("streak").child("lastUpdate")
                                         .setValue(profile.streak.lastUpdate)
+
                                     updateFlexcoins(profile)
-                                    userRef2.child("flexcoins").setValue(profile.flexcoins)
+                                    userRef2.child("flexcoins")
+                                        .setValue(profile.flexcoins)
+
                                     navController.navigate("logging")
-                                }
-                            ) {
-                                Text("Add value")
-                            }
+                                },
+                                fontSize = screenHeightDp / 23f,
+                                enabled =
+                                        workout.isNotEmpty()
+
+//                                        &&reps.isNotEmpty()
+//                                        weightNumber.isNotEmpty()
+//                                        weightUnit.isNotEmpty()
+//                                        workouttimeNumber.isNotEmpty()
+//                                        workouttimeUnit.isNotEmpty()
+                                ,
+                                screenHeightDp = screenHeightDp.toFloat(),
+                                buttomShapeRoundess = 40f
+                            )
+                            Spacer(modifier = Modifier.height(20.dp))
                         }
                     }
 
 
-                    else{
+                    if(selectedWorkout == "Cardio" && workout.isNotEmpty()){
+
+
                         Column {
-                            Spacer(modifier = Modifier.height(65.dp))
-                            LoggingInputField(
-                                label = "Distance",
+                            Spacer(modifier = Modifier.height(35.dp))
 
-                                value = distance
-                            ) {
-                                distance = it
+                            //////// [ Mins ]  [ Seconds ]   ///////////////////
+
+                            requiredTitle01("Distance", 35f);
+
+                            Row (
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+
+                                horizontalArrangement = Arrangement.Center, // Centers horizontally
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+
+
+                                ///// [  Workout value  ]
+                                Column() {
+                                    UserInputField3(
+                                        placeholder = "DISTANCE",
+                                        value = distance,
+
+                                        width = ((screenWidthDp * (3/5f)).dp - 20.dp),
+                                        textAlign = TextAlign.Center,
+                                        fontSize = (screenHeightDp / 30f),
+                                        placeHolderFontStyle = FontStyle.Italic,
+                                        fontColor = dark,
+
+                                        ) {
+
+                                        distance = it
+                                    }
+                                }
+
+                                ///// [  Workout value  ]
+                                Column() {
+                                    UserInputField3(
+                                        isNumber = false,
+                                        placeholder = "UNIT",
+                                        value = distanceUnit,
+
+
+                                        width = ((screenWidthDp * (2/5f)).dp - 20.dp),
+                                        textAlign = TextAlign.Center,
+                                        fontSize = (screenHeightDp / 30f),
+                                        placeHolderFontStyle = FontStyle.Italic,
+                                        fontColor = dark,
+
+                                        ) {
+
+                                        distanceUnit = it
+                                    }
+                                }
+
 
                             }
 
-                            Spacer(modifier = Modifier.height(15.dp))
+                            Spacer(modifier = Modifier.height(25.dp))
 
-                            LoggingInputField(
-                                label = "Time Elapsed",
-                                value = timeelapsed
-                            ) {
-                                timeelapsed = it
+//                            LoggingInputField(
+//                                label = "Distance",
+//
+//                                value = distance
+//                            ) {
+//                                distance = it
+//
+//                            }
+
+
+                            //////// [ HOurs ]  [ Mins ]  [Seconds] ///////////////////
+
+                            requiredTitle01("Time Elapsed", 35f);
+
+                            Row (
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+
+                                horizontalArrangement = Arrangement.Center, // Centers horizontally
+                                verticalAlignment = Alignment.CenterVertically
+                            ){
+
+
+                                ///// [  Workout value  ]
+                                Column() {
+                                    UserInputField3(
+                                        placeholder = "Hour(s)",
+                                        value = timeelapsedHours,
+
+                                        width = ((screenWidthDp * (1/3f)).dp - 20.dp),
+                                        textAlign = TextAlign.Center,
+                                        fontSize = (screenHeightDp / 30f),
+                                        placeHolderFontSize = (screenHeightDp / 45f),
+                                        placeHolderFontStyle = FontStyle.Italic,
+                                        fontColor = dark,
+
+                                        ) {
+
+                                        timeelapsedHours = it
+                                    }
+                                }
+
+
+                                ///// [  Workout value  ]
+                                Column() {
+                                    UserInputField3(
+                                        isNumber = true,
+                                        placeholder = "Minute(s)",
+                                        value = timeelapsedMinutes,
+
+
+                                        width = ((screenWidthDp * (1/3f)).dp - 20.dp),
+                                        textAlign = TextAlign.Center,
+
+                                        fontSize = (screenHeightDp / 30f),
+                                        placeHolderFontSize = (screenHeightDp / 70f),
+                                        placeHolderFontStyle = FontStyle.Italic,
+                                        fontColor = dark,
+
+                                        ) {
+
+                                        timeelapsedMinutes = it
+                                    }
+                                }
+
+                                ///// [  Workout value  ]
+                                Column() {
+                                    UserInputField3(
+                                        isNumber = true,
+                                        placeholder = "Second(s)",
+                                        value = timeelapsedSeconds,
+
+
+                                        width = ((screenWidthDp * (1/3f)).dp - 20.dp),
+                                        textAlign = TextAlign.Center,
+
+                                        fontSize = (screenHeightDp / 30f),
+                                        placeHolderFontSize = (screenHeightDp / 70f),
+                                        placeHolderFontStyle = FontStyle.Italic,
+                                        fontColor = dark,
+
+                                        ) {
+
+                                        timeelapsedSeconds = it
+                                    }
+                                }
+
+
                             }
+
+                            Spacer(modifier = Modifier.height(25.dp))
+
+//                            Spacer(modifier = Modifier.height(15.dp))
+//
+//                            LoggingInputField(
+//                                label = "Time Elapsed",
+//                                value = timeelapsed
+//                            ) {
+//                                timeelapsed = it
+//                            }
 
                             Spacer(modifier = Modifier.height(20.dp))
 
-                            Button(
-                                onClick = {
+                            LOGBUTTON(
+                                label = "LOG WORKOUT",
+                                onClickFunction = {
+
+                                    timeelapsed =
+                                        if(timeelapsedHours == "0"){
+                                            if(timeelapsedMinutes == "0"){
+                                                timeelapsedSeconds + "seconds"
+                                            }
+                                            else{
+                                                timeelapsedMinutes + "minutes" + timeelapsedSeconds + "seconds"
+                                            }
+
+                                        }
+                                        else{
+                                            timeelapsedHours + "hour(s)" + timeelapsedMinutes + "minute(s)" + timeelapsedSeconds + "seconds"
+                                        }
+
+
+
                                     val userRef =
                                         database.getReference("Users").child("$userID")
                                             .child("logging").child("Date").child("$year")
                                             .child("$monthday")
                                             .child("workout" + profile.workoutCount)
                                     userRef.child("Time Elapsed").setValue(timeelapsed)
-                                    userRef.child("Type").setValue(selectedText)
+                                    userRef.child("Type").setValue(selectedWorkout)
                                     userRef.child("Distance").setValue(distance)
                                     count++
                                     type = ""
                                     distance = ""
                                     timeelapsed = ""
 
-                                }
-                            ) {
-                                Text("Add value")
-                            }
+                                },
+
+                                fontSize = screenHeightDp / 23f,
+                                enabled = true,
+                                screenHeightDp = screenHeightDp.toFloat()
+                                ,
+                                buttomShapeRoundess = 40f
+
+                            )
                         }
                     }
                 }
 
-                Spacer(modifier = Modifier.height(16.dp))
-
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Button(
-
-
-                        onClick = { navController.navigate("logging") },
-
-                        ) {
-                        Text(text = "Move to logging page")
-                    }
-                }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Button(
-                        onClick = { navController.navigate("home") }
-                    ) {
-                        Text(text = "home")
-                    }
-                }
+                Spacer(modifier = Modifier.height(30.dp))
 
             }
         }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+
+//                .background(transparent)
+            ,
+//            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            val sdf = SimpleDateFormat("MMM d, yyyy", Locale.getDefault())
+            val currentDateAndTime = sdf.format(Date())
+//            Title01("Log Your Workout", brightOrange, 32f, dark)
+
+            Box(
+
+                modifier = Modifier
+//                    .background(darker)
+////                    .background(verticalGradientBrush(grayWhite, transparent,(screenHeightDp / 5f), 10f  ))
+//                    .fillMaxWidth()
+                    .fillMaxWidth()
+                    .height((screenHeightDp / 5).dp)
+                    .background(verticalGradientBrush(darker, transparent, 0f))
+
+                    .padding(
+                        start = 20.dp,
+//                    top = screenHeightDp.dp / 7 - 15.dp,
+//                    top = paddingValues.calculateTopPadding(),
+                        top = 0.dp,
+                        end = 20.dp,
+                        bottom = 0.dp
+                    )
+                ,
+                contentAlignment = Alignment.TopStart
+
+            ) {
+                Text(
+                    buildAnnotatedString {
+                        withStyle(
+                            style = SpanStyle(
+                                color = brightOrange,
+                                fontSize = (screenHeightDp / 20).sp,
+                                shadow = Shadow(Color.Black)
+                            )
+                        )
+                        {
+                            append("\nWorkout Log")
+                        }
+//                        withStyle(
+//                            style = SpanStyle(
+//                                fontWeight = FontWeight.Bold,
+//                                color = grayWhite,
+//                                fontSize = (screenHeightDp / 5).sp,
+//                                shadow = Shadow(Color.Black)
+//                            )
+//                        ) {
+//                            append("\n_\n" )
+//                        }
+
+                        append("\n\n" )
+                        withStyle(
+                            style = SpanStyle(
+                                fontWeight = FontWeight.Bold,
+                                color = grayWhite,
+                                fontSize = (screenHeightDp / 20).sp,
+                                shadow = Shadow(Color.Black)
+                            )
+                        ) {
+                            append( currentDateAndTime + "\n" )
+                        }
+
+                    },
+                )
+            }
+//            Box(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .height( (screenHeightDp / 8.5).dp )
+//                    .background(verticalGradientBrush(dark, transparent, 0f))
+//
+//            )
+//            {
+//
+//            }
+
+        }
+
     }
 }
 
@@ -902,4 +1422,20 @@ fun completeWorkout() {
             }
     }
 
+
+
+
+
+
+
+
+
+
+
 }
+
+
+
+
+
+

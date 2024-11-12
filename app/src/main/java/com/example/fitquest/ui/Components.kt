@@ -5,6 +5,7 @@ package com.example.fitquest.ui
 import android.icu.text.ListFormatter.Width
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -26,8 +27,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AddCircle
@@ -62,21 +66,27 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.PaintingStyle.Companion.Fill
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -89,6 +99,7 @@ import com.example.fitquest.UserProfile
 import com.example.fitquest.pages.myRef
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.dark
+import com.example.fitquest.ui.theme.darkOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.transparent
@@ -96,17 +107,24 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 import java.time.format.TextStyle
+import androidx.compose.ui.res.painterResource as painterResource1
 
 
 @Composable
-fun verticalGradientBrush(colorTOP: Color, colorBOTTOM: Color): Brush {
+fun verticalGradientBrush(
+        colorTOP: Color,
+        colorBOTTOM: Color,
+        startY: Float = 250f,
+        endY: Float = Float.POSITIVE_INFINITY,
+
+): Brush {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.toFloat()
 
     return Brush.verticalGradient(
         colors = listOf(colorTOP, colorBOTTOM),
         startY = 250f,
-        endY = Float.POSITIVE_INFINITY,
+        endY = endY,
     )
 }
 
@@ -203,7 +221,54 @@ fun UserInputField(
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun requiredTitle01(
+    label: String,
+    fontSize: Float = 21f,
+//    onValueChange: (String) -> Unit,
+//    isPassword: Boolean = false
+) {
+    val configuration = LocalConfiguration.current
+    val screenHeight = configuration.screenHeightDp.toFloat()
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment= Alignment.CenterVertically
+    ) {
+        Text(
+            text = label,
+            color = grayWhite,
+            textAlign = TextAlign.Left,
+            fontSize = fontSize.sp
+        )
 
+        Text(
+            text = "*",
+            color = Color.Red,
+            fontSize = fontSize.sp
+        )
+    }
+    Spacer(modifier = Modifier.height(5.dp))
+//
+//    OutlinedTextField(
+//
+//        value = value,
+//        onValueChange = onValueChange,
+//        singleLine = true,
+//        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+//        colors = TextFieldDefaults.outlinedTextFieldColors(
+//            focusedBorderColor = brightOrange,
+//            containerColor = darker,
+//            unfocusedBorderColor = Color.Transparent,
+//        ),
+//        shape = RoundedCornerShape(size = 10.dp),
+//        modifier = Modifier
+//            .fillMaxWidth()
+//            .height( (screenHeight/14) .dp)
+//    )
+
+//    Spacer(modifier = Modifier.height(15.dp))
+}
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -213,6 +278,7 @@ fun UserInputField2(
     value: String,
     width: Dp,
     textAlign: TextAlign = TextAlign.Left,
+
 
 //    fillMaxWith: Boolean = false,
 //    width: Float = 40f,
@@ -231,7 +297,7 @@ fun UserInputField2(
         onValueChange = { },
         singleLine = true,
 //        readOnly = true,
-
+//        label = {Text(label)} ,
 
 
         colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -265,6 +331,135 @@ fun UserInputField2(
     )
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun UserInputField3(
+    isNumber: Boolean = true,
+    placeholder: String,
+    value: String,
+    width: Dp,
+
+    textAlign: TextAlign = TextAlign.Center,
+
+    fontSize: Float,
+    fontColor: Color = grayWhite,
+
+
+    placeHolderFontSize : Float = fontSize,
+    placeHolderFontStyle: FontStyle = FontStyle.Normal,
+
+
+
+
+//    fillMaxWith: Boolean = false,
+//    width: Float = 40f,
+//
+
+
+    onValueChange: (String) -> Unit,
+
+
+) {
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp.toFloat()
+    val screenWidthDp = configuration.screenWidthDp
+    var text by remember { mutableStateOf(value)}
+
+
+    OutlinedTextField(
+
+        value =value
+//        if (value == "") {
+//            "0"
+//        } else {
+//            value
+//        }
+        ,
+        onValueChange = {
+
+            if (isNumber) {
+                if (it.all { char -> char.isDigit() })  {
+
+                    val strippedText = it.trimStart { char -> char == '0' }
+                    text = strippedText
+                    onValueChange(strippedText)
+
+
+                }
+            }
+
+            else{
+                onValueChange(it)
+            }
+
+
+        }
+
+        ,
+        singleLine = true,
+        keyboardOptions =
+        if (isNumber) {
+            KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number)
+        }
+        else {
+            KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
+        }
+
+        ,
+//        readOnly = true,
+//        label = {Text(label)} ,
+
+
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+
+            focusedBorderColor = brightOrange,
+            containerColor = darker,
+            unfocusedBorderColor = dark,
+
+            )
+        ,
+
+        shape = RoundedCornerShape(size = 20.dp),
+
+        textStyle = LocalTextStyle.current.copy(
+            fontSize = fontSize.sp, // Change this to your desired text size
+            color = grayWhite,
+            textAlign = textAlign
+
+        ),
+        placeholder = {
+            if (value.isEmpty()) {
+
+                Text(
+                    text = placeholder,
+                    color = fontColor,
+                    textAlign = textAlign,
+                    fontSize = placeHolderFontSize.sp,
+
+                    style = LocalTextStyle.current.copy(
+                        textAlign = TextAlign.Center,
+                        fontStyle = placeHolderFontStyle
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+
+                )
+            }
+        }
+        ,
+
+
+        modifier = Modifier
+            .height(screenHeightDp.dp/12)
+            .width(width)
+
+//        if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
+//            .fillMaxWidth()
+//            .height((screenHeightDp / 12).dp)
+//        ,
+
+    )
+}
 
 
 @Composable
@@ -318,13 +513,14 @@ fun Title01(
 fun OrangeFilledButton(
     label: String,
     onClickFunction: () -> Unit,
-    enabled: Boolean
+    enabled: Boolean,
+    modifier: Modifier = Modifier.fillMaxWidth().height(65.dp)
 ) {
     Button(
         onClick = onClickFunction,
         colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
         enabled = enabled,
-        modifier = Modifier.fillMaxWidth().height(65.dp),
+        modifier = modifier,
         shape = RoundedCornerShape(size = 18.dp)
     ) {
         Text(
@@ -336,6 +532,94 @@ fun OrangeFilledButton(
     }
     Spacer(modifier = Modifier.height(16.dp))
 }
+
+@Composable
+fun OrangeFilledButton2(
+    label: String,
+    onClickFunction: () -> Unit,
+    enabled: Boolean,
+    fontSize: Float,
+    modifier: Modifier = Modifier.fillMaxWidth().height(65.dp),
+    buttomShapeRoundess: Float = 18f
+) {
+
+
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp.toFloat()
+    val screenWidthDp = configuration.screenWidthDp
+
+
+
+    Button(
+        onClick = onClickFunction,
+        colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
+        enabled = enabled,
+        modifier = modifier,
+        shape = RoundedCornerShape(size = buttomShapeRoundess.dp)
+    ) {
+        Text(
+            text = label,
+            color = grayWhite,
+            fontSize = fontSize.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+//    Spacer(modifier = Modifier.height(16.dp))
+}
+
+@Composable
+fun LOGBUTTON(
+    label: String,
+    onClickFunction: () -> Unit,
+    enabled: Boolean,
+    fontSize: Float,
+    screenHeightDp: Float = 40f,
+    modifier: Modifier = Modifier
+        .background( horizontalGradientBrush(dark, brightOrange), RoundedCornerShape(size = 40.dp))
+        .fillMaxWidth()
+        .height((screenHeightDp.dp / 9f))
+        .border(
+            (5.3f).dp,
+            brush = horizontalGradientBrush(darkOrange, dark),
+            RoundedCornerShape(size = 40.dp)
+        )
+    ,
+    buttomShapeRoundess: Float = 18f
+) {
+
+
+    val configuration = LocalConfiguration.current
+    val screenHeightDp = configuration.screenHeightDp.toFloat()
+    val screenWidthDp = configuration.screenWidthDp
+
+
+
+    Button(
+        onClick = onClickFunction,
+        colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
+        enabled = enabled,
+        modifier = modifier,
+        shape = RoundedCornerShape(size = buttomShapeRoundess.dp)
+    ) {
+        Text(
+            text = label,
+            color = grayWhite,
+            fontSize = fontSize.sp,
+            fontWeight = FontWeight.Bold
+        )
+    }
+//    Spacer(modifier = Modifier.height(16.dp))
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -416,7 +700,7 @@ fun ClickableImageWithText(
     ) {
         // Background Image
         Image(
-            painter = painterResource(id = imageID),
+            painter = painterResource1(id = imageID),
             contentDescription = contentDescription,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -428,11 +712,11 @@ fun ClickableImageWithText(
         Text(
             text = label,
             color = grayWhite,
-            fontSize = 24.sp,
+            fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             modifier = Modifier
                 .align(Alignment.BottomStart)
-                .padding(15.dp)
+                .padding(23.dp)
         )
     }
 }
@@ -492,6 +776,9 @@ fun TopAndBottomAppBar(
         topBar = {
 
             userProfile?.let { profile ->
+
+                val bitmap: ImageBitmap = ImageBitmap.imageResource(id = userProfile!!.currentBackground)
+
                 Box(
                     modifier = Modifier
                         .height(systembarPadding.calculateTopPadding())
@@ -503,38 +790,65 @@ fun TopAndBottomAppBar(
                         modifier = modifier
 //                        .border(3.dp, dark,  RoundedCornerShape(12.dp))
                             .height((screenHeightDp / 7).dp)
-                            .fillMaxSize(),
+                            .fillMaxWidth(),
                         contentAlignment = Alignment.Center
 
                     )
 
                     {
-                        Image(
-                            painter = painterResource(id = userProfile!!.currentBackground),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size((screenHeightDp / 2.1).dp)
-                                .fillMaxWidth()// Adjust this to control the image size within the Box
-                                .align(Alignment.Center), // Center the image within the Box
-                            contentScale = ContentScale.Crop // Or use Fit, Inside, etc., depending on the effect you want
-                        )
+                        Canvas(modifier = Modifier
+                            .fillMaxSize()
+                        ) {
+                            val canvasWidth = size.width
+                            val canvasHeight = size.height
+
+                            drawImage(
+                                image = bitmap,
+                                srcSize = IntSize( bitmap.width, bitmap.width/3), // Only top half
+                                dstSize = IntSize(canvasWidth.toInt(), canvasHeight.toInt()),
+                                srcOffset = IntOffset.Zero, // Start from the top
+                                dstOffset =  IntOffset.Zero
+                            )
+                        }
+
+//                        Image(
+//                            painter = painterResource1(id = userProfile!!.currentBackground),
+//                            contentDescription = null,
+//
+//                            modifier = Modifier
+//                                .offset( ( 0 ).dp ,( 30f ).dp)
+////                                .size((screenHeightDp / 4.1).dp)
+////                                .fillMaxWidth()// Adjust this to control the image size within the Box
+//                                .align(Alignment.BottomCenter) // Center the image within the Box
+//                            ,
+//
+//                            contentScale = ContentScale.FillWidth,
+//                        )
 
 
 
                         //Plan is to make the circle the pfp but for now i just put the username in there
                         Box(
                             modifier = Modifier
-                                .size(105.dp)
+                                .size((screenHeightDp / 8.5).dp)
                                 .clip(CircleShape)
-                                .background(verticalGradientBrush(darker, dark)),
+                                .background(verticalGradientBrush(darker, dark))
+                            ,
                             contentAlignment = Alignment.Center
 
                         ) {
                             //Text(profile.username, fontSize = 35.sp, color = Color.White) //profile username
                             Image(
-                                painter = painterResource(id = userProfile!!.currentAvatar),
-                                contentDescription = null
-                                //modifier = Modifier.size(300.dp)
+                                painter = painterResource1(id = userProfile!!.currentAvatar),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .fillMaxSize()
+//                                    .size((screenHeightDp / 1).dp)
+//                                    .fillMaxWidth()// Adjust this to control the image size within the Box
+//                                    .align(Alignment.Center) // Center the image within the Box
+                                ,
+
                             )
                         }
                         Box(
@@ -547,33 +861,120 @@ fun TopAndBottomAppBar(
                         ) {
 
                             Image(
-                                painter = painterResource(id = userProfile!!.currentBorder),
-                                contentDescription = null
-                                //modifier = Modifier.size(300.dp)
+                                painter = painterResource1(id = userProfile!!.currentBorder),
+                                contentDescription = null,
+//                                modifier = Modifier.size(300.dp),                               ,
+                                contentScale = ContentScale.Crop
                             )
 
                         }
 
-
-                        Text(
-                            text = "   \uD83E\uDEB5" + profile.streak.streak.toString() + " days",
+                        Box(
                             modifier = Modifier
-                                .offset(x = (-150).dp, y = 40.dp)
-                                .padding(8.dp),
-                            color = White,
-                            fontSize = 35.sp,
-                            textAlign = TextAlign.Left,
-                            style = androidx.compose.ui.text.TextStyle(
-                                shadow = Shadow(
-                                    color = Color.Black,  // Adjust color as needed
-                                    blurRadius = 8f,
-                                    offset = Offset(2f, 2f)  // Position shadow for effect
+                                .fillMaxSize()
+//                                .offset(x = 0.dp, y = 0.dp)
+                                .padding(8.dp)
+                                .align(Alignment.BottomCenter)
+                            ,
+
+                            ){
+
+                            Text(
+                                text =
+                                buildAnnotatedString {
+                                    withStyle(
+                                        style = SpanStyle(
+                                            color = grayWhite,
+                                            fontSize =(screenWidthDp/14f).sp,
+                                            fontWeight = FontWeight.Bold,
+
+                                        )
+                                    ) {
+                                        append("\uD83E\uDEB5")
+                                    }
+                                    withStyle(
+                                        style = SpanStyle(
+                                            color = grayWhite,
+                                            fontSize = (screenWidthDp/15f).sp,
+                                            fontWeight = FontWeight.Bold,
+
+                                            )
+                                    ) {
+                                        append(profile.streak.streak.toString() + " DAYS")
+                                    }
+                                },
+                                textAlign = TextAlign.Left,
+                                style = androidx.compose.ui.text.TextStyle(
+                                    shadow = Shadow(
+                                        color = Color.Black,  // Adjust color as needed
+                                        blurRadius = 8f,
+                                        offset = Offset(2f, 2f)  // Position shadow for effect
+                                    )
                                 )
                             )
-                        )
+                        }
 
 
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+//                                .offset(x = (screenWidthDp/-3f).dp, y = (screenHeightDp/7/3.2).dp)
+                                .padding(8.dp),
+                        ){
 
+                            Text(
+                                text =
+                                buildAnnotatedString {
+                                    withStyle(
+                                        style = SpanStyle(
+                                            color = grayWhite,
+                                            fontSize =(screenWidthDp/14f).sp,
+                                            fontWeight = FontWeight.Bold,
+
+                                            )
+                                    ) {
+                                        append("\uD83E\uDE99")
+                                    }
+                                    withStyle(
+                                        style = SpanStyle(
+                                            color = grayWhite,
+                                            fontSize = (screenWidthDp/15f).sp,
+                                            fontWeight = FontWeight.Bold,
+
+                                            )
+                                    ) {
+                                        append("${profile.flexcoins}")
+                                    }
+                                },
+                                textAlign = TextAlign.Left,
+                                style = androidx.compose.ui.text.TextStyle(
+                                    shadow = Shadow(
+                                        color = Color.Black,  // Adjust color as needed
+                                        blurRadius = 8f,
+                                        offset = Offset(2f, 2f)  // Position shadow for effect
+                                    )
+                                )
+                            )
+                        }
+
+
+//                        Text(
+//                            text = "\uD83E\uDE99 ${profile.flexcoins}",
+//                            modifier = Modifier
+//                                .offset(x = (screenWidthDp/-3f).dp, y = (screenHeightDp/7/3.2).dp)
+//                                .padding(8.dp),
+//                            color = grayWhite,
+//                            fontSize = 25.sp,
+//                            fontWeight = FontWeight.Bold,
+//                            textAlign = TextAlign.Left,
+//                            style = androidx.compose.ui.text.TextStyle(
+//                                shadow = Shadow(
+//                                    color = Color.Black,  // Adjust color as needed
+//                                    blurRadius = 8f,
+//                                    offset = Offset(2f, 2f)  // Position shadow for effect
+//                                )
+//                            )
+//                        )
 
                     }
                 }
