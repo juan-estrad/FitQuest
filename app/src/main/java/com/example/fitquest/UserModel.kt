@@ -15,7 +15,7 @@ data class Weekly(
 )
 
 data class Workout(
-    var name: String = "",
+    val name: String = "",
     val description: String = "",
     var strength: Int = 0,
     var agility: Int = 0,
@@ -41,6 +41,16 @@ data class UserProfile(
 )
 
 data class Challenge(
+    val dailyChallenge: dailyChallenge = dailyChallenge(),
+    val weeklyChallenge: weeklyChallenge = weeklyChallenge()
+)
+data class dailyChallenge(
+    var workout1:Workout = Workout(),
+    var workout2:Workout = Workout(),
+    var workout3:Workout = Workout(),
+    var lastUpdate:String = ""
+)
+data class weeklyChallenge(
     var workout1:Workout = Workout(),
     var workout2:Workout = Workout(),
     var workout3:Workout = Workout(),

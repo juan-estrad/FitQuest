@@ -53,6 +53,7 @@ import com.example.fitquest.UserProfile
 import com.example.fitquest.UserStats
 import com.example.fitquest.UserStreak
 import com.example.fitquest.Workout
+import com.example.fitquest.dailyChallenge
 import com.example.fitquest.ui.OrangeFilledButton
 import com.example.fitquest.ui.UserInputField
 
@@ -60,6 +61,7 @@ import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.verticalGradientBrush
+import com.example.fitquest.weeklyChallenge
 
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -139,25 +141,48 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                         lastWorkout = "",
                         workoutCount = 0,
                         challenges = Challenge(
-                            workout1 = Workout(
-                                name = "",
-                                description = "",
-                                strength = 0,
-                                agility = 0,
+                            dailyChallenge = dailyChallenge (
+                                workout1 = Workout(
+                                    name = "",
+                                    description = "",
+                                    strength = 0,
+                                    agility = 0,
+                                ),
+                                workout2 = Workout(
+                                    name = "",
+                                    description = "",
+                                    strength = 0,
+                                    agility = 0,
+                                ),
+                                workout3 = Workout(
+                                    name = "",
+                                    description = "",
+                                    strength = 0,
+                                    agility = 0,
+                                ),
+                                lastUpdate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ISO_DATE),
                             ),
-                            workout2 = Workout(
-                                name = "",
-                                description = "",
-                                strength = 0,
-                                agility = 0,
-                            ),
-                            workout3 = Workout(
-                                name = "",
-                                description = "",
-                                strength = 0,
-                                agility = 0,
-                            ),
-                            lastUpdate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ISO_DATE)
+                            weeklyChallenge = weeklyChallenge (
+                                workout1 = Workout(
+                                    name = "",
+                                    description = "",
+                                    strength = 0,
+                                    agility = 0,
+                                ),
+                                workout2 = Workout(
+                                    name = "",
+                                    description = "",
+                                    strength = 0,
+                                    agility = 0,
+                                ),
+                                workout3 = Workout(
+                                    name = "",
+                                    description = "",
+                                    strength = 0,
+                                    agility = 0,
+                                ),
+                                lastUpdate = LocalDate.now().minusDays(8).format(DateTimeFormatter.ISO_DATE),
+                            )
                         )
                     )
                     myRef.child(id).setValue(userProfile)

@@ -26,6 +26,8 @@ class MainActivity : ComponentActivity() {
 
         val authViewModel : AuthViewModel by viewModels()
         val workoutViewModel : WorkoutViewModel by viewModels()
+        val weeklyWorkoutViewModel : WeeklyWorkoutViewModel by viewModels()
+
         val splashScreen = installSplashScreen()
 //        splashScreen.setKeepOnScreenCondition{true};
         enableEdgeToEdge()
@@ -39,7 +41,7 @@ class MainActivity : ComponentActivity() {
 
             FitQuestTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MyAppNavigation(modifier = Modifier.padding(innerPadding), authViewModel = authViewModel, workoutViewModel = workoutViewModel)
+                    MyAppNavigation(modifier = Modifier.padding(innerPadding), authViewModel = authViewModel, workoutViewModel = workoutViewModel, weeklyWorkoutViewModel = weeklyWorkoutViewModel)
 
                 }
             }

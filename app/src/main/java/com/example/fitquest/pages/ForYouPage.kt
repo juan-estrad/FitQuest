@@ -51,6 +51,7 @@ import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.R
 import com.example.fitquest.UserProfile
+import com.example.fitquest.Weekly
 import com.example.fitquest.WeeklyWorkoutViewModel
 import com.example.fitquest.WorkoutViewModel
 import com.example.fitquest.ui.TopAndBottomAppBar
@@ -76,10 +77,10 @@ import androidx.compose.material3.Text as Text
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel, workoutViewModel: WorkoutViewModel) {
+fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel, workoutViewModel: WorkoutViewModel, weeklyWorkoutViewModel: WeeklyWorkoutViewModel) {
 
     TopAndBottomAppBar(
-        contents = { ForYouPageContents(modifier,navController,authViewModel, workoutViewModel) },
+        contents = { ForYouPageContents(modifier,navController,authViewModel, workoutViewModel, weeklyWorkoutViewModel) },
         modifier = modifier,
         navController = navController,
         authViewModel = authViewModel
@@ -90,7 +91,7 @@ fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, auth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel, workoutViewModel: WorkoutViewModel) {
+fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel, workoutViewModel: WorkoutViewModel, weeklyWorkoutViewModel: WeeklyWorkoutViewModel) {
     val authState = authViewModel.authState.observeAsState()
     //val workoutViewModel: WorkoutViewModel = WorkoutViewModel()
     val context = LocalContext.current
@@ -197,9 +198,9 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                 Column {
                     LazyRow {
                         items(1) { index ->
-                            WeeklyWorkoutScreen()
-                            WeeklyWorkoutScreen()
-                            WeeklyWorkoutScreen()
+                            WeeklyWorkoutScreen1(weeklyWorkoutViewModel, profile)
+                            WeeklyWorkoutScreen2(weeklyWorkoutViewModel, profile)
+                            WeeklyWorkoutScreen3(weeklyWorkoutViewModel, profile)
                         }
                     }
                 }
@@ -403,7 +404,7 @@ fun WorkoutScreen1(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
                 .padding(16.dp)
         ) {
             //////////////////////////////////workout 1////////////////////////////
-            workoutViewModel.todayWorkout.value = profile.challenges.workout1
+            workoutViewModel.todayWorkout.value = profile.challenges.dailyChallenge.workout1
 
             // Display workout details if available
             workoutViewModel.todayWorkout.value?.let { workout ->
@@ -480,7 +481,7 @@ fun WorkoutScreen2(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
                 .padding(16.dp)
         ) {
             //////////////////////////////////workout 2////////////////////////////
-            workoutViewModel.todayWorkout.value = profile.challenges.workout2
+            workoutViewModel.todayWorkout.value = profile.challenges.dailyChallenge.workout2
 
             // Display workout details if available
             workoutViewModel.todayWorkout.value?.let { workout ->
@@ -557,7 +558,7 @@ fun WorkoutScreen3(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
                 .padding(16.dp)
         ) {
             //////////////////////////////////workout 3////////////////////////////
-            workoutViewModel.todayWorkout.value = profile.challenges.workout3
+            workoutViewModel.todayWorkout.value = profile.challenges.dailyChallenge.workout3
 
             // Display workout details if available
             workoutViewModel.todayWorkout.value?.let { workout ->
@@ -613,14 +614,19 @@ fun WorkoutScreen3(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
 }
 
 @Composable
-fun WeeklyWorkoutScreen(viewModel: WeeklyWorkoutViewModel = WeeklyWorkoutViewModel()) {
-    viewModel.loadRandomWorkout()
+fun WeeklyWorkoutScreen1(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile: UserProfile) {
+    var enabled by remember { mutableStateOf(true) }
+    //val viewModel: WorkoutViewModel = WorkoutViewModel()
+    println("IN WORKOUT SCREEN")
+    //viewModel.loadUserChallenges(profile)
+    weeklyWorkoutViewModel.loadUserChallenges(profile)
 
 
     Card(
         modifier = Modifier
             .padding(7.dp)
-            .width(350.dp),
+            .width(350.dp)
+            .height(350.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Column(
@@ -628,65 +634,209 @@ fun WeeklyWorkoutScreen(viewModel: WeeklyWorkoutViewModel = WeeklyWorkoutViewMod
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
+            //////////////////////////////////workout 1////////////////////////////
+            weeklyWorkoutViewModel.weeklyWorkout.value = profile.challenges.weeklyChallenge.workout1
+
             // Display workout details if available
-            viewModel.weeklyWorkout.value?.let { weekly ->
-                Text(text = "${weekly.name}")
+            weeklyWorkoutViewModel.weeklyWorkout.value?.let { workout ->
+                Text(text = "${workout.name}")
+
                 Spacer(modifier = Modifier.height(8.dp))
 
-                Text(text = "Workouts:",
-                    fontSize = 16.sp,
-                    lineHeight = 20.sp)
-                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = "Description:",
+                    lineHeight = 12.sp)
+                Text(text = "${workout.description}",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 15.sp,
+                    lineHeight = 18.sp
+                )
+
+                Spacer(modifier = Modifier.height(25.dp))
                 Row (
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 )
                 {
-                    Text(text = "${weekly.workout1}\nSets: ${weekly.Sets}",
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontSize = 15.sp,
-                        lineHeight = 18.sp
-                    )
-                    Text(text = "${weekly.workout2}\nSets: ${weekly.Sets}",
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontSize = 15.sp,
-                        lineHeight = 18.sp
-                    )
-                    Text(text = "${weekly.workout2}\nSets: ${weekly.Sets}",
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontSize = 15.sp,
-                        lineHeight = 18.sp
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Row (
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
-                )
-                {
-                    Text(text = "Strength: +${weekly.strength}",
-                        fontSize = 14.sp)
-                    Text(text = "Agility: +${weekly.agility}",
-                        fontSize = 14.sp)
-                    Text(text = "Stamina: +${weekly.stamina}",
-                        fontSize = 14.sp)
+                    Text(text = "Strength: +${workout.strength}",
+                        fontSize = 15.sp)
+                    Text(text = "Agility: +${workout.agility}",
+                        fontSize = 15.sp)
+                    Text(text = "Stamina: +${workout.stamina}",
+                        fontSize = 15.sp)
                 }
 
                 Row (modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 )
                 {
-                    Text(text = "Consistency: +${weekly.consistency}",
-                        fontSize = 14.sp)
-                    Text(text = "Dexterity: +${weekly.dexterity}",
-                        fontSize = 14.sp)
+                    Text(text = "Consistency: +${workout.consistency}",
+                        fontSize = 15.sp)
+                    Text(text = "Dexterity: +${workout.dexterity}",
+                        fontSize = 15.sp)
                 }
 
 
-                Spacer(modifier = Modifier.height(16.dp))
 
-                Button(onClick = { viewModel.completeWorkout() }) {
+                Spacer(modifier = Modifier.height(25.dp))
+
+                Button(onClick = {
+                    weeklyWorkoutViewModel.completeWorkout(profile)
+                    enabled = false
+                }) {
+                    Text(text = "Complete Workout")
+                }
+            } ?: Text(text = "No workout loaded.")
+        }
+    }
+}
+
+@Composable
+fun WeeklyWorkoutScreen2(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile: UserProfile) {
+    var enabled by remember { mutableStateOf(true) }
+    //val viewModel: WorkoutViewModel = WorkoutViewModel()
+    println("IN WORKOUT SCREEN")
+    //viewModel.loadUserChallenges(profile)
+    weeklyWorkoutViewModel.loadUserChallenges(profile)
+
+
+    Card(
+        modifier = Modifier
+            .padding(7.dp)
+            .width(350.dp)
+            .height(350.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            //////////////////////////////////workout 2////////////////////////////
+            weeklyWorkoutViewModel.weeklyWorkout.value = profile.challenges.weeklyChallenge.workout2
+
+            // Display workout details if available
+            weeklyWorkoutViewModel.weeklyWorkout.value?.let { workout ->
+                Text(text = "${workout.name}")
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(text = "Description:",
+                    lineHeight = 12.sp)
+                Text(text = "${workout.description}",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 15.sp,
+                    lineHeight = 18.sp
+                )
+
+                Spacer(modifier = Modifier.height(25.dp))
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                )
+                {
+                    Text(text = "Strength: +${workout.strength}",
+                        fontSize = 15.sp)
+                    Text(text = "Agility: +${workout.agility}",
+                        fontSize = 15.sp)
+                    Text(text = "Stamina: +${workout.stamina}",
+                        fontSize = 15.sp)
+                }
+
+                Row (modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                )
+                {
+                    Text(text = "Consistency: +${workout.consistency}",
+                        fontSize = 15.sp)
+                    Text(text = "Dexterity: +${workout.dexterity}",
+                        fontSize = 15.sp)
+                }
+
+
+
+                Spacer(modifier = Modifier.height(25.dp))
+
+                Button(onClick = {
+                    weeklyWorkoutViewModel.completeWorkout(profile)
+                    enabled = false
+                }) {
+                    Text(text = "Complete Workout")
+                }
+            } ?: Text(text = "No workout loaded.")
+        }
+    }
+}
+
+@Composable
+fun WeeklyWorkoutScreen3(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile: UserProfile) {
+    var enabled by remember { mutableStateOf(true) }
+    //val viewModel: WorkoutViewModel = WorkoutViewModel()
+    println("IN WORKOUT SCREEN")
+    //viewModel.loadUserChallenges(profile)
+    weeklyWorkoutViewModel.loadUserChallenges(profile)
+
+
+    Card(
+        modifier = Modifier
+            .padding(7.dp)
+            .width(350.dp)
+            .height(350.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
+            //////////////////////////////////workout 3////////////////////////////
+            weeklyWorkoutViewModel.weeklyWorkout.value = profile.challenges.weeklyChallenge.workout3
+
+            // Display workout details if available
+            weeklyWorkoutViewModel.weeklyWorkout.value?.let { workout ->
+                Text(text = "${workout.name}")
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(text = "Description:",
+                    lineHeight = 12.sp)
+                Text(text = "${workout.description}",
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontSize = 15.sp,
+                    lineHeight = 18.sp
+                )
+
+                Spacer(modifier = Modifier.height(25.dp))
+                Row (
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                )
+                {
+                    Text(text = "Strength: +${workout.strength}",
+                        fontSize = 15.sp)
+                    Text(text = "Agility: +${workout.agility}",
+                        fontSize = 15.sp)
+                    Text(text = "Stamina: +${workout.stamina}",
+                        fontSize = 15.sp)
+                }
+
+                Row (modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceAround
+                )
+                {
+                    Text(text = "Consistency: +${workout.consistency}",
+                        fontSize = 15.sp)
+                    Text(text = "Dexterity: +${workout.dexterity}",
+                        fontSize = 15.sp)
+                }
+
+
+
+                Spacer(modifier = Modifier.height(25.dp))
+
+                Button(onClick = {
+                    weeklyWorkoutViewModel.completeWorkout(profile)
+                    enabled = false
+                }) {
                     Text(text = "Complete Workout")
                 }
             } ?: Text(text = "No workout loaded.")

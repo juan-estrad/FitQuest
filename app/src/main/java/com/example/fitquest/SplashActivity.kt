@@ -36,7 +36,8 @@ public class SplashActivity : ComponentActivity() {
                     MyAppNavigation(
                         modifier = Modifier.padding(innerPadding),
                         authViewModel = authViewModel,
-                        workoutViewModel = workoutViewModel
+                        workoutViewModel = workoutViewModel,
+                        weeklyWorkoutViewModel = WeeklyWorkoutViewModel()
                     )
                 }
             }

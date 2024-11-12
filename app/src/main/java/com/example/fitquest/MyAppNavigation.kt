@@ -19,7 +19,7 @@ import com.example.fitquest.pages.StorePage
 import com.example.fitquest.pages.WorkoutScreen1
 
 @Composable
-fun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel, workoutViewModel: WorkoutViewModel){
+fun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel, workoutViewModel: WorkoutViewModel, weeklyWorkoutViewModel: WeeklyWorkoutViewModel){
     val navController = rememberNavController()
 
     NavHost(navController = navController, startDestination = "splash",
@@ -43,7 +43,7 @@ fun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel,
                 StatsPage(modifier, navController, authViewModel)
             }
             composable("foryou") {
-                ForYouPage(modifier, navController, authViewModel, workoutViewModel)
+                ForYouPage(modifier, navController, authViewModel, workoutViewModel, weeklyWorkoutViewModel)
             }
             composable("store") {
                 StorePage(modifier, navController, authViewModel)
