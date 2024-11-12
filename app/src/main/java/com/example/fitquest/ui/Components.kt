@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -561,7 +562,7 @@ fun TopAndBottomAppBar(
                                 .offset(x = (-150).dp, y = 40.dp)
                                 .padding(8.dp),
                             color = White,
-                            fontSize = 35.sp,
+                            fontSize = 22.sp,
                             textAlign = TextAlign.Left,
                             style = androidx.compose.ui.text.TextStyle(
                                 shadow = Shadow(
@@ -571,9 +572,24 @@ fun TopAndBottomAppBar(
                                 )
                             )
                         )
-
-
-
+                        Text(
+                            text = "Flexcoins: ${profile.flexcoins}",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentWidth(Alignment.End)
+                                .offset(y = 40.dp) // Remove x offset since fillMaxWidth() handles alignment
+                                .padding(end = 16.dp),  // Padding for spacing from the right edge
+                            color = White,
+                            fontSize = 22.sp,
+                            textAlign = TextAlign.Right,
+                            style = androidx.compose.ui.text.TextStyle(
+                                shadow = Shadow(
+                                    color = Color.Black,
+                                    blurRadius = 500f,
+                                    offset = Offset(2f, 2f)
+                                )
+                            )
+                        )
 
                     }
                 }
