@@ -5,6 +5,7 @@ package com.example.fitquest.ui
 import android.icu.text.ListFormatter.Width
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -27,6 +28,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -64,12 +66,15 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.PaintingStyle.Companion.Fill
 import androidx.compose.ui.graphics.Shadow
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -80,6 +85,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -100,9 +107,10 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 import java.time.format.TextStyle
+import androidx.compose.ui.res.painterResource as painterResource1
 
 
-    @Composable
+@Composable
 fun verticalGradientBrush(
         colorTOP: Color,
         colorBOTTOM: Color,
@@ -692,7 +700,7 @@ fun ClickableImageWithText(
     ) {
         // Background Image
         Image(
-            painter = painterResource(id = imageID),
+            painter = painterResource1(id = imageID),
             contentDescription = contentDescription,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -768,6 +776,9 @@ fun TopAndBottomAppBar(
         topBar = {
 
             userProfile?.let { profile ->
+
+                val bitmap: ImageBitmap = ImageBitmap.imageResource(id = userProfile!!.currentBackground)
+
                 Box(
                     modifier = Modifier
                         .height(systembarPadding.calculateTopPadding())
@@ -779,38 +790,65 @@ fun TopAndBottomAppBar(
                         modifier = modifier
 //                        .border(3.dp, dark,  RoundedCornerShape(12.dp))
                             .height((screenHeightDp / 7).dp)
-                            .fillMaxSize(),
+                            .fillMaxWidth(),
                         contentAlignment = Alignment.Center
 
                     )
 
                     {
-                        Image(
-                            painter = painterResource(id = userProfile!!.currentBackground),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .size((screenHeightDp / 2.1).dp)
-                                .fillMaxWidth()// Adjust this to control the image size within the Box
-                                .align(Alignment.Center), // Center the image within the Box
-                            contentScale = ContentScale.Crop // Or use Fit, Inside, etc., depending on the effect you want
-                        )
+                        Canvas(modifier = Modifier
+                            .fillMaxSize()
+                        ) {
+                            val canvasWidth = size.width
+                            val canvasHeight = size.height
+
+                            drawImage(
+                                image = bitmap,
+                                srcSize = IntSize( bitmap.width, bitmap.width/3), // Only top half
+                                dstSize = IntSize(canvasWidth.toInt(), canvasHeight.toInt()),
+                                srcOffset = IntOffset.Zero, // Start from the top
+                                dstOffset =  IntOffset.Zero
+                            )
+                        }
+
+//                        Image(
+//                            painter = painterResource1(id = userProfile!!.currentBackground),
+//                            contentDescription = null,
+//
+//                            modifier = Modifier
+//                                .offset( ( 0 ).dp ,( 30f ).dp)
+////                                .size((screenHeightDp / 4.1).dp)
+////                                .fillMaxWidth()// Adjust this to control the image size within the Box
+//                                .align(Alignment.BottomCenter) // Center the image within the Box
+//                            ,
+//
+//                            contentScale = ContentScale.FillWidth,
+//                        )
 
 
 
                         //Plan is to make the circle the pfp but for now i just put the username in there
                         Box(
                             modifier = Modifier
-                                .size(105.dp)
+                                .size((screenHeightDp / 8.5).dp)
                                 .clip(CircleShape)
-                                .background(verticalGradientBrush(darker, dark)),
+                                .background(verticalGradientBrush(darker, dark))
+                            ,
                             contentAlignment = Alignment.Center
 
                         ) {
                             //Text(profile.username, fontSize = 35.sp, color = Color.White) //profile username
                             Image(
-                                painter = painterResource(id = userProfile!!.currentAvatar),
-                                contentDescription = null
-                                //modifier = Modifier.size(300.dp)
+                                painter = painterResource1(id = userProfile!!.currentAvatar),
+                                contentDescription = null,
+                                contentScale = ContentScale.Crop,
+                                modifier = Modifier
+                                    .fillMaxSize()
+//                                    .size((screenHeightDp / 1).dp)
+//                                    .fillMaxWidth()// Adjust this to control the image size within the Box
+//                                    .align(Alignment.Center) // Center the image within the Box
+                                ,
+
                             )
                         }
                         Box(
@@ -823,48 +861,120 @@ fun TopAndBottomAppBar(
                         ) {
 
                             Image(
-                                painter = painterResource(id = userProfile!!.currentBorder),
-                                contentDescription = null
-                                //modifier = Modifier.size(300.dp)
+                                painter = painterResource1(id = userProfile!!.currentBorder),
+                                contentDescription = null,
+//                                modifier = Modifier.size(300.dp),                               ,
+                                contentScale = ContentScale.Crop
                             )
 
                         }
 
-
-                        Text(
-                            text = "   \uD83E\uDEB5" + profile.streak.streak.toString() + " days",
+                        Box(
                             modifier = Modifier
-                                .offset(x = (-150).dp, y = 40.dp)
-                                .padding(8.dp),
-                            color = White,
-                            fontSize = 22.sp,
-                            textAlign = TextAlign.Left,
-                            style = androidx.compose.ui.text.TextStyle(
-                                shadow = Shadow(
-                                    color = Color.Black,  // Adjust color as needed
-                                    blurRadius = 8f,
-                                    offset = Offset(2f, 2f)  // Position shadow for effect
+                                .fillMaxSize()
+//                                .offset(x = 0.dp, y = 0.dp)
+                                .padding(8.dp)
+                                .align(Alignment.BottomCenter)
+                            ,
+
+                            ){
+
+                            Text(
+                                text =
+                                buildAnnotatedString {
+                                    withStyle(
+                                        style = SpanStyle(
+                                            color = grayWhite,
+                                            fontSize =(screenWidthDp/14f).sp,
+                                            fontWeight = FontWeight.Bold,
+
+                                        )
+                                    ) {
+                                        append("\uD83E\uDEB5")
+                                    }
+                                    withStyle(
+                                        style = SpanStyle(
+                                            color = grayWhite,
+                                            fontSize = (screenWidthDp/15f).sp,
+                                            fontWeight = FontWeight.Bold,
+
+                                            )
+                                    ) {
+                                        append(profile.streak.streak.toString() + " DAYS")
+                                    }
+                                },
+                                textAlign = TextAlign.Left,
+                                style = androidx.compose.ui.text.TextStyle(
+                                    shadow = Shadow(
+                                        color = Color.Black,  // Adjust color as needed
+                                        blurRadius = 8f,
+                                        offset = Offset(2f, 2f)  // Position shadow for effect
+                                    )
                                 )
                             )
-                        )
-                        Text(
-                            text = "Flexcoins: ${profile.flexcoins}",
+                        }
+
+
+                        Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .wrapContentWidth(Alignment.End)
-                                .offset(y = 40.dp) // Remove x offset since fillMaxWidth() handles alignment
-                                .padding(end = 16.dp),  // Padding for spacing from the right edge
-                            color = White,
-                            fontSize = 22.sp,
-                            textAlign = TextAlign.Right,
-                            style = androidx.compose.ui.text.TextStyle(
-                                shadow = Shadow(
-                                    color = Color.Black,
-                                    blurRadius = 500f,
-                                    offset = Offset(2f, 2f)
+//                                .offset(x = (screenWidthDp/-3f).dp, y = (screenHeightDp/7/3.2).dp)
+                                .padding(8.dp),
+                        ){
+
+                            Text(
+                                text =
+                                buildAnnotatedString {
+                                    withStyle(
+                                        style = SpanStyle(
+                                            color = grayWhite,
+                                            fontSize =(screenWidthDp/14f).sp,
+                                            fontWeight = FontWeight.Bold,
+
+                                            )
+                                    ) {
+                                        append("\uD83E\uDE99")
+                                    }
+                                    withStyle(
+                                        style = SpanStyle(
+                                            color = grayWhite,
+                                            fontSize = (screenWidthDp/15f).sp,
+                                            fontWeight = FontWeight.Bold,
+
+                                            )
+                                    ) {
+                                        append("${profile.flexcoins}")
+                                    }
+                                },
+                                textAlign = TextAlign.Left,
+                                style = androidx.compose.ui.text.TextStyle(
+                                    shadow = Shadow(
+                                        color = Color.Black,  // Adjust color as needed
+                                        blurRadius = 8f,
+                                        offset = Offset(2f, 2f)  // Position shadow for effect
+                                    )
                                 )
                             )
-                        )
+                        }
+
+
+//                        Text(
+//                            text = "\uD83E\uDE99 ${profile.flexcoins}",
+//                            modifier = Modifier
+//                                .offset(x = (screenWidthDp/-3f).dp, y = (screenHeightDp/7/3.2).dp)
+//                                .padding(8.dp),
+//                            color = grayWhite,
+//                            fontSize = 25.sp,
+//                            fontWeight = FontWeight.Bold,
+//                            textAlign = TextAlign.Left,
+//                            style = androidx.compose.ui.text.TextStyle(
+//                                shadow = Shadow(
+//                                    color = Color.Black,  // Adjust color as needed
+//                                    blurRadius = 8f,
+//                                    offset = Offset(2f, 2f)  // Position shadow for effect
+//                                )
+//                            )
+//                        )
 
                     }
                 }
