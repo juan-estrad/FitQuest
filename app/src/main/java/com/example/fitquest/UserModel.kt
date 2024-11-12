@@ -38,7 +38,15 @@ data class UserProfile(
     //val logging: Logging = Logging(),
     val streak: UserStreak = UserStreak(),
     var lastWorkout: String = "",
-    var workoutCount: Int = 0
+    var workoutCount: Int = 0,
+    var challenges:Challenge = Challenge()
+)
+
+data class Challenge(
+    var workout1:Workout = Workout(),
+    var workout2:Workout = Workout(),
+    var workout3:Workout = Workout(),
+    var lastUpdate:String = ""
 )
 
 //data class Inventory(
