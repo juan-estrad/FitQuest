@@ -265,7 +265,7 @@ class WeeklyWorkoutViewModel : ViewModel() {
     fun loadUserChallenges(profile: UserProfile){
         //userProfile = profile
         println("loadUserChallenges called")
-        val currentWeekStart = LocalDate.now().with(DayOfWeek.MONDAY).format(DateTimeFormatter.ISO_DATE)
+        val currentWeekStart = LocalDate.now().with(DayOfWeek.SUNDAY).format(DateTimeFormatter.ISO_DATE)
 
         //println(todayWorkout)
         if(profile.challenges.weeklyChallenge.lastUpdate != currentWeekStart) {
@@ -281,7 +281,7 @@ class WeeklyWorkoutViewModel : ViewModel() {
             loadRandomWorkout1(profile)
             loadRandomWorkout2(profile)
             loadRandomWorkout3(profile)
-            profile.challenges.weeklyChallenge.lastUpdate = LocalDate.now().format(DateTimeFormatter.ISO_DATE)
+            profile.challenges.weeklyChallenge.lastUpdate = currentWeekStart.toString()
 
             database.getReference("Users").child("$userID").child("challenges").child("weeklyChallenge").child("lastUpdate")
                 .setValue(profile.challenges.weeklyChallenge.lastUpdate)

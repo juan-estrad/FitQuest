@@ -181,7 +181,7 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                                     strength = 0,
                                     agility = 0,
                                 ),
-                                lastUpdate = LocalDate.now().minusDays(8).format(DateTimeFormatter.ISO_DATE),
+                                lastUpdate = LocalDate.now().minusDays(7).format(DateTimeFormatter.ISO_DATE),
                             )
                         )
                     )
