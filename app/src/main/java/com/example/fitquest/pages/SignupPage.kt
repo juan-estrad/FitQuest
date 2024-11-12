@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.Challenge
 //import com.example.fitquest.Avatar
 //import com.example.fitquest.Background
 //import com.example.fitquest.Borders
@@ -51,6 +52,7 @@ import com.example.fitquest.R
 import com.example.fitquest.UserProfile
 import com.example.fitquest.UserStats
 import com.example.fitquest.UserStreak
+import com.example.fitquest.Workout
 import com.example.fitquest.ui.OrangeFilledButton
 import com.example.fitquest.ui.UserInputField
 
@@ -62,7 +64,9 @@ import com.example.fitquest.ui.theme.verticalGradientBrush
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.system.exitProcess
 
 
@@ -94,7 +98,7 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                         username = username,
                         flexcoins = 0,
                         currentAvatar = R.drawable.avatar,
-                        currentBackground = R.drawable.background_1,
+                        currentBackground = R.drawable.background,
                         currentBorder = R.drawable.border,
 //                        inventory = Inventory(
 //                            avatar = Avatar(
@@ -133,12 +137,33 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                             lastUpdate = ""
                         ),
                         lastWorkout = "",
-                        workoutCount = 0
+                        workoutCount = 0,
+                        challenges = Challenge(
+                            workout1 = Workout(
+                                name = "",
+                                description = "",
+                                strength = 0,
+                                agility = 0,
+                            ),
+                            workout2 = Workout(
+                                name = "",
+                                description = "",
+                                strength = 0,
+                                agility = 0,
+                            ),
+                            workout3 = Workout(
+                                name = "",
+                                description = "",
+                                strength = 0,
+                                agility = 0,
+                            ),
+                            lastUpdate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ISO_DATE)
+                        )
                     )
                     myRef.child(id).setValue(userProfile)
                     myRef.child(id).child("inventory").child("avatar").child(R.drawable.avatar.toString()).setValue("Default Avatar")
                     myRef.child(id).child("inventory").child("borders").child(R.drawable.border.toString()).setValue("Default Border")
-                    myRef.child(id).child("inventory").child("background").child(R.drawable.background_1.toString()).setValue("Default Background")
+                    myRef.child(id).child("inventory").child("background").child(R.drawable.background.toString()).setValue("Default Background")
                 }
 
                 navController.navigate("home")

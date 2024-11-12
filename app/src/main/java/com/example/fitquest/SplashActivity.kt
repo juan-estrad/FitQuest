@@ -24,6 +24,7 @@ public class SplashActivity : ComponentActivity() {
 
 
         val authViewModel : AuthViewModel by viewModels()
+        val workoutViewModel : WorkoutViewModel by viewModels()
         installSplashScreen()
 
         enableEdgeToEdge()
@@ -34,7 +35,8 @@ public class SplashActivity : ComponentActivity() {
                 { innerPadding ->
                     MyAppNavigation(
                         modifier = Modifier.padding(innerPadding),
-                        authViewModel = authViewModel
+                        authViewModel = authViewModel,
+                        workoutViewModel = workoutViewModel
                     )
                 }
             }

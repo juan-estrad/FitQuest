@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -59,8 +60,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.Shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -95,6 +99,7 @@ import com.example.fitquest.ui.theme.transparent
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
+import java.time.format.TextStyle
 
 
     @Composable
@@ -795,7 +800,7 @@ fun TopAndBottomAppBar(
                         //Plan is to make the circle the pfp but for now i just put the username in there
                         Box(
                             modifier = Modifier
-                                .size(120.dp)
+                                .size(105.dp)
                                 .clip(CircleShape)
                                 .background(verticalGradientBrush(darker, dark)),
                             contentAlignment = Alignment.Center
@@ -807,27 +812,59 @@ fun TopAndBottomAppBar(
                                 contentDescription = null
                                 //modifier = Modifier.size(300.dp)
                             )
+                        }
+                        Box(
+                            modifier = Modifier
+                                .size(120.dp)
+                                .clip(CircleShape)
+                                .background(Color.Transparent),
+                            contentAlignment = Alignment.Center
+
+                        ) {
 
                             Image(
                                 painter = painterResource(id = userProfile!!.currentBorder),
                                 contentDescription = null
                                 //modifier = Modifier.size(300.dp)
                             )
+
                         }
 
+
                         Text(
-                            text = "\uD83E\uDEB5" + profile.streak.streak.toString() + " days",
+                            text = "   \uD83E\uDEB5" + profile.streak.streak.toString() + " days",
                             modifier = Modifier
-                                .offset(x =(-150).dp, y = (40).dp)
-//                            .border(8.dp, verticalGradientBrush(darker, darkOrange), shape = RoundedCornerShape(4.dp))
-                                .padding(8.dp)
-                            ,
-                            color = brightOrange,
-                            fontSize = 35.sp,
-                            textAlign = TextAlign.Left
+                                .offset(x = (-150).dp, y = 40.dp)
+                                .padding(8.dp),
+                            color = White,
+                            fontSize = 22.sp,
+                            textAlign = TextAlign.Left,
+                            style = androidx.compose.ui.text.TextStyle(
+                                shadow = Shadow(
+                                    color = Color.Black,  // Adjust color as needed
+                                    blurRadius = 8f,
+                                    offset = Offset(2f, 2f)  // Position shadow for effect
+                                )
+                            )
                         )
-
-
+                        Text(
+                            text = "Flexcoins: ${profile.flexcoins}",
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .wrapContentWidth(Alignment.End)
+                                .offset(y = 40.dp) // Remove x offset since fillMaxWidth() handles alignment
+                                .padding(end = 16.dp),  // Padding for spacing from the right edge
+                            color = White,
+                            fontSize = 22.sp,
+                            textAlign = TextAlign.Right,
+                            style = androidx.compose.ui.text.TextStyle(
+                                shadow = Shadow(
+                                    color = Color.Black,
+                                    blurRadius = 500f,
+                                    offset = Offset(2f, 2f)
+                                )
+                            )
+                        )
 
                     }
                 }
