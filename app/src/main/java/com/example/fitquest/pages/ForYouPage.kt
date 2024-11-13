@@ -388,7 +388,10 @@ fun WorkoutScreen1(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
     //val viewModel: WorkoutViewModel = WorkoutViewModel()
     println("IN WORKOUT SCREEN")
     //viewModel.loadUserChallenges(profile)
+    val database = Firebase.database //initialize an instance of the realtime database
+    val userID = FirebaseAuth.getInstance().uid
     workoutViewModel.loadUserChallenges(profile)
+
 
 
     Card(
@@ -450,9 +453,14 @@ fun WorkoutScreen1(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
 
                 Button(onClick = {
                     workoutViewModel.completeWorkout(profile)
-                    enabled = false
-                }) {
+                    profile.challenges.dailyChallenge.completeWorkout1 = true
+                    database.getReference("Users").child("$userID").child("challenges").child("dailyChallenge").child("completeWorkout1")
+                        .setValue(true)
+                },
+                    enabled = !profile.challenges.dailyChallenge.completeWorkout1
+                    ) {
                     Text(text = "Complete Workout")
+
                 }
             } ?: Text(text = "No workout loaded.")
         }
@@ -527,9 +535,14 @@ fun WorkoutScreen2(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
 
                 Button(onClick = {
                     workoutViewModel.completeWorkout(profile)
-                    enabled = false
-                }) {
+                    profile.challenges.dailyChallenge.completeWorkout2 = true
+                    database.getReference("Users").child("$userID").child("challenges").child("dailyChallenge").child("completeWorkout2")
+                        .setValue(true)
+                },
+                    enabled = !profile.challenges.dailyChallenge.completeWorkout2
+                    ) {
                     Text(text = "Complete Workout")
+
                 }
             } ?: Text(text = "No workout loaded.")
         }
@@ -604,8 +617,12 @@ fun WorkoutScreen3(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
 
                 Button(onClick = {
                     workoutViewModel.completeWorkout(profile)
-                    enabled = false
-                }) {
+                    profile.challenges.dailyChallenge.completeWorkout3 = true
+                    database.getReference("Users").child("$userID").child("challenges").child("dailyChallenge").child("completeWorkout3")
+                        .setValue(true)
+                },
+                    enabled = !profile.challenges.dailyChallenge.completeWorkout3
+                    ) {
                     Text(text = "Complete Workout")
                 }
             } ?: Text(text = "No workout loaded.")
@@ -681,8 +698,12 @@ fun WeeklyWorkoutScreen1(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
 
                 Button(onClick = {
                     weeklyWorkoutViewModel.completeWorkout(profile)
-                    enabled = false
-                }) {
+                    profile.challenges.weeklyChallenge.completeWorkout1 = true
+                    database.getReference("Users").child("$userID").child("challenges").child("weeklyChallenge").child("completeWorkout1")
+                        .setValue(true)
+                },
+                    enabled = !profile.challenges.weeklyChallenge.completeWorkout1
+                    ) {
                     Text(text = "Complete Workout")
                 }
             } ?: Text(text = "No workout loaded.")
@@ -758,8 +779,12 @@ fun WeeklyWorkoutScreen2(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
 
                 Button(onClick = {
                     weeklyWorkoutViewModel.completeWorkout(profile)
-                    enabled = false
-                }) {
+                    profile.challenges.weeklyChallenge.completeWorkout2 = true
+                    database.getReference("Users").child("$userID").child("challenges").child("weeklyChallenge").child("completeWorkout2")
+                        .setValue(true)
+                },
+                    enabled = !profile.challenges.weeklyChallenge.completeWorkout2
+                    ) {
                     Text(text = "Complete Workout")
                 }
             } ?: Text(text = "No workout loaded.")
@@ -835,8 +860,12 @@ fun WeeklyWorkoutScreen3(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
 
                 Button(onClick = {
                     weeklyWorkoutViewModel.completeWorkout(profile)
-                    enabled = false
-                }) {
+                    profile.challenges.weeklyChallenge.completeWorkout3 = true
+                    database.getReference("Users").child("$userID").child("challenges").child("weeklyChallenge").child("completeWorkout3")
+                        .setValue(true)
+                },
+                    enabled = !profile.challenges.weeklyChallenge.completeWorkout3
+                    ) {
                     Text(text = "Complete Workout")
                 }
             } ?: Text(text = "No workout loaded.")

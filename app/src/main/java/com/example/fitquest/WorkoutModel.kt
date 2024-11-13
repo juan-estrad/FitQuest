@@ -14,8 +14,8 @@ import java.time.temporal.WeekFields
 import java.util.Locale
 
 class WorkoutViewModel : ViewModel() {
-    private val database = FirebaseDatabase.getInstance()
-    //val database2 = Firebase.database
+    //private val database = FirebaseDatabase.getInstance()
+    private val database = Firebase.database
     val userID = FirebaseAuth.getInstance().uid
 
     // Observables for UI
@@ -81,8 +81,10 @@ class WorkoutViewModel : ViewModel() {
                                     println("workout: $workout")
                                     todayWorkout.value = workout.copy(name = workoutName)
                                     profile.challenges.dailyChallenge.workout1 = todayWorkout.value!!
+                                    profile.challenges.dailyChallenge.completeWorkout1 = false
                                     database.getReference("Users").child("$userID").child("challenges").child("dailyChallenge").child("workout1")
                                         .setValue(profile.challenges.dailyChallenge.workout1)
+                                    database.getReference("Users").child("$userID").child("challenges").child("dailyChallenge").child("completeWorkout1").setValue(false)
                                     workoutLoaded = true
                                     //lastLoadDate = today // Update last load date
 
@@ -131,8 +133,10 @@ class WorkoutViewModel : ViewModel() {
                                     println("workout: $workout")
                                     todayWorkout.value = workout.copy(name = workoutName)
                                     profile.challenges.dailyChallenge.workout2 = todayWorkout.value!!
+                                    profile.challenges.dailyChallenge.completeWorkout2 = false
                                     database.getReference("Users").child("$userID").child("challenges").child("dailyChallenge").child("workout2")
                                         .setValue(profile.challenges.dailyChallenge.workout2)
+                                    database.getReference("Users").child("$userID").child("challenges").child("dailyChallenge").child("completeWorkout2").setValue(false)
                                     workoutLoaded = true
                                     //lastLoadDate = today // Update last load date
 
@@ -181,6 +185,8 @@ class WorkoutViewModel : ViewModel() {
                                     println("workout: $workout")
                                     todayWorkout.value = workout.copy(name = workoutName)
                                     profile.challenges.dailyChallenge.workout3 = todayWorkout.value!!
+                                    profile.challenges.dailyChallenge.completeWorkout3 = false
+                                    database.getReference("Users").child("$userID").child("challenges").child("dailyChallenge").child("completeWorkout3").setValue(false)
                                     database.getReference("Users").child("$userID").child("challenges").child("dailyChallenge").child("workout3")
                                         .setValue(profile.challenges.dailyChallenge.workout3)
                                     workoutLoaded = true
@@ -319,6 +325,8 @@ class WeeklyWorkoutViewModel : ViewModel() {
                                     println("workout: $workout")
                                     weeklyWorkout.value = workout.copy(name = workoutName)
                                     profile.challenges.weeklyChallenge.workout1 = weeklyWorkout.value!!
+                                    profile.challenges.weeklyChallenge.completeWorkout1 = false
+                                    database.getReference("Users").child("$userID").child("challenges").child("weeklyChallenge").child("completeWorkout1").setValue(false)
                                     database.getReference("Users").child("$userID").child("challenges").child("weeklyChallenge").child("workout1")
                                         .setValue(profile.challenges.weeklyChallenge.workout1)
                                     workoutLoaded = true
@@ -371,6 +379,8 @@ class WeeklyWorkoutViewModel : ViewModel() {
                                     profile.challenges.weeklyChallenge.workout2 = weeklyWorkout.value!!
                                     database.getReference("Users").child("$userID").child("challenges").child("weeklyChallenge").child("workout2")
                                         .setValue(profile.challenges.weeklyChallenge.workout2)
+                                    profile.challenges.weeklyChallenge.completeWorkout2 = false
+                                    database.getReference("Users").child("$userID").child("challenges").child("weeklyChallenge").child("completeWorkout2").setValue(false)
                                     workoutLoaded = true
                                     //lastLoadDate = today // Update last load date
 
@@ -421,6 +431,8 @@ class WeeklyWorkoutViewModel : ViewModel() {
                                     profile.challenges.weeklyChallenge.workout3 = weeklyWorkout.value!!
                                     database.getReference("Users").child("$userID").child("challenges").child("weeklyChallenge").child("workout3")
                                         .setValue(profile.challenges.weeklyChallenge.workout3)
+                                    profile.challenges.weeklyChallenge.completeWorkout3 = false
+                                    database.getReference("Users").child("$userID").child("challenges").child("weeklyChallenge").child("completeWorkout3").setValue(false)
                                     workoutLoaded = true
                                     //lastLoadDate = today // Update last load date
 

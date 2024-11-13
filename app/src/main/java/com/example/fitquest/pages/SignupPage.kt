@@ -148,19 +148,22 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                                     strength = 0,
                                     agility = 0,
                                 ),
+                                completeWorkout1 = false,
                                 workout2 = Workout(
                                     name = "",
                                     description = "",
                                     strength = 0,
                                     agility = 0,
                                 ),
+                                completeWorkout2 = false,
                                 workout3 = Workout(
                                     name = "",
                                     description = "",
                                     strength = 0,
                                     agility = 0,
                                 ),
-                                lastUpdate = LocalDate.now().minusDays(1).format(DateTimeFormatter.ISO_DATE),
+                                completeWorkout3 = false,
+                                lastUpdate = LocalDate.now().minusDays(2).format(DateTimeFormatter.ISO_DATE),
                             ),
                             weeklyChallenge = weeklyChallenge (
                                 workout1 = Workout(
@@ -169,18 +172,21 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                                     strength = 0,
                                     agility = 0,
                                 ),
+                                completeWorkout1 = false,
                                 workout2 = Workout(
                                     name = "",
                                     description = "",
                                     strength = 0,
                                     agility = 0,
                                 ),
+                                completeWorkout2 = false,
                                 workout3 = Workout(
                                     name = "",
                                     description = "",
                                     strength = 0,
                                     agility = 0,
                                 ),
+                                completeWorkout3 = false,
                                 lastUpdate = LocalDate.now().minusDays(7).format(DateTimeFormatter.ISO_DATE),
                             )
                         )
