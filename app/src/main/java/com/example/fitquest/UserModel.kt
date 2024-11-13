@@ -54,11 +54,11 @@ data class dailyChallenge(
     var lastUpdate:String = ""
 )
 data class weeklyChallenge(
-    var workout1:Workout = Workout(),
+    var workout1:Weekly = Weekly(),
     var completeWorkout1:Boolean = false,
-    var workout2:Workout = Workout(),
+    var workout2:Weekly = Weekly(),
     var completeWorkout2:Boolean = false,
-    var workout3:Workout = Workout(),
+    var workout3:Weekly = Weekly(),
     var completeWorkout3:Boolean = false,
     var lastUpdate:String = ""
 )
