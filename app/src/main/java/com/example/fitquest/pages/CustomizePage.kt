@@ -62,6 +62,7 @@ import com.example.fitquest.ui.theme.darker
 import com.example.fitquest.ui.theme.grayWhite
 import com.example.fitquest.ui.theme.verticalGradientBrush
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -95,6 +96,8 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
     var avatarCategories by remember { mutableStateOf(listOf<String>()) }
     var backgroundCategories by remember { mutableStateOf(listOf<String>()) }
     var bordersCategories by remember { mutableStateOf(listOf<String>()) }
+    val database = Firebase.database //initialize an instance of the realtime database
+    val userID = FirebaseAuth.getInstance().uid
 
     LaunchedEffect(authState.value) {
         when (authState.value) {

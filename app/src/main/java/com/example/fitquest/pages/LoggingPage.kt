@@ -1406,6 +1406,8 @@ fun LoggingInputField(
 fun completeWorkout() {
     val todayWorkout = mutableStateOf<Workout?>(null)
     val userProfile = mutableStateOf(UserProfile())
+    val database = Firebase.database //initialize an instance of the realtime database
+    val userID = FirebaseAuth.getInstance().uid
 
     todayWorkout.value?.let { workout ->
 

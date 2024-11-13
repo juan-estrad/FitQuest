@@ -2,7 +2,6 @@
 
 package com.example.fitquest.ui
 
-import android.icu.text.ListFormatter.Width
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -27,8 +26,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.pager.PageSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -36,8 +33,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.BottomAppBar
@@ -65,11 +60,8 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.PaintingStyle.Companion.Fill
 import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
@@ -96,7 +88,6 @@ import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.R
 import com.example.fitquest.UserProfile
-import com.example.fitquest.pages.myRef
 import com.example.fitquest.ui.theme.brightOrange
 import com.example.fitquest.ui.theme.dark
 import com.example.fitquest.ui.theme.darkOrange
@@ -106,7 +97,6 @@ import com.example.fitquest.ui.theme.transparent
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
-import java.time.format.TextStyle
 import androidx.compose.ui.res.painterResource as painterResource1
 
 
@@ -848,7 +838,6 @@ fun TopAndBottomAppBar(
 //                                    .fillMaxWidth()// Adjust this to control the image size within the Box
 //                                    .align(Alignment.Center) // Center the image within the Box
                                 ,
-
                             )
                         }
                         Box(
@@ -859,7 +848,6 @@ fun TopAndBottomAppBar(
                             contentAlignment = Alignment.Center
 
                         ) {
-
                             Image(
                                 painter = painterResource1(id = userProfile!!.currentBorder),
                                 contentDescription = null,
@@ -877,84 +865,116 @@ fun TopAndBottomAppBar(
                                 .align(Alignment.BottomCenter)
                             ,
 
-                            ){
+                            ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(100.dp)
+//                                .offset(x = 0.dp, y = 0.dp)
+                                    .padding(8.dp)
+                                    .align(Alignment.BottomCenter),
 
-                            Text(
-                                text =
-                                buildAnnotatedString {
-                                    withStyle(
-                                        style = SpanStyle(
-                                            color = grayWhite,
-                                            fontSize =(screenWidthDp/14f).sp,
-                                            fontWeight = FontWeight.Bold,
+                                ) {
 
+                            }
+
+                            //streak
+                            Row {
+                                Box(modifier = Modifier.size(36.dp))
+                                {
+                                    Image(
+                                        painter = painterResource1(id = R.drawable.flexcoin),
+                                        contentDescription = null,
+                                        contentScale = ContentScale.Crop
+                                    )
+                                }
+
+                                Text(
+                                    text =
+                                    buildAnnotatedString {
+                                        withStyle(
+                                            style = SpanStyle(
+                                                color = grayWhite,
+                                                fontSize = (screenWidthDp / 15f).sp,
+                                                fontWeight = FontWeight.Bold,
+
+                                                )
+                                        ) {
+                                            append(" " +profile.flexcoins.toString())
+                                        }
+                                    },
+                                    textAlign = TextAlign.Left,
+                                    style = androidx.compose.ui.text.TextStyle(
+                                        shadow = Shadow(
+                                            color = Color.Black,  // Adjust color as needed
+                                            blurRadius = 8f,
+                                            offset = Offset(2f, 2f)  // Position shadow for effect
                                         )
-                                    ) {
-                                        append("\uD83E\uDEB5")
-                                    }
-                                    withStyle(
-                                        style = SpanStyle(
-                                            color = grayWhite,
-                                            fontSize = (screenWidthDp/15f).sp,
-                                            fontWeight = FontWeight.Bold,
-
-                                            )
-                                    ) {
-                                        append(profile.streak.streak.toString() + " DAYS")
-                                    }
-                                },
-                                textAlign = TextAlign.Left,
-                                style = androidx.compose.ui.text.TextStyle(
-                                    shadow = Shadow(
-                                        color = Color.Black,  // Adjust color as needed
-                                        blurRadius = 8f,
-                                        offset = Offset(2f, 2f)  // Position shadow for effect
                                     )
                                 )
-                            )
+                            }
                         }
 
 
+                        //flexcoins
                         Box(
                             modifier = Modifier
-                                .fillMaxWidth()
-//                                .offset(x = (screenWidthDp/-3f).dp, y = (screenHeightDp/7/3.2).dp)
-                                .padding(8.dp),
-                        ){
+                                .fillMaxSize()
+                                .offset(x = 0.dp, y = 37.dp)
+                                .padding(8.dp)
+                                .align(Alignment.BottomCenter)
+                            ,
 
-                            Text(
-                                text =
-                                buildAnnotatedString {
-                                    withStyle(
-                                        style = SpanStyle(
-                                            color = grayWhite,
-                                            fontSize =(screenWidthDp/14f).sp,
-                                            fontWeight = FontWeight.Bold,
+                            ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(100.dp)
+//                                .offset(x = 0.dp, y = 0.dp)
+                                    .padding(8.dp)
+                                    .align(Alignment.BottomCenter),
 
-                                            )
-                                    ) {
-                                        append("\uD83E\uDE99")
-                                    }
-                                    withStyle(
-                                        style = SpanStyle(
-                                            color = grayWhite,
-                                            fontSize = (screenWidthDp/15f).sp,
-                                            fontWeight = FontWeight.Bold,
+                                ) {
 
-                                            )
-                                    ) {
-                                        append("${profile.flexcoins}")
-                                    }
-                                },
-                                textAlign = TextAlign.Left,
-                                style = androidx.compose.ui.text.TextStyle(
-                                    shadow = Shadow(
-                                        color = Color.Black,  // Adjust color as needed
-                                        blurRadius = 8f,
-                                        offset = Offset(2f, 2f)  // Position shadow for effect
+                            }
+
+                            //streak
+                            Row {
+
+
+                                Text(
+                                    text =
+                                    buildAnnotatedString {
+                                        withStyle(
+                                            style = SpanStyle(
+                                                color = grayWhite,
+                                                fontSize = (screenWidthDp / 15f).sp,
+                                                fontWeight = FontWeight.Bold,
+
+                                                )
+                                        ) {
+                                            append("\uD83D\uDD25")
+                                        }
+
+                                        withStyle(
+                                            style = SpanStyle(
+                                                color = grayWhite,
+                                                fontSize = (screenWidthDp / 15f).sp,
+                                                fontWeight = FontWeight.Bold,
+
+                                                )
+                                        ) {
+                                            append(" " + profile.streak.streak.toString() + " DAYS")
+                                        }
+                                    },
+                                    textAlign = TextAlign.Left,
+                                    style = androidx.compose.ui.text.TextStyle(
+                                        shadow = Shadow(
+                                            color = Color.Black,  // Adjust color as needed
+                                            blurRadius = 8f,
+                                            offset = Offset(2f, 2f)  // Position shadow for effect
+                                        )
                                     )
                                 )
-                            )
+                            }
                         }
 
 

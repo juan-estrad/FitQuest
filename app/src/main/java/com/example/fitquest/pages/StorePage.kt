@@ -168,6 +168,8 @@ fun BackgroundStoreItemBox(image: Int, userFlexCoins: Int, navController: NavCon
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp
     val screenWidthDp = configuration.screenWidthDp
+    val database = Firebase.database //initialize an instance of the realtime database
+    val userID = FirebaseAuth.getInstance().uid
 
     val checkBack = database.getReference("Users").child("$userID").child("inventory").child("background")
     checkBack.get().addOnSuccessListener { snapshot ->
@@ -304,6 +306,8 @@ fun BordersStoreItemBox(image: Int, userFlexCoins: Int, navController: NavContro
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp
     val screenWidthDp = configuration.screenWidthDp
+    val database = Firebase.database //initialize an instance of the realtime database
+    val userID = FirebaseAuth.getInstance().uid
 
     val checkBack = database.getReference("Users").child("$userID").child("inventory").child("borders")
     checkBack.get().addOnSuccessListener { snapshot ->
@@ -439,6 +443,8 @@ fun AvatarStoreItemBox(image: Int, userFlexCoins: Int, navController: NavControl
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp
     val screenWidthDp = configuration.screenWidthDp
+    val database = Firebase.database //initialize an instance of the realtime database
+    val userID = FirebaseAuth.getInstance().uid
 
     val checkBack = database.getReference("Users").child("$userID").child("inventory").child("avatar")
     checkBack.get().addOnSuccessListener { snapshot ->

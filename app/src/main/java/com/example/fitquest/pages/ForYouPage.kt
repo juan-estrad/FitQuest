@@ -469,6 +469,8 @@ fun WorkoutScreen1(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
 
 @Composable
 fun WorkoutScreen2(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
+    val database = Firebase.database //initialize an instance of the realtime database
+    val userID = FirebaseAuth.getInstance().uid
     var enabled by remember { mutableStateOf(true) }
     //val viewModel: WorkoutViewModel = WorkoutViewModel()
     println("IN WORKOUT SCREEN")
@@ -551,6 +553,8 @@ fun WorkoutScreen2(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
 
 @Composable
 fun WorkoutScreen3(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
+    val database = Firebase.database //initialize an instance of the realtime database
+    val userID = FirebaseAuth.getInstance().uid
     var enabled by remember { mutableStateOf(true) }
     //val viewModel: WorkoutViewModel = WorkoutViewModel()
     println("IN WORKOUT SCREEN")
@@ -632,6 +636,8 @@ fun WorkoutScreen3(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
 
 @Composable
 fun WeeklyWorkoutScreen1(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile: UserProfile) {
+    val database = Firebase.database //initialize an instance of the realtime database
+    val userID = FirebaseAuth.getInstance().uid
     var enabled by remember { mutableStateOf(true) }
     //val viewModel: WorkoutViewModel = WorkoutViewModel()
     println("IN WORKOUT SCREEN")
@@ -713,6 +719,8 @@ fun WeeklyWorkoutScreen1(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
 
 @Composable
 fun WeeklyWorkoutScreen2(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile: UserProfile) {
+    val database = Firebase.database //initialize an instance of the realtime database
+    val userID = FirebaseAuth.getInstance().uid
     var enabled by remember { mutableStateOf(true) }
     //val viewModel: WorkoutViewModel = WorkoutViewModel()
     println("IN WORKOUT SCREEN")
@@ -794,6 +802,8 @@ fun WeeklyWorkoutScreen2(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
 
 @Composable
 fun WeeklyWorkoutScreen3(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile: UserProfile) {
+    val database = Firebase.database //initialize an instance of the realtime database
+    val userID = FirebaseAuth.getInstance().uid
     var enabled by remember { mutableStateOf(true) }
     //val viewModel: WorkoutViewModel = WorkoutViewModel()
     println("IN WORKOUT SCREEN")
