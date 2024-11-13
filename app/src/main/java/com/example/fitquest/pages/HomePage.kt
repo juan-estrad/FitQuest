@@ -225,7 +225,7 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
             ) {
 
                 ClickableImageWithText(
-                    "Stats",
+                    "Profile",
                     "Stats page Background",
                     {navController.navigate("stats")},
                     authState.value != AuthState.Loading,
@@ -242,7 +242,7 @@ fun HomePageContents(modifier: Modifier = Modifier, navController: NavController
             ) {
 
                 ClickableImageWithText(
-                    "Recommended Workouts",
+                    "For You",
                     "Recommended Work Outs image",
                     { navController.navigate("foryou") },
                     authState.value != AuthState.Loading,
