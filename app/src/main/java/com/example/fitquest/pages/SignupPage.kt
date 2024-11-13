@@ -52,6 +52,7 @@ import com.example.fitquest.R
 import com.example.fitquest.UserProfile
 import com.example.fitquest.UserStats
 import com.example.fitquest.UserStreak
+import com.example.fitquest.Weekly
 import com.example.fitquest.Workout
 import com.example.fitquest.dailyChallenge
 import com.example.fitquest.ui.OrangeFilledButton
@@ -166,23 +167,23 @@ fun SignupPage(modifier: Modifier = Modifier, navController: NavController, auth
                                 lastUpdate = LocalDate.now().minusDays(2).format(DateTimeFormatter.ISO_DATE),
                             ),
                             weeklyChallenge = weeklyChallenge (
-                                workout1 = Workout(
+                                workout1 = Weekly(
                                     name = "",
-                                    description = "",
+                                    Sets = "3x10",
                                     strength = 0,
                                     agility = 0,
                                 ),
                                 completeWorkout1 = false,
-                                workout2 = Workout(
+                                workout2 = Weekly(
                                     name = "",
-                                    description = "",
+                                    Sets = "3x10",
                                     strength = 0,
                                     agility = 0,
                                 ),
                                 completeWorkout2 = false,
-                                workout3 = Workout(
+                                workout3 = Weekly(
                                     name = "",
-                                    description = "",
+                                    Sets = "3x10",
                                     strength = 0,
                                     agility = 0,
                                 ),
