@@ -576,8 +576,9 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
 
                         }
                     }
+                    Thread.sleep(2000)
 
-                    navController.navigate("stats")
+                   navController.navigate("customize")
                 }
             ) {
                 Text("Apply")

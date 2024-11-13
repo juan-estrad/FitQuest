@@ -218,11 +218,7 @@ fun dpSlide(startNumber: Float, endNumber: Float) : Dp {
 
     LaunchedEffect(Unit) {
         target = endNumber.dp
-//        delay(0000) // Delay for the animation duration
-//        while (true) {
-//            offset = if (offset == (0).dp) 200.dp else (0).dp
-//
-//        }
+
     }
     return dpMove
 }
@@ -242,10 +238,7 @@ fun floatSlide(startNumber: Float, endNumber: Float) : Float {
     LaunchedEffect(Unit) {
         target = endNumber
         delay(6000) // Delay for the animation duration
-//        while (true) {
-//            offset = if (offset == (0).dp) 200.dp else (0).dp
-//
-//        }
+
     }
     return floatMove
 }
@@ -265,17 +258,11 @@ fun TextAnimated(text: String, textColor: Color, fontSize: Float, startOffset: F
     LaunchedEffect(Unit) {
         offset = endOffset.dp
         delay(10000) // Delay for the animation duration
-//        while (true) {
-//            offset = if (offset == (0).dp) 200.dp else (0).dp
-//
-//        }
     }
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(16.dp)
-//            .background(Color.LightGray)
+
 
     ) {
         Text(
