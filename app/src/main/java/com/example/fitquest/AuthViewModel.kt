@@ -4,12 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
-import kotlin.concurrent.timerTask
+
+////////////////////////////////////Code: Joseph////////////////////////////////////
 
 class AuthViewModel : ViewModel(){
-
     private val auth : FirebaseAuth =FirebaseAuth.getInstance()
-
     private val _authState = MutableLiveData<AuthState>()
     val authState: LiveData<AuthState> = _authState
 
@@ -65,7 +64,6 @@ class AuthViewModel : ViewModel(){
         auth.signOut()
         _authState.value = AuthState.Unauthenticated
     }
-
 }
 
 sealed class AuthState{
@@ -73,6 +71,4 @@ sealed class AuthState{
     object Unauthenticated: AuthState()
     object Loading : AuthState()
     data class Error(val message : String): AuthState()
-
-
 }

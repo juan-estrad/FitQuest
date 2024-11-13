@@ -99,18 +99,15 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 import androidx.compose.ui.res.painterResource as painterResource1
 
+//////////////////////////////////////Code: Nick, Juan, Joseph and Alexis/////////////////////////////////////
 
 @Composable
 fun verticalGradientBrush(
         colorTOP: Color,
         colorBOTTOM: Color,
-        startY: Float = 250f,
         endY: Float = Float.POSITIVE_INFINITY,
 
 ): Brush {
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp.toFloat()
-
     return Brush.verticalGradient(
         colors = listOf(colorTOP, colorBOTTOM),
         startY = 250f,
@@ -118,48 +115,14 @@ fun verticalGradientBrush(
     )
 }
 
-
 @Composable
 fun horizontalGradientBrush(color1: Color, color2: Color): Brush {
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp.toFloat()
-
     return Brush.horizontalGradient(
         colors = listOf(color1, color2),
         startX = 250f,
         endX = Float.POSITIVE_INFINITY,
     )
 }
-
-
-//val verticalGradientBrush = Brush.verticalGradient(
-//    listOf( Color.Transparent, dark),
-//    startY = 500f,
-//    endY = 2000f
-//)
-
-
-@Composable
-fun FitQuestTxt(
-    fontSize: TextUnit
-    // DEFAUT 68.sp
-) {
-    Text(
-        text =
-        buildAnnotatedString {
-            withStyle(style = SpanStyle(color = brightOrange)) {
-                append("Fit")
-            }
-            withStyle(style = SpanStyle(color = grayWhite)) {
-                append("Quest")
-            }
-        },
-        fontSize = fontSize,
-        fontWeight = FontWeight.Bold,
-        textAlign = TextAlign.Center
-    )
-}
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -181,7 +144,6 @@ fun UserInputField(
             textAlign = TextAlign.Left,
             fontSize = 21.sp
         )
-
         Text(
             text = "*",
             color = Color.Red,
@@ -189,9 +151,7 @@ fun UserInputField(
         )
     }
     Spacer(modifier = Modifier.height(3.dp))
-
     OutlinedTextField(
-
         value = value,
         onValueChange = onValueChange,
         singleLine = true,
@@ -206,21 +166,15 @@ fun UserInputField(
             .fillMaxWidth()
             .height( (screenHeight/14) .dp)
     )
-
     Spacer(modifier = Modifier.height(15.dp))
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun requiredTitle01(
     label: String,
     fontSize: Float = 21f,
-//    onValueChange: (String) -> Unit,
-//    isPassword: Boolean = false
 ) {
-    val configuration = LocalConfiguration.current
-    val screenHeight = configuration.screenHeightDp.toFloat()
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment= Alignment.CenterVertically
@@ -239,88 +193,7 @@ fun requiredTitle01(
         )
     }
     Spacer(modifier = Modifier.height(5.dp))
-//
-//    OutlinedTextField(
-//
-//        value = value,
-//        onValueChange = onValueChange,
-//        singleLine = true,
-//        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-//        colors = TextFieldDefaults.outlinedTextFieldColors(
-//            focusedBorderColor = brightOrange,
-//            containerColor = darker,
-//            unfocusedBorderColor = Color.Transparent,
-//        ),
-//        shape = RoundedCornerShape(size = 10.dp),
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .height( (screenHeight/14) .dp)
-//    )
-
-//    Spacer(modifier = Modifier.height(15.dp))
 }
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun UserInputField2(
-    label: String,
-    value: String,
-    width: Dp,
-    textAlign: TextAlign = TextAlign.Left,
-
-
-//    fillMaxWith: Boolean = false,
-//    width: Float = 40f,
-//
-
-    onValueChange: (String) -> Unit,
-) {
-    val configuration = LocalConfiguration.current
-    val screenHeightDp = configuration.screenHeightDp.toFloat()
-    val screenWidthDp = configuration.screenWidthDp
-
-
-    OutlinedTextField(
-
-        value = value,
-        onValueChange = { },
-        singleLine = true,
-//        readOnly = true,
-//        label = {Text(label)} ,
-
-
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-
-            focusedBorderColor = brightOrange,
-            containerColor = darker,
-            unfocusedBorderColor = dark,
-
-            )
-        ,
-
-        shape = RoundedCornerShape(size = 20.dp),
-
-        textStyle = LocalTextStyle.current.copy(
-            fontSize = (screenHeightDp / 30).sp, // Change this to your desired text size
-            fontStyle = FontStyle.Italic,
-            color = dark,
-            textAlign = textAlign
-
-        ),
-
-        modifier = Modifier
-            .height(screenHeightDp.dp/12)
-            .width(width)
-
-//        if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-//            .fillMaxWidth()
-//            .height((screenHeightDp / 12).dp)
-//        ,
-
-    )
-}
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -329,45 +202,19 @@ fun UserInputField3(
     placeholder: String,
     value: String,
     width: Dp,
-
     textAlign: TextAlign = TextAlign.Center,
-
     fontSize: Float,
     fontColor: Color = grayWhite,
-
-
     placeHolderFontSize : Float = fontSize,
     placeHolderFontStyle: FontStyle = FontStyle.Normal,
-
-
-
-
-//    fillMaxWith: Boolean = false,
-//    width: Float = 40f,
-//
-
-
     onValueChange: (String) -> Unit,
-
-
 ) {
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp.toFloat()
-    val screenWidthDp = configuration.screenWidthDp
     var text by remember { mutableStateOf(value)}
-
-
     OutlinedTextField(
-
-        value =value
-//        if (value == "") {
-//            "0"
-//        } else {
-//            value
-//        }
-        ,
+        value =value,
         onValueChange = {
-
             if (isNumber) {
                 if (it.all { char -> char.isDigit() })  {
 
@@ -378,15 +225,10 @@ fun UserInputField3(
 
                 }
             }
-
             else{
                 onValueChange(it)
             }
-
-
-        }
-
-        ,
+        },
         singleLine = true,
         keyboardOptions =
         if (isNumber) {
@@ -394,60 +236,37 @@ fun UserInputField3(
         }
         else {
             KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
-        }
-
-        ,
-//        readOnly = true,
-//        label = {Text(label)} ,
-
-
+        },
         colors = TextFieldDefaults.outlinedTextFieldColors(
-
             focusedBorderColor = brightOrange,
             containerColor = darker,
             unfocusedBorderColor = dark,
 
-            )
-        ,
-
+            ),
         shape = RoundedCornerShape(size = 20.dp),
-
         textStyle = LocalTextStyle.current.copy(
-            fontSize = fontSize.sp, // Change this to your desired text size
+            fontSize = fontSize.sp,
             color = grayWhite,
             textAlign = textAlign
-
         ),
         placeholder = {
             if (value.isEmpty()) {
-
                 Text(
                     text = placeholder,
                     color = fontColor,
                     textAlign = textAlign,
                     fontSize = placeHolderFontSize.sp,
-
                     style = LocalTextStyle.current.copy(
                         textAlign = TextAlign.Center,
                         fontStyle = placeHolderFontStyle
                     ),
                     modifier = Modifier.fillMaxWidth()
-
                 )
             }
-        }
-        ,
-
-
+        },
         modifier = Modifier
             .height(screenHeightDp.dp/12)
             .width(width)
-
-//        if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-//            .fillMaxWidth()
-//            .height((screenHeightDp / 12).dp)
-//        ,
-
     )
 }
 
@@ -460,7 +279,6 @@ fun Title01_LEFT(
 ) {
     Box(modifier = Modifier
         .fillMaxWidth()
-
     ){
         Text(
             text = label,
@@ -469,35 +287,6 @@ fun Title01_LEFT(
             fontSize = fontSize.sp )
     }
 }
-
-@Composable
-fun Title01(
-    label: String,
-    color: Color = grayWhite,
-    fontSize: Float,
-    backgroundColor: Color = transparent
-) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(backgroundColor),
-        contentAlignment = Alignment.Center
-
-    ){
-        Text(
-            text = label,
-            color = color,
-            textAlign = TextAlign.Center,
-            fontSize = fontSize.sp
-        )
-    }
-}
-
-
-
-//
-
-
 
 @Composable
 fun OrangeFilledButton(
@@ -532,14 +321,6 @@ fun OrangeFilledButton2(
     modifier: Modifier = Modifier.fillMaxWidth().height(65.dp),
     buttomShapeRoundess: Float = 18f
 ) {
-
-
-    val configuration = LocalConfiguration.current
-    val screenHeightDp = configuration.screenHeightDp.toFloat()
-    val screenWidthDp = configuration.screenWidthDp
-
-
-
     Button(
         onClick = onClickFunction,
         colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
@@ -554,7 +335,6 @@ fun OrangeFilledButton2(
             fontWeight = FontWeight.Bold
         )
     }
-//    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
@@ -576,14 +356,6 @@ fun LOGBUTTON(
     ,
     buttomShapeRoundess: Float = 18f
 ) {
-
-
-    val configuration = LocalConfiguration.current
-    val screenHeightDp = configuration.screenHeightDp.toFloat()
-    val screenWidthDp = configuration.screenWidthDp
-
-
-
     Button(
         onClick = onClickFunction,
         colors = ButtonDefaults.buttonColors(containerColor = brightOrange),
@@ -598,20 +370,7 @@ fun LOGBUTTON(
             fontWeight = FontWeight.Bold
         )
     }
-//    Spacer(modifier = Modifier.height(16.dp))
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 @Composable
 fun HollowOrangeButton(
@@ -633,10 +392,6 @@ fun HollowOrangeButton(
     }
 }
 
-
-
-
-
 @Composable
 fun NavigationBarItem(
     onClickFunction: () -> Unit,
@@ -645,9 +400,7 @@ fun NavigationBarItem(
     screenWidthDivedBy: Float
 ) {
     val configuration = LocalConfiguration.current
-    val screenHeightDp = configuration.screenHeightDp
     val screenWidthDp = configuration.screenWidthDp
-
     IconButton(
         onClick = onClickFunction,
         modifier = Modifier.size(screenWidthDp.dp / 5),
@@ -674,7 +427,6 @@ fun ClickableImageWithText(
 ){
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp
-    val screenWidthDp = configuration.screenWidthDp
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -683,12 +435,10 @@ fun ClickableImageWithText(
                 enabled = enabled,
                 onClick = onClickFunction
             )
-//            .padding(8.dp)
             .border(7.dp, brightOrange, RoundedCornerShape(30.dp))
             .padding(0.dp)
             .clip(RoundedCornerShape(30.dp))
     ) {
-        // Background Image
         Image(
             painter = painterResource1(id = imageID),
             contentDescription = contentDescription,
@@ -697,8 +447,6 @@ fun ClickableImageWithText(
                 .fillMaxSize()
                 .scale(1.15f)
         )
-
-        // Text on top of the image
         Text(
             text = label,
             color = grayWhite,
@@ -711,10 +459,6 @@ fun ClickableImageWithText(
     }
 }
 
-
-
-
-
 @ExperimentalMaterial3Api
 @Composable
 fun TopAndBottomAppBar(
@@ -723,26 +467,21 @@ fun TopAndBottomAppBar(
     modifier: Modifier = Modifier,
     navController: NavController,
     authViewModel: AuthViewModel
-
 ){
-
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
 
     var userProfile by remember { mutableStateOf<UserProfile?>(null) }
-    val database = Firebase.database //initialize an instance of the realtime database
+    val database = Firebase.database
     val userID = FirebaseAuth.getInstance().uid
-
-    println("In TOP AND BOTTOM ")
     LaunchedEffect(authState.value) {
         when(authState.value) {
             is AuthState.Unauthenticated -> navController.navigate("login")
             is AuthState.Authenticated -> {
                 userID?.let { id ->
-                    val userRef = database.getReference("Users").child(id) // points to the Users node in firebase
-
-                    userRef.get().addOnSuccessListener { dataSnapshot ->     //sends a request to retrieve info in firebase
-                        userProfile = dataSnapshot.getValue(UserProfile::class.java) //converts the info into a user profile object
+                    val userRef = database.getReference("Users").child(id)
+                    userRef.get().addOnSuccessListener { dataSnapshot ->
+                        userProfile = dataSnapshot.getValue(UserProfile::class.java)
                     }.addOnFailureListener {
                         Toast.makeText(context, "Failed to retrieve user data", Toast.LENGTH_SHORT).show()
                     }
@@ -751,24 +490,14 @@ fun TopAndBottomAppBar(
             else -> Unit
         }
     }
-
-
-
-
     val configuration = LocalConfiguration.current
     val screenHeightDp = configuration.screenHeightDp
     val screenWidthDp = configuration.screenWidthDp
-
     val systembarPadding = WindowInsets.systemBars.asPaddingValues()
-
-
     Scaffold(
         topBar = {
-
             userProfile?.let { profile ->
-
                 val bitmap: ImageBitmap = ImageBitmap.imageResource(id = userProfile!!.currentBackground)
-
                 Box(
                     modifier = Modifier
                         .height(systembarPadding.calculateTopPadding())
@@ -778,46 +507,24 @@ fun TopAndBottomAppBar(
                 if(topBar){
                     Box(
                         modifier = modifier
-//                        .border(3.dp, dark,  RoundedCornerShape(12.dp))
                             .height((screenHeightDp / 7).dp)
                             .fillMaxWidth(),
                         contentAlignment = Alignment.Center
-
                     )
-
                     {
                         Canvas(modifier = Modifier
                             .fillMaxSize()
                         ) {
                             val canvasWidth = size.width
                             val canvasHeight = size.height
-
                             drawImage(
                                 image = bitmap,
-                                srcSize = IntSize( bitmap.width, bitmap.width/3), // Only top half
+                                srcSize = IntSize( bitmap.width, bitmap.width/3),
                                 dstSize = IntSize(canvasWidth.toInt(), canvasHeight.toInt()),
-                                srcOffset = IntOffset.Zero, // Start from the top
+                                srcOffset = IntOffset.Zero,
                                 dstOffset =  IntOffset.Zero
                             )
                         }
-
-//                        Image(
-//                            painter = painterResource1(id = userProfile!!.currentBackground),
-//                            contentDescription = null,
-//
-//                            modifier = Modifier
-//                                .offset( ( 0 ).dp ,( 30f ).dp)
-////                                .size((screenHeightDp / 4.1).dp)
-////                                .fillMaxWidth()// Adjust this to control the image size within the Box
-//                                .align(Alignment.BottomCenter) // Center the image within the Box
-//                            ,
-//
-//                            contentScale = ContentScale.FillWidth,
-//                        )
-
-
-
-                        //Plan is to make the circle the pfp but for now i just put the username in there
                         Box(
                             modifier = Modifier
                                 .size((screenHeightDp / 8.5).dp)
@@ -827,17 +534,12 @@ fun TopAndBottomAppBar(
                             contentAlignment = Alignment.Center
 
                         ) {
-                            //Text(profile.username, fontSize = 35.sp, color = Color.White) //profile username
                             Image(
                                 painter = painterResource1(id = userProfile!!.currentAvatar),
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop,
                                 modifier = Modifier
-                                    .fillMaxSize()
-//                                    .size((screenHeightDp / 1).dp)
-//                                    .fillMaxWidth()// Adjust this to control the image size within the Box
-//                                    .align(Alignment.Center) // Center the image within the Box
-                                ,
+                                    .fillMaxSize(),
                             )
                         }
                         Box(
@@ -851,33 +553,23 @@ fun TopAndBottomAppBar(
                             Image(
                                 painter = painterResource1(id = userProfile!!.currentBorder),
                                 contentDescription = null,
-//                                modifier = Modifier.size(300.dp),                               ,
                                 contentScale = ContentScale.Crop
                             )
-
                         }
 
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
-//                                .offset(x = 0.dp, y = 0.dp)
                                 .padding(8.dp)
-                                .align(Alignment.BottomCenter)
-                            ,
-
+                                .align(Alignment.BottomCenter),
                             ) {
                             Box(
                                 modifier = Modifier
                                     .size(100.dp)
-//                                .offset(x = 0.dp, y = 0.dp)
                                     .padding(8.dp)
                                     .align(Alignment.BottomCenter),
-
                                 ) {
-
                             }
-
-                            //streak
                             Row {
                                 Box(modifier = Modifier.size(36.dp))
                                 {
@@ -887,7 +579,6 @@ fun TopAndBottomAppBar(
                                         contentScale = ContentScale.Crop
                                     )
                                 }
-
                                 Text(
                                     text =
                                     buildAnnotatedString {
@@ -905,9 +596,9 @@ fun TopAndBottomAppBar(
                                     textAlign = TextAlign.Left,
                                     style = androidx.compose.ui.text.TextStyle(
                                         shadow = Shadow(
-                                            color = Color.Black,  // Adjust color as needed
+                                            color = Color.Black,
                                             blurRadius = 8f,
-                                            offset = Offset(2f, 2f)  // Position shadow for effect
+                                            offset = Offset(2f, 2f)
                                         )
                                     )
                                 )
@@ -915,31 +606,23 @@ fun TopAndBottomAppBar(
                         }
 
 
-                        //flexcoins
                         Box(
                             modifier = Modifier
                                 .fillMaxSize()
                                 .offset(x = 0.dp, y = 37.dp)
                                 .padding(8.dp)
-                                .align(Alignment.BottomCenter)
-                            ,
-
+                                .align(Alignment.BottomCenter),
                             ) {
                             Box(
                                 modifier = Modifier
                                     .size(100.dp)
-//                                .offset(x = 0.dp, y = 0.dp)
                                     .padding(8.dp)
                                     .align(Alignment.BottomCenter),
 
                                 ) {
-
                             }
 
-                            //streak
                             Row {
-
-
                                 Text(
                                     text =
                                     buildAnnotatedString {
@@ -948,7 +631,6 @@ fun TopAndBottomAppBar(
                                                 color = grayWhite,
                                                 fontSize = (screenWidthDp / 15f).sp,
                                                 fontWeight = FontWeight.Bold,
-
                                                 )
                                         ) {
                                             append("\uD83D\uDD25")
@@ -959,7 +641,6 @@ fun TopAndBottomAppBar(
                                                 color = grayWhite,
                                                 fontSize = (screenWidthDp / 15f).sp,
                                                 fontWeight = FontWeight.Bold,
-
                                                 )
                                         ) {
                                             append(" " + profile.streak.streak.toString() + " DAYS")
@@ -968,143 +649,94 @@ fun TopAndBottomAppBar(
                                     textAlign = TextAlign.Left,
                                     style = androidx.compose.ui.text.TextStyle(
                                         shadow = Shadow(
-                                            color = Color.Black,  // Adjust color as needed
+                                            color = Color.Black,
                                             blurRadius = 8f,
-                                            offset = Offset(2f, 2f)  // Position shadow for effect
+                                            offset = Offset(2f, 2f)
                                         )
                                     )
                                 )
                             }
                         }
-
-
-//                        Text(
-//                            text = "\uD83E\uDE99 ${profile.flexcoins}",
-//                            modifier = Modifier
-//                                .offset(x = (screenWidthDp/-3f).dp, y = (screenHeightDp/7/3.2).dp)
-//                                .padding(8.dp),
-//                            color = grayWhite,
-//                            fontSize = 25.sp,
-//                            fontWeight = FontWeight.Bold,
-//                            textAlign = TextAlign.Left,
-//                            style = androidx.compose.ui.text.TextStyle(
-//                                shadow = Shadow(
-//                                    color = Color.Black,  // Adjust color as needed
-//                                    blurRadius = 8f,
-//                                    offset = Offset(2f, 2f)  // Position shadow for effect
-//                                )
-//                            )
-//                        )
-
                     }
                 }
-
-
-
-
             }
-
         },
         bottomBar = {
             BottomAppBar(
-
                 modifier = Modifier
-                    .height(screenHeightDp.dp / 9f)
-//                    .border(3.dp, dark,  RoundedCornerShape(12.dp))
-                ,
-
+                    .height(screenHeightDp.dp / 9f),
                 containerColor = darker,
                 actions = {
                     Column(
-
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally,
-
                     ) {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceEvenly
                         ) {
-//                            navigationItems.forEach { navigationItem -> navigationItem() }
-
                             NavigationBarItem(
                                 { navController.navigate("home") },
                                 Icons.Filled.Home,
                                 "Store Page",
                                 9.5f
                             )
-
                             NavigationBarItem(
                                 { navController.navigate("store") },
                                 Icons.Filled.ShoppingCart,
                                 "Store Page",
                                 9.5f
                             )
-
                             NavigationBarItem(
                                 { navController.navigate("logging") },
                                 Icons.Filled.AddCircle,
                                 "Store Page",
                                 4.5f
                             )
-
                             NavigationBarItem(
                                 { navController.navigate("stats") },
                                 Icons.Filled.AccountCircle,
                                 "Store Page",
                                 9.5f
                             )
-
                             NavigationBarItem(
                                 { navController.navigate("settings") },
                                 Icons.Filled.Settings,
                                 "Settings Page",
                                 9.5f
                             )
-
-
                         }
                     }
                 }
             )
-//
         }
-
     ){paddingValues ->
         val topPadding =
             if (topBar) {
                 paddingValues.calculateTopPadding() - systembarPadding.calculateTopPadding()
             }
             else {
-//                0.dp
                 paddingValues.calculateTopPadding()
             }
-
         val bottomPadding =
             if (topBar) {
                 screenHeightDp.dp / 9f
             }
             else {
                 screenHeightDp.dp / 9f
-//                0.dp
             }
-
         Box(
             modifier = Modifier
                 .padding(
                     start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
                     top = topPadding,
-//                    top = paddingValues.calculateTopPadding() - systembarPadding.calculateTopPadding(),
                     end = paddingValues.calculateEndPadding(LayoutDirection.Rtl),
                     bottom = bottomPadding,
-                )
+                    )
                 .fillMaxSize()
                 .background(verticalGradientBrush(transparent, dark))
         ){
-            contents();
+            contents()
         }
-
-
     }
-
 }

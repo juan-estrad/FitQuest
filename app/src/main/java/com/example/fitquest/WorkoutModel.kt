@@ -2,7 +2,6 @@ package com.example.fitquest
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.fitquest.pages.WeeklyWorkoutScreen1
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -10,18 +9,16 @@ import com.google.firebase.database.database
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import java.time.temporal.WeekFields
-import java.util.Locale
+
+////////////////////////////////////Code: Juan and Alexis////////////////////////////////////
 
 class WorkoutViewModel : ViewModel() {
     private val database = Firebase.database
-    val userID = FirebaseAuth.getInstance().uid
+    private val userID = FirebaseAuth.getInstance().uid
     var todayWorkout = mutableStateOf<Workout?>(null)
-    val userStats = mutableStateOf(UserStats())
-    val workout:Workout? = Workout()
+    private val userStats = mutableStateOf(UserStats())
 
     private var workoutLoaded = false
-    private var lastLoadDate: LocalDate? = null
 
     fun loadUserChallenges(profile: UserProfile){
         println("loadUserChallenges called")
@@ -36,7 +33,7 @@ class WorkoutViewModel : ViewModel() {
         }
     }
 
-    fun loadRandomWorkout1(profile: UserProfile){
+    private fun loadRandomWorkout1(profile: UserProfile){
         val workoutsRef = database.getReference("workouts")
         workoutsRef.get().addOnSuccessListener { snapshot ->
             if (snapshot.exists()) {
@@ -73,7 +70,7 @@ class WorkoutViewModel : ViewModel() {
             println("Error fetching body locations: ${error.message}")
         }
     }
-    fun loadRandomWorkout2(profile: UserProfile){
+    private fun loadRandomWorkout2(profile: UserProfile){
         val workoutsRef = database.getReference("workouts")
         workoutsRef.get().addOnSuccessListener { snapshot ->
             if (snapshot.exists()) {
@@ -101,7 +98,6 @@ class WorkoutViewModel : ViewModel() {
                                 }
                             }
                             .addOnFailureListener { error ->
-                                // Handle error while fetching workout
                                 println("Error fetching workout: ${error.message}")
                             }
 
@@ -112,7 +108,7 @@ class WorkoutViewModel : ViewModel() {
             println("Error fetching body locations: ${error.message}")
         }
     }
-    fun loadRandomWorkout3(profile: UserProfile){
+    private fun loadRandomWorkout3(profile: UserProfile){
         val workoutsRef = database.getReference("workouts")
         workoutsRef.get().addOnSuccessListener { snapshot ->
             if (snapshot.exists()) {
@@ -191,13 +187,11 @@ class WorkoutViewModel : ViewModel() {
 
 class WeeklyWorkoutViewModel : ViewModel() {
     private val database = FirebaseDatabase.getInstance()
-    val userID = FirebaseAuth.getInstance().uid
+    private val userID = FirebaseAuth.getInstance().uid
     var weeklyWorkout = mutableStateOf<Weekly?>(null)
-    val userStats = mutableStateOf(UserStats())
-    val workout:Weekly? = Weekly()
+    private val userStats = mutableStateOf(UserStats())
 
     private var workoutLoaded = false
-    private var lastLoadDate: LocalDate? = null
 
     fun loadUserChallenges(profile: UserProfile){
         val currentWeekStart = LocalDate.now().with(DayOfWeek.SUNDAY).format(DateTimeFormatter.ISO_DATE)
@@ -212,7 +206,7 @@ class WeeklyWorkoutViewModel : ViewModel() {
         }
     }
 
-    fun loadRandomWorkout1(profile: UserProfile){
+    private fun loadRandomWorkout1(profile: UserProfile){
         val workoutsRef = database.getReference("Weekly")
         workoutsRef.get().addOnSuccessListener { snapshot ->
             if (snapshot.exists()) {
@@ -246,7 +240,7 @@ class WeeklyWorkoutViewModel : ViewModel() {
         }
     }
 
-    fun loadRandomWorkout2(profile: UserProfile){
+    private fun loadRandomWorkout2(profile: UserProfile){
         val workoutsRef = database.getReference("Weekly")
         workoutsRef.get().addOnSuccessListener { snapshot ->
             if (snapshot.exists()) {
@@ -279,7 +273,7 @@ class WeeklyWorkoutViewModel : ViewModel() {
         }
     }
 
-    fun loadRandomWorkout3(profile: UserProfile){
+    private fun loadRandomWorkout3(profile: UserProfile){
         val workoutsRef = database.getReference("Weekly")
         workoutsRef.get().addOnSuccessListener { snapshot ->
             println("still in2")
@@ -349,6 +343,6 @@ class WeeklyWorkoutViewModel : ViewModel() {
     }
 
     init {
-        loadUserStats()  // Load user stats on ViewModel init
+        loadUserStats()
     }
 }

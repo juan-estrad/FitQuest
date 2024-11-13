@@ -1,6 +1,5 @@
 package com.example.fitquest
 
-
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
@@ -16,12 +15,12 @@ import com.example.fitquest.pages.ForYouPage
 import com.example.fitquest.pages.SettingsPage
 import com.example.fitquest.pages.SplashScreen
 import com.example.fitquest.pages.StorePage
-import com.example.fitquest.pages.WorkoutScreen1
+
+////////////////////////////////////Code: Joseph////////////////////////////////////
 
 @Composable
 fun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel, workoutViewModel: WorkoutViewModel, weeklyWorkoutViewModel: WeeklyWorkoutViewModel){
     val navController = rememberNavController()
-
     NavHost(navController = navController, startDestination = "splash",
         builder = {
             composable("splash"){

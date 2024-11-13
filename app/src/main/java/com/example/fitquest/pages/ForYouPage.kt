@@ -1,7 +1,6 @@
 package com.example.fitquest.pages
 
 import android.os.CountDownTimer
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
@@ -34,7 +32,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,103 +42,73 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
 import com.example.fitquest.R
 import com.example.fitquest.UserProfile
-import com.example.fitquest.Weekly
 import com.example.fitquest.WeeklyWorkoutViewModel
 import com.example.fitquest.WorkoutViewModel
 import com.example.fitquest.ui.TopAndBottomAppBar
 import com.example.fitquest.ui.theme.brightOrange
-import com.example.fitquest.weeklyChallenge
-//import com.google.ai.client.generativeai.type.content
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.MutableData
-import com.google.firebase.database.Transaction
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.tasks.await
-import kotlin.random.Random
-import java.text.SimpleDateFormat
-import java.util.Locale
 import androidx.compose.material3.Text as Text
 
+///////////////////////////////Code: Alexis, Nick, Campbell, Joseph, Juan and Tanner////////////////////////////////////////////////
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForYouPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel, workoutViewModel: WorkoutViewModel, weeklyWorkoutViewModel: WeeklyWorkoutViewModel) {
-
     TopAndBottomAppBar(
         contents = { ForYouPageContents(modifier,navController,authViewModel, workoutViewModel, weeklyWorkoutViewModel) },
         modifier = modifier,
         navController = navController,
         authViewModel = authViewModel
     )
-
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel, workoutViewModel: WorkoutViewModel, weeklyWorkoutViewModel: WeeklyWorkoutViewModel) {
     val authState = authViewModel.authState.observeAsState()
-    //val workoutViewModel: WorkoutViewModel = WorkoutViewModel()
     val context = LocalContext.current
-
     var userProfile by remember { mutableStateOf<UserProfile?>(null) }
-    //val workoutViewModel: WorkoutViewModel = WorkoutViewModel()
-    val database = Firebase.database //initialize an instance of the realtime database
+    val database = Firebase.database
     val userID = FirebaseAuth.getInstance().uid
-
     LaunchedEffect(authState.value) {
         when (authState.value) {
             is AuthState.Unauthenticated -> navController.navigate("login")
             is AuthState.Authenticated -> {
                 userID?.let { id ->
                     val userRef = database.getReference("Users")
-                        .child(id) // points to the Users node in firebase
-
+                        .child(id)
                     userRef.get()
-                        .addOnSuccessListener { dataSnapshot ->     //sends a request to retrieve info in firebase
+                        .addOnSuccessListener { dataSnapshot ->
                             userProfile =
-                                dataSnapshot.getValue(UserProfile::class.java) //converts the info into a user profile object
+                                dataSnapshot.getValue(UserProfile::class.java)
                         }.addOnFailureListener {
                         Toast.makeText(context, "Failed to retrieve user data", Toast.LENGTH_SHORT)
                             .show()
                     }
                 }
             }
-
             else -> Unit
         }
     }
 
     userProfile?.let { profile ->
-
         Column(
             modifier = modifier
                 .fillMaxSize()
-//                .background(Color.DarkGray)
                 .padding(
                     start = 16.dp,
-//                    top = screenHeightDp.dp / 7 - 15.dp,
-//                    top = paddingValues.calculateTopPadding(),
                     top = 0.dp,
                     end = 16.dp,
                     bottom = 0.dp
                 )
                 .verticalScroll(rememberScrollState())
         ) {
-
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -159,10 +126,6 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                     fontWeight = FontWeight.Bold
                 )
             }
-            val database = Firebase.database
-            val myRef = database.getReference("Users")
-
-
             Column(
             ) {
                 Row (
@@ -174,8 +137,6 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                 ){
                     Text("Daily", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
                 }
-
-
                 Column {
                     LazyRow {
                         items(1) { index ->
@@ -195,7 +156,6 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                     Text("Weekly", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color.White)
                     Spacer(modifier = Modifier.width(8.dp))
                 }
-
                 Column {
                     LazyRow {
                         items(1) { index ->
@@ -205,7 +165,6 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                         }
                     }
                 }
-
                 Row (
                     modifier = Modifier
                         .fillMaxWidth()
@@ -226,7 +185,6 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                     ReccomendedBox(
                         img = R.drawable.profile_3,
                         name = "Arnold Beefcake",
-
                         title = "T-800 (muscles only!!)",
                         text = "This is some text in the box.",
                         workouts1 = "Upperbody",
@@ -261,7 +219,6 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                         workouts3prog = "Bench Press: 5x10 \nDumbbell Flyers: 5x10 \nIncline Bench Press: 5x10",
                     )
                 }
-                //RandomChildDisplay()
             }
         }
     }
@@ -272,12 +229,9 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
 fun ReccomendedBox(img: Int, name: String, title: String, text: String, workouts1: String, workouts1prog: String, workouts2: String, workouts2prog: String,workouts3: String, workouts3prog: String) {
     var showDialog by remember { mutableStateOf(false) }
     var isButtonVisible by remember { mutableStateOf(true) }
-
-
     LaunchedEffect(Unit) {
-        val timer = object : CountDownTimer(24 * 60 * 60 * 1000, 1000) { // 24 hours in milliseconds
+        val timer = object : CountDownTimer(24 * 60 * 60 * 1000, 1000) {
             override fun onTick(millisUntilFinished: Long) {}
-
             override fun onFinish() {
                 isButtonVisible = true
             }
@@ -378,16 +332,9 @@ fun ReccomendedBox(img: Int, name: String, title: String, text: String, workouts
 
 @Composable
 fun WorkoutScreen1(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
-    var enabled by remember { mutableStateOf(true) }
-    //val viewModel: WorkoutViewModel = WorkoutViewModel()
-    println("IN WORKOUT SCREEN")
-    //viewModel.loadUserChallenges(profile)
-    val database = Firebase.database //initialize an instance of the realtime database
+    val database = Firebase.database
     val userID = FirebaseAuth.getInstance().uid
     workoutViewModel.loadUserChallenges(profile)
-
-
-
     Card(
         modifier = Modifier
             .padding(7.dp)
@@ -402,13 +349,9 @@ fun WorkoutScreen1(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
         ) {
             //////////////////////////////////workout 1////////////////////////////
             workoutViewModel.todayWorkout.value = profile.challenges.dailyChallenge.workout1
-
-            // Display workout details if available
             workoutViewModel.todayWorkout.value?.let { workout ->
                 Text(text = "${workout.name}")
-
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Text(text = "Description:",
                     lineHeight = 12.sp)
                 Text(text = "${workout.description}",
@@ -416,7 +359,6 @@ fun WorkoutScreen1(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
                     fontSize = 15.sp,
                     lineHeight = 18.sp
                 )
-
                 Spacer(modifier = Modifier.height(25.dp))
                 Row (
                     modifier = Modifier.fillMaxWidth(),
@@ -430,7 +372,6 @@ fun WorkoutScreen1(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
                     Text(text = "Stamina: +${workout.stamina}",
                         fontSize = 15.sp)
                 }
-
                 Row (modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 )
@@ -440,11 +381,7 @@ fun WorkoutScreen1(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
                     Text(text = "Dexterity: +${workout.dexterity}",
                         fontSize = 15.sp)
                 }
-
-
-
                 Spacer(modifier = Modifier.height(25.dp))
-
                 Button(onClick = {
                     workoutViewModel.completeWorkout(profile)
                     profile.challenges.dailyChallenge.completeWorkout1 = true
@@ -463,15 +400,9 @@ fun WorkoutScreen1(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
 
 @Composable
 fun WorkoutScreen2(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
-    val database = Firebase.database //initialize an instance of the realtime database
+    val database = Firebase.database
     val userID = FirebaseAuth.getInstance().uid
-    var enabled by remember { mutableStateOf(true) }
-    //val viewModel: WorkoutViewModel = WorkoutViewModel()
-    println("IN WORKOUT SCREEN")
-    //viewModel.loadUserChallenges(profile)
     workoutViewModel.loadUserChallenges(profile)
-
-
     Card(
         modifier = Modifier
             .padding(7.dp)
@@ -486,13 +417,9 @@ fun WorkoutScreen2(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
         ) {
             //////////////////////////////////workout 2////////////////////////////
             workoutViewModel.todayWorkout.value = profile.challenges.dailyChallenge.workout2
-
-            // Display workout details if available
             workoutViewModel.todayWorkout.value?.let { workout ->
                 Text(text = "${workout.name}")
-
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Text(text = "Description:",
                     lineHeight = 12.sp)
                 Text(text = "${workout.description}",
@@ -500,7 +427,6 @@ fun WorkoutScreen2(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
                     fontSize = 15.sp,
                     lineHeight = 18.sp
                 )
-
                 Spacer(modifier = Modifier.height(25.dp))
                 Row (
                     modifier = Modifier.fillMaxWidth(),
@@ -514,7 +440,6 @@ fun WorkoutScreen2(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
                     Text(text = "Stamina: +${workout.stamina}",
                         fontSize = 15.sp)
                 }
-
                 Row (modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 )
@@ -524,11 +449,7 @@ fun WorkoutScreen2(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
                     Text(text = "Dexterity: +${workout.dexterity}",
                         fontSize = 15.sp)
                 }
-
-
-
                 Spacer(modifier = Modifier.height(25.dp))
-
                 Button(onClick = {
                     workoutViewModel.completeWorkout(profile)
                     profile.challenges.dailyChallenge.completeWorkout2 = true
@@ -547,15 +468,9 @@ fun WorkoutScreen2(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
 
 @Composable
 fun WorkoutScreen3(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
-    val database = Firebase.database //initialize an instance of the realtime database
+    val database = Firebase.database
     val userID = FirebaseAuth.getInstance().uid
-    var enabled by remember { mutableStateOf(true) }
-    //val viewModel: WorkoutViewModel = WorkoutViewModel()
-    println("IN WORKOUT SCREEN")
-    //viewModel.loadUserChallenges(profile)
     workoutViewModel.loadUserChallenges(profile)
-
-
     Card(
         modifier = Modifier
             .padding(7.dp)
@@ -570,13 +485,9 @@ fun WorkoutScreen3(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
         ) {
             //////////////////////////////////workout 3////////////////////////////
             workoutViewModel.todayWorkout.value = profile.challenges.dailyChallenge.workout3
-
-            // Display workout details if available
             workoutViewModel.todayWorkout.value?.let { workout ->
                 Text(text = "${workout.name}")
-
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Text(text = "Description:",
                     lineHeight = 12.sp)
                 Text(text = "${workout.description}",
@@ -584,7 +495,6 @@ fun WorkoutScreen3(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
                     fontSize = 15.sp,
                     lineHeight = 18.sp
                 )
-
                 Spacer(modifier = Modifier.height(25.dp))
                 Row (
                     modifier = Modifier.fillMaxWidth(),
@@ -598,7 +508,6 @@ fun WorkoutScreen3(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
                     Text(text = "Stamina: +${workout.stamina}",
                         fontSize = 15.sp)
                 }
-
                 Row (modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 )
@@ -608,11 +517,7 @@ fun WorkoutScreen3(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
                     Text(text = "Dexterity: +${workout.dexterity}",
                         fontSize = 15.sp)
                 }
-
-
-
                 Spacer(modifier = Modifier.height(25.dp))
-
                 Button(onClick = {
                     workoutViewModel.completeWorkout(profile)
                     profile.challenges.dailyChallenge.completeWorkout3 = true
@@ -630,15 +535,9 @@ fun WorkoutScreen3(workoutViewModel: WorkoutViewModel, profile: UserProfile) {
 
 @Composable
 fun WeeklyWorkoutScreen1(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile: UserProfile) {
-    val database = Firebase.database //initialize an instance of the realtime database
+    val database = Firebase.database
     val userID = FirebaseAuth.getInstance().uid
-    var enabled by remember { mutableStateOf(true) }
-    //val viewModel: WorkoutViewModel = WorkoutViewModel()
-    println("IN WORKOUT SCREEN")
-    //viewModel.loadUserChallenges(profile)
     weeklyWorkoutViewModel.loadUserChallenges(profile)
-
-
     Card(
         modifier = Modifier
             .padding(7.dp)
@@ -653,12 +552,9 @@ fun WeeklyWorkoutScreen1(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
         ) {
             //////////////////////////////////workout 1////////////////////////////
             weeklyWorkoutViewModel.weeklyWorkout.value = profile.challenges.weeklyChallenge.workout1
-
-            // Display workout details if available
             weeklyWorkoutViewModel.weeklyWorkout.value?.let { weekly ->
                 Text(text = "${weekly.name}")
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Text(text = "Workouts:",
                     fontSize = 16.sp,
                     lineHeight = 20.sp)
@@ -685,7 +581,6 @@ fun WeeklyWorkoutScreen1(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Row (
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
@@ -698,7 +593,6 @@ fun WeeklyWorkoutScreen1(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
                     Text(text = "Stamina: +${weekly.stamina}",
                         fontSize = 14.sp)
                 }
-
                 Row (modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 )
@@ -708,10 +602,7 @@ fun WeeklyWorkoutScreen1(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
                     Text(text = "Dexterity: +${weekly.dexterity}",
                         fontSize = 14.sp)
                 }
-
-
                 Spacer(modifier = Modifier.height(16.dp))
-
                 Button(onClick = {
                     weeklyWorkoutViewModel.completeWorkout(profile)
                     profile.challenges.weeklyChallenge.completeWorkout1 = true
@@ -729,15 +620,9 @@ fun WeeklyWorkoutScreen1(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
 
 @Composable
 fun WeeklyWorkoutScreen2(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile: UserProfile) {
-    val database = Firebase.database //initialize an instance of the realtime database
+    val database = Firebase.database
     val userID = FirebaseAuth.getInstance().uid
-    var enabled by remember { mutableStateOf(true) }
-    //val viewModel: WorkoutViewModel = WorkoutViewModel()
-    println("IN WORKOUT SCREEN")
-    //viewModel.loadUserChallenges(profile)
     weeklyWorkoutViewModel.loadUserChallenges(profile)
-
-
     Card(
         modifier = Modifier
             .padding(7.dp)
@@ -752,12 +637,9 @@ fun WeeklyWorkoutScreen2(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
         ) {
             //////////////////////////////////workout 2////////////////////////////
             weeklyWorkoutViewModel.weeklyWorkout.value = profile.challenges.weeklyChallenge.workout2
-
-            // Display workout details if available
             weeklyWorkoutViewModel.weeklyWorkout.value?.let { weekly ->
                 Text(text = "${weekly.name}")
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Text(text = "Workouts:",
                     fontSize = 16.sp,
                     lineHeight = 20.sp)
@@ -797,7 +679,6 @@ fun WeeklyWorkoutScreen2(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
                     Text(text = "Stamina: +${weekly.stamina}",
                         fontSize = 14.sp)
                 }
-
                 Row (modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 )
@@ -807,10 +688,7 @@ fun WeeklyWorkoutScreen2(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
                     Text(text = "Dexterity: +${weekly.dexterity}",
                         fontSize = 14.sp)
                 }
-
-
                 Spacer(modifier = Modifier.height(16.dp))
-
                 Button(onClick = {
                     weeklyWorkoutViewModel.completeWorkout(profile)
                     profile.challenges.weeklyChallenge.completeWorkout2 = true
@@ -828,15 +706,9 @@ fun WeeklyWorkoutScreen2(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
 
 @Composable
 fun WeeklyWorkoutScreen3(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile: UserProfile) {
-    val database = Firebase.database //initialize an instance of the realtime database
+    val database = Firebase.database
     val userID = FirebaseAuth.getInstance().uid
-    var enabled by remember { mutableStateOf(true) }
-    //val viewModel: WorkoutViewModel = WorkoutViewModel()
-    println("IN WORKOUT SCREEN")
-    //viewModel.loadUserChallenges(profile)
     weeklyWorkoutViewModel.loadUserChallenges(profile)
-
-
     Card(
         modifier = Modifier
             .padding(7.dp)
@@ -851,12 +723,9 @@ fun WeeklyWorkoutScreen3(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
         ) {
             //////////////////////////////////workout 3////////////////////////////
             weeklyWorkoutViewModel.weeklyWorkout.value = profile.challenges.weeklyChallenge.workout3
-
-            // Display workout details if available
             weeklyWorkoutViewModel.weeklyWorkout.value?.let { weekly ->
                 Text(text = "${weekly.name}")
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Text(text = "Workouts:",
                     fontSize = 16.sp,
                     lineHeight = 20.sp)
@@ -883,7 +752,6 @@ fun WeeklyWorkoutScreen3(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
                     )
                 }
                 Spacer(modifier = Modifier.height(8.dp))
-
                 Row (
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
@@ -896,7 +764,6 @@ fun WeeklyWorkoutScreen3(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
                     Text(text = "Stamina: +${weekly.stamina}",
                         fontSize = 14.sp)
                 }
-
                 Row (modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceAround
                 )
@@ -906,10 +773,7 @@ fun WeeklyWorkoutScreen3(weeklyWorkoutViewModel: WeeklyWorkoutViewModel, profile
                     Text(text = "Dexterity: +${weekly.dexterity}",
                         fontSize = 14.sp)
                 }
-
-
                 Spacer(modifier = Modifier.height(16.dp))
-
                 Button(onClick = {
                     weeklyWorkoutViewModel.completeWorkout(profile)
                     profile.challenges.weeklyChallenge.completeWorkout3 = true

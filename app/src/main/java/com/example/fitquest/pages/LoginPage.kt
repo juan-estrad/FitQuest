@@ -1,7 +1,5 @@
 package com.example.fitquest.pages
 
-
-
 import android.content.Intent
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -62,18 +60,14 @@ import com.example.fitquest.ui.theme.dark
 import com.example.fitquest.ui.theme.darkOrange
 import com.example.fitquest.ui.theme.transparent
 
-@OptIn(ExperimentalMaterial3Api::class)
+///////////////////////////////Code: Alexis, Nick, Campbell, Joseph, Juan and Tanner////////////////////////////////////////////////
+
 @Composable
 fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-
-
-
     val authState = authViewModel.authState.observeAsState()
     val context = LocalContext.current
-
-    // Handle authentication state changes
     LaunchedEffect(authState.value) {
         when (authState.value) {
             is AuthState.Authenticated -> navController.navigate("home")
@@ -82,31 +76,19 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                 (authState.value as AuthState.Error).message,
                 Toast.LENGTH_LONG
             ).show()
-
             else -> Unit
         }
     }
-
-
-    // Login page layout
     val configuration = LocalConfiguration.current
     val iconSize = 200f
-    val iconOffset = configuration.screenHeightDp / 12
-    // Login page layout
     Column(
 
         modifier = Modifier
             .fillMaxSize()
-            .background(verticalGradientBrush(transparent, dark))
-
-//            .padding(iconSize.dp)
-        ,
+            .background(verticalGradientBrush(transparent, dark)),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
-
-
     }
     Column(
         modifier = Modifier
@@ -115,49 +97,33 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
         verticalArrangement = Arrangement.Bottom,
         horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-//        Spacer(modifier = Modifier.height(configuration.screenHeightDp.dp))
-
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-//                .offset(y = (iconOffset).dp)
-//                .background(dark)
-                .size(iconSize.dp)
-            ,
+                .size(iconSize.dp),
         ) {
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .fillMaxWidth()// Outer Box size
+                    .fillMaxWidth()
                     .aspectRatio(1f)
-                    .background(darkOrange, CircleShape) // Outer border
+                    .background(darkOrange, CircleShape)
                     .padding(horizontal = 20.dp)
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.fit_quest_logo), // Replace with your image
+                    painter = painterResource(id = R.drawable.fit_quest_logo),
                     contentDescription = null,
                 )
             }
-
         }
-
         Spacer(modifier = Modifier.height( (configuration.screenHeightDp /30) .dp) )
-
-        // Title
         Box(
             contentAlignment = Alignment.Center,
-            modifier = Modifier
-//                .offset(y = (iconOffset + 13f).dp)
-//                .background(dark)
-//                .size(iconSize.dp)
-            ,
+            modifier = Modifier,
         ) {
             Text(
                 text =
                 buildAnnotatedString {
-//                    withStyle(style = SpanStyle(fontSize = 35.sp)) {
-//                        append("Time for a \n\n")
-//                    }
                     withStyle(style = SpanStyle(color = brightOrange)) {
                         append("Fit")
                     }
@@ -170,62 +136,24 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
                 textAlign = TextAlign.Center
             )
         }
-
-
         Spacer(modifier = Modifier.height( (configuration.screenHeightDp /30 ) .dp) )
-
-
-
-
-        // Email input
         UserInputField(
             label = "EMAIL",
             value = email,
             onValueChange = { email = it }
         )
-        
-
-
-       // Password Input
         UserInputField(
             label = "PASSWORD",
             value = password,
             onValueChange = { password = it },
-
             isPassword = true
         )
-
         Spacer(modifier = Modifier.height(35.dp))
-
-        // Login button
         OrangeFilledButton("Login", {authViewModel.login(email, password)},  authState.value != AuthState.Loading)
-
         Spacer(modifier = Modifier.height( (configuration.screenHeightDp /14 ) .dp) )
-
         Title01_LEFT("NEED AN ACCOUNT?", grayWhite, 16f)
-
-
-        // Signup navigation text
         HollowOrangeButton("REGISTER", {navController.navigate("signup")} ,  authState.value != AuthState.Loading)
-
         Spacer(modifier = Modifier.height( (configuration.screenHeightDp /12 ) .dp) )
-
-
-//        Button(
-//            onClick = { navController.navigate("signup") },
-//            colors = ButtonDefaults.buttonColors(containerColor = transparent),
-//            enabled = authState.value != AuthState.Loading,
-//            modifier = Modifier
-//                .fillMaxWidth()
-//                .height(55.dp),
-////                .border(width = 5.dp, color = Color(0xFFD58D18)),
-//            shape = RoundedCornerShape(size = 25.dp),
-//            border = BorderStroke(4.5.dp, brightOrange)
-//
-//        ) {
-//            Text(text = "REGISTER", color = brightOrange, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-//        }
-//
         BackHandler {
             val homeIntent = Intent(Intent.ACTION_MAIN).apply {
                 addCategory(Intent.CATEGORY_HOME)
@@ -233,21 +161,12 @@ fun LoginPage(modifier: Modifier = Modifier, navController: NavController, authV
             }
             context.startActivity(homeIntent)
         }
-
-
-
         BackHandler(enabled = true ) {
-
-
             val intent = Intent(Intent.ACTION_MAIN)
             intent.addCategory(Intent.CATEGORY_HOME)
             context.startActivity(intent)
-//            exitProcess(1);
         }
-
-
     }
-
 }
 
 

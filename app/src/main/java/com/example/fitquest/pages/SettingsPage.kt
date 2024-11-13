@@ -1,6 +1,5 @@
 package com.example.fitquest.pages
 
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -37,23 +36,19 @@ import com.example.fitquest.AuthViewModel
 import com.example.fitquest.ui.TopAndBottomAppBar
 import com.example.fitquest.ui.theme.verticalGradientBrush
 
-
+///////////////////////////////Code: Alexis, Nick, Campbell, Joseph, Juan and Tanner////////////////////////////////////////////////
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
-
     TopAndBottomAppBar(
         contents = { SettingsPageContent(modifier,navController,authViewModel) },
         modifier = modifier,
         navController = navController,
         authViewModel = authViewModel
     )
-
-
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsPageContent(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
     Column(
@@ -68,36 +63,25 @@ fun SettingsPageContent(modifier: Modifier = Modifier, navController: NavControl
             fontWeight = FontWeight.Bold,
             color = Color.White
         )
-
         Spacer(modifier = Modifier.height(16.dp))
-
-        // Settings items
         SettingsItem(icon = Icons.Default.Person, title = "Account") {
-
         }
         SettingsItem(icon = Icons.Default.Notifications, title = "Notifications") {
-
         }
         SettingsItem(icon = Icons.Default.AccountCircle, title = "Customize Profile") {
             navController.navigate("customize")
         }
         SettingsItem(icon = Icons.Default.Lock, title = "Privacy & Security") {
-
         }
         SettingsItem(icon = Icons.Default.Star, title = "Language") {
-
         }
         SettingsItem(icon = Icons.Default.Phone, title = "Help & Support") {
-
         }
         SettingsItem(icon = Icons.Default.Info, title = "About") {
-
         }
         SettingsItem(icon = Icons.Default.Warning, title = "Log Out") {
             authViewModel.signout()
         }
-
-
     }
 }
 

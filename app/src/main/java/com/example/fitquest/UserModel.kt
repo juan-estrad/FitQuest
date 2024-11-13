@@ -1,5 +1,7 @@
 package com.example.fitquest
 
+////////////////////////////////////Code: Juan, Alexis, Joseph, and Tanner////////////////////////////////////
+
 data class Weekly(
     val name: String = "",
     val workout1: String = "",
@@ -31,9 +33,7 @@ data class UserProfile(
     var currentAvatar: Int = 0,
     var currentBackground:Int = 0,
     var currentBorder:Int = 0,
-    //val inventory:Inventory = Inventory(),
     val userStats: UserStats = UserStats(),
-    //val logging: Logging = Logging(),
     val streak: UserStreak = UserStreak(),
     var lastWorkout: String = "",
     var workoutCount: Int = 0,
@@ -44,6 +44,7 @@ data class Challenge(
     val dailyChallenge: dailyChallenge = dailyChallenge(),
     val weeklyChallenge: weeklyChallenge = weeklyChallenge()
 )
+
 data class dailyChallenge(
     var workout1:Workout = Workout(),
     var completeWorkout1:Boolean = false,
@@ -53,6 +54,7 @@ data class dailyChallenge(
     var completeWorkout3:Boolean = false,
     var lastUpdate:String = ""
 )
+
 data class weeklyChallenge(
     var workout1:Weekly = Weekly(),
     var completeWorkout1:Boolean = false,
@@ -63,38 +65,12 @@ data class weeklyChallenge(
     var lastUpdate:String = ""
 )
 
-//data class Inventory(
-//    var avatar:Avatar = Avatar(),
-//    var background:Background = Background(),
-//    var borders:Borders = Borders()
-//)
-
-//data class Avatar(
-//    var default:Int = R.drawable.avatar
-//)
-//data class Background(
-//    var default:Int = R.drawable.background_1
-//)
-//data class Borders(
-//    var default:Int = R.drawable.border
-//)
-
-data class ID(
-    val name:String = "",
-    val desc:String = ""
-)
-
 data class UserStats(
     var agility: Int = 0,
     var consistency: Int = 0,
     var dexterity: Int = 0,
     var stamina: Int = 0,
     var strength: Int = 0
-)
-data class PieData(
-    val label: String,
-    val value: Float,
-    val color: androidx.compose.ui.graphics.Color
 )
 
 data class UserStreak(
@@ -103,22 +79,7 @@ data class UserStreak(
     var lastUpdate: String = ""
 )
 
-/*data class Logging(
-    val date: Date = Date()
-)
 
-data class Date(
-    val year: Year = Year()
-)
-
-data class Year(
-    val monthday: Monthday = Monthday()
-)
-
-data class Monthday(
-    val log: Log = Log()
-)
-*/
 data class Log(
     val workout: String = "",
     val type: String = "",

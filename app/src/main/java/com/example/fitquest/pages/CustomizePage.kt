@@ -57,11 +57,12 @@ import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.database
 
+///////////////////////////////Code: Alexis, Nick, Campbell, Joseph, Juan and Tanner////////////////////////////////////////////////
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomizePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
-
     TopAndBottomAppBar(
         contents = { CustomizePageContents(modifier, navController, authViewModel) },
         modifier = modifier,
@@ -69,6 +70,7 @@ fun CustomizePage(modifier: Modifier = Modifier, navController: NavController, a
         authViewModel = authViewModel
     )
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
@@ -82,26 +84,20 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
     var avatarCategories by remember { mutableStateOf(listOf<String>()) }
     var backgroundCategories by remember { mutableStateOf(listOf<String>()) }
     var bordersCategories by remember { mutableStateOf(listOf<String>()) }
-    val database = Firebase.database //initialize an instance of the realtime database
+    val database = Firebase.database
     val userID = FirebaseAuth.getInstance().uid
-
     LaunchedEffect(authState.value) {
         when (authState.value) {
             is AuthState.Unauthenticated -> navController.navigate("login")
             is AuthState.Authenticated -> {
                 userID?.let { id ->
                     val userRef = database.getReference("Users").child(id)
-                    //val database =
-                    //    Firebase.database.reference.child("inventory") // points to the Users node in firebase
-
                     val avatar = userRef.child("inventory").child("avatar")
                     val background = userRef.child("inventory").child("background")
                     val borders = userRef.child("inventory").child("borders")
-
                     userRef.get()
-                        .addOnSuccessListener { dataSnapshot ->     //sends a request to retrieve info in firebase
+                        .addOnSuccessListener { dataSnapshot ->
                             userProfile = dataSnapshot.getValue(UserProfile::class.java)
-                            //converts the info into a user profile object
                         }.addOnFailureListener {
                             Toast.makeText(
                                 context,
@@ -120,7 +116,6 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                         Toast.makeText(context, "Failed to fetch profile categories", Toast.LENGTH_SHORT)
                             .show()
                     }
-
                     background.get().addOnSuccessListener { dataSnapshot ->
                         val categories = mutableListOf<String>()
                         dataSnapshot.children.forEach {
@@ -131,7 +126,6 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                         Toast.makeText(context, "Failed to fetch profile categories", Toast.LENGTH_SHORT)
                             .show()
                     }
-
                     borders.get().addOnSuccessListener { dataSnapshot ->
                         val categories = mutableListOf<String>()
                         dataSnapshot.children.forEach {
@@ -144,12 +138,9 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                     }
                 }
             }
-
             else -> Unit
         }
     }
-
-
     userProfile?.let { profile ->
         Column(
             modifier = modifier
@@ -163,27 +154,14 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                 fontWeight = FontWeight.Bold,
                 color = Color.White
             )
-
-//            Box(
-//                modifier = Modifier
-//
-//                    .fillMaxWidth(),
-//                contentAlignment = Alignment.Center
-//
-//
-//            )
             Row {
-
                 ExposedDropdownMenuBox(
                     expanded = expanded,
-
                     onExpandedChange = {
                         expanded = !expanded
                     }
                 ) {
-
                     OutlinedTextField(
-
                         value = selectedText,
                         onValueChange = { },
                         singleLine = true,
@@ -198,26 +176,20 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                                     Icons.Filled.KeyboardArrowLeft
                                 },
                                 contentDescription = null,
-                                //                                        tint = LocalContentColor.current.copy(alpha = if (expanded) ContentAlpha.high else ContentAlpha.medium),
                                 modifier = Modifier.size(50.dp)
-                            )// Adjust the size as needed
+                            )
                         },
-
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-
                             focusedBorderColor = brightOrange,
                             containerColor = darker,
                             unfocusedBorderColor = dark,
-
                             ),
                         shape = RoundedCornerShape(size = 20.dp),
                         textStyle = LocalTextStyle.current.copy(
-                            fontSize = (screenHeightDp / 30).sp, // Change this to your desired text size
+                            fontSize = (screenHeightDp / 30).sp,
                             fontStyle = FontStyle.Italic,
                             color = dark
-
                         ),
-
                         modifier = Modifier
                             .menuAnchor()
                             .fillMaxWidth()
@@ -233,9 +205,7 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                             .background(
                                 color = darker,
                                 shape = RoundedCornerShape(size = 10.dp)
-                            )
-                        //                                    .clip(RoundedCornerShape(size = 26.dp))
-                        ,
+                            ),
                         expanded = expanded,
                         onDismissRequest = { expanded = false }
                     )
@@ -245,20 +215,11 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                             Box(
                                 modifier = Modifier
                                     .height((screenHeightDp / 15f).dp)
-                                    .border(1.dp, dark, RoundedCornerShape(size = 5.dp))
-                                //                                            .background(transparent, RoundedCornerShape(size = 26.dp))
-                                //                                                    .padding(30.dp)
-
-                                ,
+                                    .border(1.dp, dark, RoundedCornerShape(size = 5.dp)),
                                 contentAlignment = Alignment.CenterStart
-
                             ) {
-                                //                                        Spacer(modifier = Modifier.height(10.dp))
                                 DropdownMenuItem(
-                                    //                                        modifier = Modifier.padding(30.dp),
                                     text = {
-                                        //                                            Text(text = category)
-
                                         Title01_LEFT(
                                             "    $category",
                                             grayWhite,
@@ -274,7 +235,6 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                                             Toast.LENGTH_SHORT
                                         )
                                             .show()
-
                                     },
                                 )
                             }
@@ -283,26 +243,17 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                     }
                 }
             }
-
-
                 Spacer(modifier = Modifier.height(25.dp))
-
-
                 var expandedBorder by remember { mutableStateOf(false) }
                 var selectedTextBorder by remember { mutableStateOf("Borders") }
-                ///// BORDER DROPDOWN////
-
                 Row {
                     ExposedDropdownMenuBox(
                         expanded = expandedBorder,
-
                         onExpandedChange = {
                             expandedBorder = !expandedBorder
                         }
                     ) {
-
                         OutlinedTextField(
-
                             value = selectedTextBorder,
                             onValueChange = { },
                             singleLine = true,
@@ -317,26 +268,20 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                                         Icons.Filled.KeyboardArrowLeft
                                     },
                                     contentDescription = null,
-                                    //                                        tint = LocalContentColor.current.copy(alpha = if (expanded) ContentAlpha.high else ContentAlpha.medium),
                                     modifier = Modifier.size(50.dp)
-                                )// Adjust the size as needed
+                                )
                             },
-
                             colors = TextFieldDefaults.outlinedTextFieldColors(
-
                                 focusedBorderColor = brightOrange,
                                 containerColor = darker,
                                 unfocusedBorderColor = dark,
-
                                 ),
                             shape = RoundedCornerShape(size = 20.dp),
                             textStyle = LocalTextStyle.current.copy(
-                                fontSize = (screenHeightDp / 30).sp, // Change this to your desired text size
+                                fontSize = (screenHeightDp / 30).sp,
                                 fontStyle = FontStyle.Italic,
                                 color = dark
-
                             ),
-
                             modifier = Modifier
                                 .menuAnchor()
                                 .fillMaxWidth()
@@ -352,9 +297,7 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                                 .background(
                                     color = darker,
                                     shape = RoundedCornerShape(size = 10.dp)
-                                )
-                            //                                    .clip(RoundedCornerShape(size = 26.dp))
-                            ,
+                                ),
                             expanded = expandedBorder,
                             onDismissRequest = { expandedBorder = false }
                         )
@@ -364,20 +307,11 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                                 Box(
                                     modifier = Modifier
                                         .height((screenHeightDp / 15f).dp)
-                                        .border(1.dp, dark, RoundedCornerShape(size = 5.dp))
-                                    //                                            .background(transparent, RoundedCornerShape(size = 26.dp))
-                                    //                                                    .padding(30.dp)
-
-                                    ,
+                                        .border(1.dp, dark, RoundedCornerShape(size = 5.dp)),
                                     contentAlignment = Alignment.CenterStart
-
                                 ) {
-                                    //                                        Spacer(modifier = Modifier.height(10.dp))
                                     DropdownMenuItem(
-                                        //                                        modifier = Modifier.padding(30.dp),
                                         text = {
-                                            //                                            Text(text = category)
-
                                             Title01_LEFT(
                                                 "    $category",
                                                 grayWhite,
@@ -393,33 +327,24 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                                                 Toast.LENGTH_SHORT
                                             )
                                                 .show()
-
                                         },
                                     )
                                 }
                             }
-
                         }
                     }
                 }
-
             Spacer(modifier = Modifier.height(25.dp))
-
             var expandedBG by remember { mutableStateOf(false) }
             var selectedTextBG by remember { mutableStateOf("Background") }
-            ///// BORDER DROPDOWN////
-
             Row {
                 ExposedDropdownMenuBox(
                     expanded = expandedBG,
-
                     onExpandedChange = {
                         expandedBG = !expandedBG
                     }
                 ) {
-
                     OutlinedTextField(
-
                         value = selectedTextBG,
                         onValueChange = { },
                         singleLine = true,
@@ -434,26 +359,20 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                                     Icons.Filled.KeyboardArrowLeft
                                 },
                                 contentDescription = null,
-                                //                                        tint = LocalContentColor.current.copy(alpha = if (expanded) ContentAlpha.high else ContentAlpha.medium),
                                 modifier = Modifier.size(50.dp)
-                            )// Adjust the size as needed
+                            )
                         },
-
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-
                             focusedBorderColor = brightOrange,
                             containerColor = darker,
                             unfocusedBorderColor = dark,
-
                             ),
                         shape = RoundedCornerShape(size = 20.dp),
                         textStyle = LocalTextStyle.current.copy(
-                            fontSize = (screenHeightDp / 30).sp, // Change this to your desired text size
+                            fontSize = (screenHeightDp / 30).sp,
                             fontStyle = FontStyle.Italic,
                             color = dark
-
                         ),
-
                         modifier = Modifier
                             .menuAnchor()
                             .fillMaxWidth()
@@ -469,32 +388,20 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                             .background(
                                 color = darker,
                                 shape = RoundedCornerShape(size = 10.dp)
-                            )
-                        //                                    .clip(RoundedCornerShape(size = 26.dp))
-                        ,
+                            ),
                         expanded = expandedBG,
                         onDismissRequest = { expandedBG = false }
                     )
                     {
                         backgroundCategories.forEach { category ->
-
                             Box(
                                 modifier = Modifier
                                     .height((screenHeightDp / 15f).dp)
-                                    .border(1.dp, dark, RoundedCornerShape(size = 5.dp))
-                                //                                            .background(transparent, RoundedCornerShape(size = 26.dp))
-                                //                                                    .padding(30.dp)
-
-                                ,
+                                    .border(1.dp, dark, RoundedCornerShape(size = 5.dp)),
                                 contentAlignment = Alignment.CenterStart
-
                             ) {
-                                //                                        Spacer(modifier = Modifier.height(10.dp))
                                 DropdownMenuItem(
-                                    //                                        modifier = Modifier.padding(30.dp),
                                     text = {
-                                        //                                            Text(text = category)
-
                                         Title01_LEFT(
                                             "    $category",
                                             grayWhite,
@@ -510,7 +417,6 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                                             Toast.LENGTH_SHORT
                                         )
                                             .show()
-
                                     },
                                 )
                             }
@@ -523,7 +429,6 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
             Button(
                 onClick = {
                     val userRef = database.getReference("Users").child("$userID")
-
                     val checkBack1 = database.getReference("Users").child("$userID").child("inventory").child("borders")
                     checkBack1.get().addOnSuccessListener { snapshot ->
                         if (snapshot.exists()) {
@@ -534,10 +439,8 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                                     profile.currentBorder = i.key!!.toInt()
                                 }
                             }
-
                         }
                     }
-
                     val checkBack2 = database.getReference("Users").child("$userID").child("inventory").child("avatar")
                     checkBack2.get().addOnSuccessListener { snapshot ->
                         if (snapshot.exists()) {
@@ -548,7 +451,6 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                                     profile.currentAvatar = i.key!!.toInt()
                                 }
                             }
-
                         }
                     }
 
@@ -562,19 +464,15 @@ fun CustomizePageContents(modifier: Modifier = Modifier, navController: NavContr
                                     profile.currentBackground = i.key!!.toInt()
                                 }
                             }
-
                         }
                     }
                     Thread.sleep(2000)
-
                    navController.navigate("customize")
                 }
             ) {
                 Text("Apply")
             }
-
         }
-
     }
 }
 
