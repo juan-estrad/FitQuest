@@ -183,10 +183,10 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                 }
                 Column {
                     ReccomendedBox(
-                        img = R.drawable.profile_3,
+                        img = R.drawable.profile_1,
                         name = "Arnold Beefcake",
                         title = "T-800 (muscles only!!)",
-                        text = "This is some text in the box.",
+                        text = "This is the Arnold Excercise Routine.",
                         workouts1 = "Upperbody",
                         workouts1prog = "Bench Press: 5x10 \n Bicep Curls: 5x10 \n Tricep curls: 5x10",
                         workouts2 = "Lowerbody",
@@ -196,9 +196,9 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                     )
                     ReccomendedBox(
                         img = R.drawable.profile_2,
-                        name = "Emily LoveCraft",
-                        title = "Emily's gym Time!",
-                        text = "Test Test Test",
+                        name = "Ronnie Coleman",
+                        title = "Ronnie's gym Time!",
+                        text = "The Ronnie core workout Routine",
                         workouts1 = "Core workout",
                         workouts1prog = "Bicycle Crunches: 3x8 \nLeg Raises: 3x8 \nPlanks: 5 minutes",
                         workouts2 = "Cardio",
@@ -208,9 +208,9 @@ fun ForYouPageContents(modifier: Modifier = Modifier, navController: NavControll
                     )
                     ReccomendedBox(
                         img = R.drawable.profile_3,
-                        name = "Dave Rubin",
-                        title = "Training to Battle Psycho",
-                        text = "Test",
+                        name = "David Goggins",
+                        title = "Training to Battle Psycho's",
+                        text = "The David Goggins easy routine",
                         workouts1 = "Core workout",
                         workouts1prog = "Crunches: 5x10 \nSit-Ups: 5x10 \nLeg Raises: 5x10",
                         workouts2 = "Arms",
@@ -311,14 +311,6 @@ fun ReccomendedBox(img: Int, name: String, title: String, text: String, workouts
 
                 },
                 confirmButton = {
-                    if (isButtonVisible) {
-                        Button(onClick = {
-                            isButtonVisible = false
-                            showDialog = false
-                        }) {
-                            Text("Click me")
-                        }
-                    }
                     Button(onClick = {
                         showDialog = false
                     }) {
