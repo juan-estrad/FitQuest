@@ -7,4 +7,17 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+<!--FIT QUEST COLORS-->
+    <color name="dark">#FF393E46</color>
+    <color name="darker">#FF222831</color>
+
+    <color name="rayWhite">#FFEEEEEE</color>
+
+    <color name="darkOrange">#FF967410</color>
+    <color name="brightOrange">#FFD58D18</color>
+
+    <color name="transparent">#00000000</color>
+
 </resources>

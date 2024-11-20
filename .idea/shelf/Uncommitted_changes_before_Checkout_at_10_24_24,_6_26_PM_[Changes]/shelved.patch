@@ -1,0 +1,97 @@
+Index: app/src/main/AndroidManifest.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<manifest xmlns:android=\"http://schemas.android.com/apk/res/android\"\n    xmlns:tools=\"http://schemas.android.com/tools\">\n\n    <application\n        android:allowBackup=\"true\"\n        android:dataExtractionRules=\"@xml/data_extraction_rules\"\n        android:fullBackupContent=\"@xml/backup_rules\"\n        android:icon=\"@mipmap/ic_launcher\"\n        android:label=\"@string/app_name\"\n        android:roundIcon=\"@mipmap/ic_launcher_round\"\n        android:supportsRtl=\"true\"\n        android:theme=\"@style/Theme.FitQuest\"\n        tools:targetApi=\"31\">\n        <activity\n            android:name=\".MainActivity\"\n            android:exported=\"true\"\n            android:label=\"@string/app_name\"\n            android:theme=\"@style/Theme.FitQuest\">\n            <intent-filter>\n                <action android:name=\"android.intent.action.MAIN\" />\n\n                <category android:name=\"android.intent.category.LAUNCHER\" />\n            </intent-filter>\n        </activity>\n    </application>\n\n</manifest>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+--- a/app/src/main/AndroidManifest.xml	
++++ b/app/src/main/AndroidManifest.xml	
+@@ -16,10 +16,10 @@
+             android:name=".MainActivity"
+             android:exported="true"
+             android:label="@string/app_name"
+-            android:theme="@style/Theme.FitQuest">
++            android:theme="@style/Theme.FitQuestSplashScreen">
++
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+-
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
+         </activity>
+Index: app/src/main/java/com/example/fitquest/MyAppNavigation.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.fitquest\n\n\nimport androidx.compose.runtime.Composable\nimport androidx.compose.ui.Modifier\nimport androidx.navigation.compose.NavHost\nimport androidx.navigation.compose.composable\nimport androidx.navigation.compose.rememberNavController\nimport com.example.fitquest.pages.HomePage\nimport com.example.fitquest.pages.LoginPage\nimport com.example.fitquest.pages.SignupPage\nimport com.example.fitquest.pages.LoggingPage\nimport com.example.fitquest.pages.StatsPage\nimport com.example.fitquest.pages.ForYouPage\nimport com.example.fitquest.pages.StorePage\n\n@Composable\nfun MyAppNavigation(modifier: Modifier = Modifier, authViewModel: AuthViewModel){\n    val navController = rememberNavController()\n\n    NavHost(navController = navController, startDestination = \"login\", builder = {\n        composable(\"login\"){\n            LoginPage(modifier,navController,authViewModel)\n        }\n        composable(\"signup\") {\n            SignupPage(modifier, navController, authViewModel)\n        }\n        composable(\"home\") {\n            HomePage(modifier, navController, authViewModel)\n        }\n        composable(\"logging\") {\n            LoggingPage(modifier, navController, authViewModel)\n        }\n        composable(\"stats\") {\n            StatsPage(modifier, navController, authViewModel)\n        }\n        composable(\"foryou\") {\n            ForYouPage(modifier, navController, authViewModel)\n        }\n        composable(\"store\") {\n            StorePage(modifier, navController, authViewModel)\n        }\n    })\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/fitquest/MyAppNavigation.kt b/app/src/main/java/com/example/fitquest/MyAppNavigation.kt
+--- a/app/src/main/java/com/example/fitquest/MyAppNavigation.kt	
++++ b/app/src/main/java/com/example/fitquest/MyAppNavigation.kt	
+@@ -9,7 +9,7 @@
+ import com.example.fitquest.pages.HomePage
+ import com.example.fitquest.pages.LoginPage
+ import com.example.fitquest.pages.SignupPage
+-import com.example.fitquest.pages.LoggingPage
++import com.example.fitquest.pages.WorkoutLogPage
+ import com.example.fitquest.pages.StatsPage
+ import com.example.fitquest.pages.ForYouPage
+ import com.example.fitquest.pages.StorePage
+@@ -29,7 +29,7 @@
+             HomePage(modifier, navController, authViewModel)
+         }
+         composable("logging") {
+-            LoggingPage(modifier, navController, authViewModel)
++            WorkoutLogPage(modifier, navController, authViewModel)
+         }
+         composable("stats") {
+             StatsPage(modifier, navController, authViewModel)
+Index: app/src/main/res/values/themes.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources>\n\n    <style name=\"Theme.FitQuest\" parent=\"android:Theme.Material.Light.NoActionBar\">\n        <item name=\"android:windowSplashScreenBackground\">@color/darker</item>\n    </style>\n\n\n\n</resources>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/values/themes.xml b/app/src/main/res/values/themes.xml
+--- a/app/src/main/res/values/themes.xml	
++++ b/app/src/main/res/values/themes.xml	
+@@ -1,10 +1,18 @@
+ <?xml version="1.0" encoding="utf-8"?>
+ <resources>
+ 
++
++
++
+     <style name="Theme.FitQuest" parent="android:Theme.Material.Light.NoActionBar">
+         <item name="android:windowSplashScreenBackground">@color/darker</item>
+     </style>
+ 
++    <style name="Theme.FitQuestSplashScreen" parent="Theme.SplashScreen">
++        <item name="android:windowSplashScreenBackground">@color/darker</item>
++
++        <item name="postSplashScreenTheme">@style/Theme.FitQuest</item>
++    </style>
+ 
+ 
+ </resources>
+\ No newline at end of file
+Index: app/src/main/java/com/example/fitquest/pages/LoggingPage.kt
+===================================================================
+diff --git a/app/src/main/java/com/example/fitquest/pages/LoggingPage.kt b/app/src/main/java/com/example/fitquest/pages/WorkoutLogPage.kt
+rename from app/src/main/java/com/example/fitquest/pages/LoggingPage.kt
+rename to app/src/main/java/com/example/fitquest/pages/WorkoutLogPage.kt
+--- a/app/src/main/java/com/example/fitquest/pages/LoggingPage.kt	
++++ b/app/src/main/java/com/example/fitquest/pages/WorkoutLogPage.kt	
+@@ -65,7 +65,7 @@
+ 
+ @OptIn(ExperimentalMaterial3Api::class)
+ @Composable
+-fun LoggingPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
++fun WorkoutLogPage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+     var statname by remember {
+         mutableStateOf("")
+     }

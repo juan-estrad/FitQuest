@@ -1,8 +1,10 @@
 package com.example.fitquest.pages
 
-import androidx.compose.foundation.background
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,148 +12,173 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicText
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.fitquest.AuthState
 import com.example.fitquest.AuthViewModel
+import com.example.fitquest.R
+import com.example.fitquest.UserProfile
+import com.example.fitquest.ui.ClickableImageWithText
+import com.example.fitquest.ui.TopAndBottomAppBar
+import com.example.fitquest.ui.theme.darkOrange
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.database
 
+///////////////////////////////Code: Alexis, Nick, Campbell, Joseph, Juan and Tanner////////////////////////////////////////////////
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel){
-    val authState=authViewModel.authState.observeAsState()
+fun HomePage(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+    TopAndBottomAppBar(
+    contents = { HomePageContents(modifier,navController,authViewModel) },
+    modifier = modifier,
+    navController = navController,
+    authViewModel = authViewModel)
+}
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomePageContents(modifier: Modifier = Modifier, navController: NavController, authViewModel: AuthViewModel) {
+    val authState = authViewModel.authState.observeAsState()
+    val context = LocalContext.current
+    var userProfile by remember { mutableStateOf<UserProfile?>(null) }
+    val database = Firebase.database
+    val userID = FirebaseAuth.getInstance().uid
     LaunchedEffect(authState.value) {
-        when(authState.value){
+        when(authState.value) {
             is AuthState.Unauthenticated -> navController.navigate("login")
+            is AuthState.Authenticated -> {
+                userID?.let { id ->
+                    val userRef = database.getReference("Users")
+                        .child(id)
+                    userRef.get()
+                        .addOnSuccessListener { dataSnapshot ->
+                            userProfile =
+                                dataSnapshot.getValue(UserProfile::class.java)
+                        }.addOnFailureListener {
+                            Toast.makeText(context, "Failed to retrieve user data", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                }
+            }
             else -> Unit
         }
     }
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.DarkGray)
-            .padding(16.dp)
-    ) {
-        // Top section with title and user icon
-        Row(
+    userProfile?.let { profile ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .padding(
+                    start = 20.dp,
+                    top = 0.dp,
+                    end = 20.dp,
+                    bottom = 0.dp
+                )
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Text("FitQuest", fontSize = 32.sp, fontWeight = FontWeight.Bold, color = Color(0xFFFF6D00))
-            Box(
+            val configuration = LocalConfiguration.current
+            val screenHeight = configuration.screenHeightDp.toFloat()
+            Spacer(
                 modifier = Modifier
-                    .size(40.dp)
-                    .clip(CircleShape)
-                    .background(Color.Gray),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("USER", fontSize = 12.sp, color = Color.White)
-            }
-        }
-
-        // XP Progress Bar
-        Text("XP", color = Color.White, fontSize = 14.sp)
-        LinearProgressIndicator(
-            progress = 0.7f, // Replace with dynamic XP progress
-            color = Color(0xFFFF6D00),
-            trackColor = Color.LightGray,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(8.dp)
-                .padding(vertical = 8.dp)
-        )
-
-        // Streak Section
-        Text("STREAK", color = Color.White, fontWeight = FontWeight.Light, fontSize = 18.sp)
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Stats Section
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 16.dp),
-            contentAlignment = Alignment.Center
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-                    StatItem("Strength", "85")
-                    StatItem("Consistency", "78")
-                    StatItem("Stamina", "90")
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-                    StatItem("Dexterity", "65")
-                    StatItem("Agility", "72")
-                }
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Featured Workouts Section
-        Text("Featured Workouts", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            Box(
-                modifier = Modifier
-                    .size(100.dp)
-                    .background(Color.Gray)
+                    .height( (screenHeight/36) .dp)
             )
-            Box(
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ClickableImageWithText(
+                    "Log Workout",
+                    "Stats page Background",
+                    {navController.navigate("logging")},
+                    authState.value != AuthState.Loading,
+                    R.drawable.logpagebtn
+                )
+            }
+            Spacer(modifier = Modifier.height(23.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ClickableImageWithText(
+                    "Store",
+                    "Stats page Background",
+                    { navController.navigate("store") },
+                    authState.value != AuthState.Loading,
+                    R.drawable.storepagebtn
+                )
+            }
+            Spacer(modifier = Modifier.height(23.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ClickableImageWithText(
+                    "Profile",
+                    "Stats page Background",
+                    {navController.navigate("stats")},
+                    authState.value != AuthState.Loading,
+                    R.drawable.statspagebtn
+                )
+            }
+            Spacer(modifier = Modifier.height(26.dp))
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                ClickableImageWithText(
+                    "For You",
+                    "Recommended Work Outs image",
+                    { navController.navigate("foryou") },
+                    authState.value != AuthState.Loading,
+                    R.drawable.fypbtn
+                )
+            }
+            Spacer(
                 modifier = Modifier
-                    .size(100.dp)
-                    .background(Color.Gray)
+                    .height( (screenHeight/32) .dp)
+            )
+            Row(
+                modifier = Modifier
+                    .height(60.dp)
+                    .fillMaxWidth(),
+                    Arrangement.Start
+            ){
+                TextButton(
+                    onClick = { authViewModel.signout() }) {
+                    Text(
+                        text = "Sign Out",
+                        color = darkOrange,
+                        textAlign = TextAlign.Left
+                    )
+                }
+            }
+            Spacer(
+                modifier = Modifier
+                    .height( (screenHeight/36) .dp)
             )
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Sign Out Button
-        TextButton(onClick = { authViewModel.signout() }) {
-            Text(text = "Sign Out", color = Color.Red)
-        }
+    }
+    BackHandler(enabled = true ) {
+        val intent = Intent(Intent.ACTION_MAIN)
+        intent.addCategory(Intent.CATEGORY_HOME)
+        context.startActivity(intent)
     }
 }
 
-@Composable
-fun StatItem(statName: String, statValue: String) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = statName, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 14.sp)
-        Text(text = statValue, color = Color.White, fontSize = 18.sp)
-    }
-}
