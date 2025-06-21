@@ -36,6 +36,6 @@ FitQuest is a stat-based fitness tracking app that gamifies workouts. Users can 
 - **Joseph Gomez** - Developer / Firebase Integration  
 - **Alexis Flores** - Developer / Firebase Integration  
 - **Juan Estrada** - Developer / Firebase Integration  
-- **Tanner Freitag** - Developer  
+- **Tanner Freitag** - Developer / Project Manager  
 - **Tuan "Nick" Tran** - UI/UX Designer  
 - **Campbell Williams** - UI/UX Designer  
